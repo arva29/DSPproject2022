@@ -1,2 +1,45 @@
-Main.java
- Main
+AdministratorServer/Responses/TaxiAddingResponse.java
+ AdministratorServer.Responses.TaxiAddingResponse
+SETA/Data/RideRequest.java
+ SETA.Data.RideRequest
+AdministratorServer/Beans/StatisticsRecord.java
+ AdministratorServer.Beans.StatisticsRecord
+AdministratorServer/services/AdministratorServices.java
+ AdministratorServer.services.AdministratorServices
+AdministratorServer/Responses/LastStatisticsByIdResponse.java
+ AdministratorServer.Responses.LastStatisticsByIdResponse
+SETA/Simulators/Simulator.java
+ SETA.Simulators.Simulator
+SETA/Data/Position.java
+ SETA.Data.Position
+SETA/RideManagementModule.java
+ SETA.RideManagementModule
+ SETA.RideManagementModule$1
+AdministratorServer/Beans/TaxiBean.java
+ AdministratorServer.Beans.TaxiBean
+AdministratorServer/services/TaxiServices.java
+ AdministratorServer.services.TaxiServices
+SETA/Taxi.java
+ SETA.Taxi
+AdministratorServer/Responses/TaxiListResponse.java
+ AdministratorServer.Responses.TaxiListResponse
+SETA/SetaProcess.java
+ SETA.SetaProcess
+SETA/Simulators/Buffer.java
+ SETA.Simulators.Buffer
+SETA/Simulators/PM10Simulator.java
+ SETA.Simulators.PM10Simulator
+AdministratorServer/Beans/TaxiList.java
+ AdministratorServer.Beans.TaxiList
+AdministratorServer/Beans/StatisticsStorage.java
+ AdministratorServer.Beans.StatisticsStorage
+AdministratorServer/ClientProva.java
+ AdministratorServer.ClientProva
+AdministratorServer/Beans/Statistics.java
+ AdministratorServer.Beans.Statistics
+AdministratorServer/Responses/AverageStatisticsResponse.java
+ AdministratorServer.Responses.AverageStatisticsResponse
+SETA/Simulators/Measurement.java
+ SETA.Simulators.Measurement
+AdministratorServer/AdministratorServer.java
+ AdministratorServer.AdministratorServer
