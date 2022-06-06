@@ -1,5 +1,7 @@
 package SETA;
 
+import AdministratorServer.Beans.TaxiInfo;
+import SETA.Data.Taxi;
 import org.eclipse.paho.client.mqttv3.*;
 
 import java.sql.Timestamp;
@@ -66,9 +68,9 @@ public class RideManagementModule extends Thread{
                 }
 
             });
+
             System.out.println(CLIENT_ID + " Subscribing ... - Thread PID: " + Thread.currentThread().getId());
-            client.subscribe(topic + district,QOS);
-            System.out.println(CLIENT_ID + " Subscribed to topics : " + topic);
+            client.subscribe(topic + district, QOS);
 
 
             System.out.println("\n ***  Press a random key to exit *** \n");
@@ -89,5 +91,9 @@ public class RideManagementModule extends Thread{
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public Taxi getTaxi() {
+        return taxi;
     }
 }

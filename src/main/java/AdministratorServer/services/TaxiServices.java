@@ -2,7 +2,7 @@ package AdministratorServer.services;
 
 import AdministratorServer.Beans.StatisticsRecord;
 import AdministratorServer.Beans.StatisticsStorage;
-import AdministratorServer.Beans.TaxiBean;
+import AdministratorServer.Beans.TaxiInfo;
 import AdministratorServer.Beans.TaxiList;
 
 import javax.ws.rs.*;
@@ -15,7 +15,7 @@ public class TaxiServices {
     @POST
     @Consumes({"application/json", "application/xml"})
     @Produces({"application/json", "application/xml"})
-    public Response addTaxi(TaxiBean taxi){
+    public Response addTaxi(TaxiInfo taxi){
         if(TaxiList.getInstance().addTaxi(taxi)){
             return Response.ok(TaxiList.getInstance().responseToAddition(taxi.getId())).build();
         } else {
@@ -26,8 +26,8 @@ public class TaxiServices {
     @Path("remove")
     @DELETE
     @Consumes({"application/json", "application/xml"})
-    public Response removeTaxi(TaxiBean taxiBean){
-        TaxiList.getInstance().removeTaxi(taxiBean.getId());
+    public Response removeTaxi(TaxiInfo taxiInfo){
+        TaxiList.getInstance().removeTaxi(taxiInfo.getId());
         return Response.ok().build();
     }
 

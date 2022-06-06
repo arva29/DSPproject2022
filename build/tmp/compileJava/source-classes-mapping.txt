@@ -1,45 +1,75 @@
-AdministratorServer/Responses/TaxiAddingResponse.java
- AdministratorServer.Responses.TaxiAddingResponse
-SETA/Data/RideRequest.java
- SETA.Data.RideRequest
-AdministratorServer/Beans/StatisticsRecord.java
- AdministratorServer.Beans.StatisticsRecord
-AdministratorServer/services/AdministratorServices.java
- AdministratorServer.services.AdministratorServices
-AdministratorServer/Responses/LastStatisticsByIdResponse.java
- AdministratorServer.Responses.LastStatisticsByIdResponse
-SETA/Simulators/Simulator.java
- SETA.Simulators.Simulator
-SETA/Data/Position.java
- SETA.Data.Position
-SETA/RideManagementModule.java
- SETA.RideManagementModule
- SETA.RideManagementModule$1
-AdministratorServer/Beans/TaxiBean.java
- AdministratorServer.Beans.TaxiBean
-AdministratorServer/services/TaxiServices.java
- AdministratorServer.services.TaxiServices
-SETA/Taxi.java
- SETA.Taxi
-AdministratorServer/Responses/TaxiListResponse.java
- AdministratorServer.Responses.TaxiListResponse
-SETA/SetaProcess.java
- SETA.SetaProcess
-SETA/Simulators/Buffer.java
- SETA.Simulators.Buffer
-SETA/Simulators/PM10Simulator.java
- SETA.Simulators.PM10Simulator
-AdministratorServer/Beans/TaxiList.java
- AdministratorServer.Beans.TaxiList
-AdministratorServer/Beans/StatisticsStorage.java
- AdministratorServer.Beans.StatisticsStorage
-AdministratorServer/ClientProva.java
- AdministratorServer.ClientProva
-AdministratorServer/Beans/Statistics.java
- AdministratorServer.Beans.Statistics
 AdministratorServer/Responses/AverageStatisticsResponse.java
  AdministratorServer.Responses.AverageStatisticsResponse
+AdministratorServer/Responses/TaxiAddingResponse.java
+ AdministratorServer.Responses.TaxiAddingResponse
+AdministratorServer/services/AdministratorServices.java
+ AdministratorServer.services.AdministratorServices
+SETA/TaxiNetworkServiceImpl.java
+ SETA.TaxiNetworkServiceImpl
+SETA/Data/Position.java
+ SETA.Data.Position
+SETA/SetaProcess.java
+ SETA.SetaProcess
+SETA/Simulators/Simulator.java
+ SETA.Simulators.Simulator
+SETA/Simulators/Buffer.java
+ SETA.Simulators.Buffer
+com/example/grpc/TaxiNetworkServiceGrpc.java
+ com.example.grpc.TaxiNetworkServiceGrpc
+ com.example.grpc.TaxiNetworkServiceGrpc$1
+ com.example.grpc.TaxiNetworkServiceGrpc$MethodHandlers
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceBaseDescriptorSupplier
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceBlockingStub
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceFileDescriptorSupplier
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceFutureStub
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceImplBase
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceMethodDescriptorSupplier
+ com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceStub
+SETA/Simulators/PM10Simulator.java
+ SETA.Simulators.PM10Simulator
+SETA/NetworkCommunicationModule.java
+ SETA.NetworkCommunicationModule
+AdministratorServer/Beans/StatisticsStorage.java
+ AdministratorServer.Beans.StatisticsStorage
+AdministratorServer/Beans/Statistics.java
+ AdministratorServer.Beans.Statistics
 SETA/Simulators/Measurement.java
  SETA.Simulators.Measurement
 AdministratorServer/AdministratorServer.java
  AdministratorServer.AdministratorServer
+com/example/grpc/TaxiNetworkServiceOuterClass.java
+ com.example.grpc.TaxiNetworkServiceOuterClass
+ com.example.grpc.TaxiNetworkServiceOuterClass$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$Empty
+ com.example.grpc.TaxiNetworkServiceOuterClass$Empty$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$Empty$Builder
+ com.example.grpc.TaxiNetworkServiceOuterClass$EmptyOrBuilder
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation$Builder
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformationOrBuilder
+AdministratorServer/Responses/LastStatisticsByIdResponse.java
+ AdministratorServer.Responses.LastStatisticsByIdResponse
+SETA/Data/RideRequest.java
+ SETA.Data.RideRequest
+AdministratorServer/Beans/StatisticsRecord.java
+ AdministratorServer.Beans.StatisticsRecord
+AdministratorServer/Beans/TaxiInfo.java
+ AdministratorServer.Beans.TaxiInfo
+AdministratorServer/Beans/TaxiList.java
+ AdministratorServer.Beans.TaxiList
+AdministratorServer/ClientProva.java
+ AdministratorServer.ClientProva
+SETA/Data/Taxi.java
+ SETA.Data.Taxi
+SETA/RideManagementModule.java
+ SETA.RideManagementModule
+ SETA.RideManagementModule$1
+AdministratorServer/Responses/TaxiListResponse.java
+ AdministratorServer.Responses.TaxiListResponse
+AdministratorServer/services/TaxiServices.java
+ AdministratorServer.services.TaxiServices
+SETA/RESTServerModule.java
+ SETA.RESTServerModule
+SETA/TaxiProcess.java
+ SETA.TaxiProcess

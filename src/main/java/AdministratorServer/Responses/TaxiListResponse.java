@@ -1,6 +1,6 @@
 package AdministratorServer.Responses;
 
-import AdministratorServer.Beans.TaxiBean;
+import AdministratorServer.Beans.TaxiInfo;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,19 +10,19 @@ import java.util.List;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiListResponse {
-    private List<TaxiBean> taxiList;
+    private List<TaxiInfo> taxiList;
 
-    public TaxiListResponse(List<TaxiBean> taxiList) {
+    public TaxiListResponse(List<TaxiInfo> taxiList) {
         this.taxiList = taxiList;
     }
 
     public TaxiListResponse() {}
 
-    public List<TaxiBean> getTaxiList() {
+    public List<TaxiInfo> getTaxiList() {
         return taxiList;
     }
 
-    public void addTaxi(TaxiBean taxi){
+    public void addTaxi(TaxiInfo taxi){
         this.taxiList.add(taxi);
     }
 }

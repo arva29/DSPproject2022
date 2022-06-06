@@ -1,6 +1,6 @@
 package AdministratorServer.Responses;
 
-import AdministratorServer.Beans.TaxiBean;
+import AdministratorServer.Beans.TaxiInfo;
 import SETA.Data.Position;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -12,19 +12,21 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiAddingResponse {
 
-    private final Position position;
-    private final List<TaxiBean> taxiList;
+    private Position position;
+    private List<TaxiInfo> taxiList;
 
-    public TaxiAddingResponse(Position position, List<TaxiBean> taxiList) {
+    public TaxiAddingResponse(Position position, List<TaxiInfo> taxiList) {
         this.position = position;
         this.taxiList = taxiList;
     }
+
+    public TaxiAddingResponse() {}
 
     public Position getPosition() {
         return position;
     }
 
-    public List<TaxiBean> getTaxiList() {
+    public List<TaxiInfo> getTaxiList() {
         return taxiList;
     }
 

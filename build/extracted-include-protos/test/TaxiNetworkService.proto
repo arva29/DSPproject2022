@@ -1,0 +1,14 @@
+syntax = "proto3";
+package com.example.grpc;
+
+message TaxiInformation {
+  int32 id = 1;
+  string ipAddress = 2;
+  int32 portNumber = 3;
+}
+
+message Empty {}
+
+service TaxiNetworkService{
+  rpc notifyNewTaxiPresence(TaxiInformation) returns(Empty);
+}

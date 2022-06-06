@@ -1,6 +1,6 @@
 package AdministratorServer;
 
-import AdministratorServer.Beans.TaxiBean;
+import AdministratorServer.Beans.TaxiInfo;
 import AdministratorServer.Responses.TaxiListResponse;
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
@@ -17,7 +17,7 @@ public class ClientProva {
 
         // POST EXAMPLE
         String postPath = "/taxi/add";
-        TaxiBean taxi = new TaxiBean(1001,"127.0.0.1",888);
+        TaxiInfo taxi = new TaxiInfo(1001,"127.0.0.1",888);
         clientResponse = postRequest(client,serverAddress+postPath,taxi);
         System.out.println(clientResponse.toString());
 
@@ -27,13 +27,13 @@ public class ClientProva {
         System.out.println(clientResponse.toString());
         TaxiListResponse taxiList = clientResponse.getEntity(TaxiListResponse.class);
         System.out.println("---- Taxis:");
-        for (TaxiBean i : taxiList.getTaxiList()){
+        for (TaxiInfo i : taxiList.getTaxiList()){
             System.out.println("ID: " + i.getId());
         }
 
     }
 
-    public static ClientResponse postRequest(Client client, String url, TaxiBean t){
+    public static ClientResponse postRequest(Client client, String url, TaxiInfo t){
         WebResource webResource = client.resource(url);
         String input = new Gson().toJson(t);
         System.out.println("-----> " + input);
