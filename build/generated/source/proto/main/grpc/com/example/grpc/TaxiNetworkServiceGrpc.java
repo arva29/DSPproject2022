@@ -58,6 +58,37 @@ public final class TaxiNetworkServiceGrpc {
     return getNotifyNewTaxiPresenceMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage,
+      com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> getElectionMessageMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "electionMessage",
+      requestType = com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage.class,
+      responseType = com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage,
+      com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> getElectionMessageMethod() {
+    io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage, com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> getElectionMessageMethod;
+    if ((getElectionMessageMethod = TaxiNetworkServiceGrpc.getElectionMessageMethod) == null) {
+      synchronized (TaxiNetworkServiceGrpc.class) {
+        if ((getElectionMessageMethod = TaxiNetworkServiceGrpc.getElectionMessageMethod) == null) {
+          TaxiNetworkServiceGrpc.getElectionMessageMethod = getElectionMessageMethod =
+              io.grpc.MethodDescriptor.<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage, com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "electionMessage"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply.getDefaultInstance()))
+              .setSchemaDescriptor(new TaxiNetworkServiceMethodDescriptorSupplier("electionMessage"))
+              .build();
+        }
+      }
+    }
+    return getElectionMessageMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -92,6 +123,13 @@ public final class TaxiNetworkServiceGrpc {
       asyncUnimplementedUnaryCall(getNotifyNewTaxiPresenceMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void electionMessage(com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> responseObserver) {
+      asyncUnimplementedUnaryCall(getElectionMessageMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -101,6 +139,13 @@ public final class TaxiNetworkServiceGrpc {
                 com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation,
                 com.example.grpc.TaxiNetworkServiceOuterClass.Empty>(
                   this, METHODID_NOTIFY_NEW_TAXI_PRESENCE)))
+          .addMethod(
+            getElectionMessageMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage,
+                com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply>(
+                  this, METHODID_ELECTION_MESSAGE)))
           .build();
     }
   }
@@ -130,6 +175,14 @@ public final class TaxiNetworkServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getNotifyNewTaxiPresenceMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void electionMessage(com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getElectionMessageMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -155,6 +208,13 @@ public final class TaxiNetworkServiceGrpc {
     public com.example.grpc.TaxiNetworkServiceOuterClass.Empty notifyNewTaxiPresence(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation request) {
       return blockingUnaryCall(
           getChannel(), getNotifyNewTaxiPresenceMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply electionMessage(com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getElectionMessageMethod(), getCallOptions(), request);
     }
   }
 
@@ -183,9 +243,18 @@ public final class TaxiNetworkServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getNotifyNewTaxiPresenceMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> electionMessage(
+        com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getElectionMessageMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_NOTIFY_NEW_TAXI_PRESENCE = 0;
+  private static final int METHODID_ELECTION_MESSAGE = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -207,6 +276,10 @@ public final class TaxiNetworkServiceGrpc {
         case METHODID_NOTIFY_NEW_TAXI_PRESENCE:
           serviceImpl.notifyNewTaxiPresence((com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation) request,
               (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_ELECTION_MESSAGE:
+          serviceImpl.electionMessage((com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage) request,
+              (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -270,6 +343,7 @@ public final class TaxiNetworkServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new TaxiNetworkServiceFileDescriptorSupplier())
               .addMethod(getNotifyNewTaxiPresenceMethod())
+              .addMethod(getElectionMessageMethod())
               .build();
         }
       }

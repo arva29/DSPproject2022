@@ -1,36 +1,36 @@
 package SETA;
 
-import AdministratorServer.Beans.TaxiInfo;
-import SETA.Data.Taxi;
+import SETA.Data.RideRequest;
+import com.google.gson.Gson;
+import com.sun.jersey.api.client.Client;
 import org.eclipse.paho.client.mqttv3.*;
 
-import java.sql.Timestamp;
 import java.util.Scanner;
 
 public class RideManagementModule extends Thread{
-    private final Taxi taxi;
-
     private final String BROKER = "tcp://localhost:1883";
     private final String CLIENT_ID = MqttClient.generateClientId();
     private final int QOS = 2;
 
-    private String topic = "seta/smartcity/rides/";
+    private String topic = "seta/smartcity/rides/district";
     private MqttClient client;
-    private String district;
+    private int district;
+    private NetworkCommunicationModule networkCommunicationModule;
 
-    public RideManagementModule(String district, Taxi taxi) throws MqttException {
-        this.taxi = taxi;
+    public RideManagementModule(int district, NetworkCommunicationModule networkCommunicationModule) throws MqttException {
         this.client = new MqttClient(BROKER, CLIENT_ID);
         this.district = district;
+        this.networkCommunicationModule = networkCommunicationModule;
     }
 
     @Override
     public void run() {
-
         try {
             client = new MqttClient(BROKER, CLIENT_ID);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
+
+
 
             // Connect the client
             System.out.println(CLIENT_ID + " Connecting Broker " + BROKER);
@@ -40,27 +40,18 @@ public class RideManagementModule extends Thread{
             // Callback
             client.setCallback(new MqttCallback() {
 
-                public void messageArrived(String topic, MqttMessage message) {
-                    // Called when a message arrives from the server that matches any subscription made by the client
-                    String time = new Timestamp(System.currentTimeMillis()).toString();
-                    String receivedMessage = new String(message.getPayload());
+                public void messageArrived(String topic, MqttMessage message) throws InterruptedException {
 
-                    /**
-                     * TODO - ELEZIONE gRPC
-                     */
+                    RideRequest rideRequest = new Gson().fromJson(new String(message.getPayload()), RideRequest.class);
 
-                    /*System.out.println(CLIENT_ID +" Received a Message! - Callback - Thread PID: " + Thread.currentThread().getId() +
-                            "\n\tTime:    " + time +
-                            "\n\tTopic:   " + topic +
-                            "\n\tMessage: " + receivedMessage +
-                            "\n\tQoS:     " + message.getQos() + "\n");
-
-                    System.out.println("\n ***  Press a random key to exit *** \n");*/
+                    if (rideRequest.getDistrict() == district) {
+                        networkCommunicationModule.startElection(rideRequest);
+                    }
 
                 }
 
                 public void connectionLost(Throwable cause) {
-                    System.out.println(CLIENT_ID + " Connectionlost! cause:" + cause.getMessage()+ "-  Thread PID: " + Thread.currentThread().getId());
+                    System.err.println(CLIENT_ID + " Connection lost! cause:" + cause.getMessage() + "-  Thread PID: " + Thread.currentThread().getId());
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
@@ -72,13 +63,7 @@ public class RideManagementModule extends Thread{
             System.out.println(CLIENT_ID + " Subscribing ... - Thread PID: " + Thread.currentThread().getId());
             client.subscribe(topic + district, QOS);
 
-
-            System.out.println("\n ***  Press a random key to exit *** \n");
-            Scanner command = new Scanner(System.in);
-            command.nextLine();
-            client.disconnect();
-
-        } catch (MqttException me ) {
+        } catch (MqttException me) {
             System.out.println("reason " + me.getReasonCode());
             System.out.println("msg " + me.getMessage());
             System.out.println("loc " + me.getLocalizedMessage());
@@ -89,11 +74,13 @@ public class RideManagementModule extends Thread{
 
     }
 
-    public void setDistrict(String district) {
+    public void setDistrict(int district) {
         this.district = district;
     }
 
-    public Taxi getTaxi() {
-        return taxi;
+    public void disconnect() throws MqttException {
+        client.disconnect();
+        System.out.println(" -- MQTT CLIENT DISCONNETTED -- ");
     }
+
 }

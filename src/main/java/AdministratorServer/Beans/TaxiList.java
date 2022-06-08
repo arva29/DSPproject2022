@@ -17,7 +17,7 @@ import java.util.Random;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiList {
     @XmlElement
-    private final HashMap<Integer, TaxiInfo> listOfTaxis;
+    private final HashMap<Integer, TaxiNetworkInfo> listOfTaxis;
     private static TaxiList instance;
 
     private TaxiList() {
@@ -31,7 +31,7 @@ public class TaxiList {
         return instance;
     }
 
-    public synchronized boolean addTaxi(TaxiInfo taxi){
+    public synchronized boolean addTaxi(TaxiNetworkInfo taxi){
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -55,8 +55,8 @@ public class TaxiList {
         listOfTaxis.remove(id);
     }
 
-    private List<TaxiInfo> getListFromMap(){
-        List<TaxiInfo> listToReturn = new ArrayList<>();
+    private List<TaxiNetworkInfo> getListFromMap(){
+        List<TaxiNetworkInfo> listToReturn = new ArrayList<>();
         for(int key : listOfTaxis.keySet()){
             listToReturn.add(listOfTaxis.get(key));
         }
@@ -69,7 +69,7 @@ public class TaxiList {
     }
 
     public TaxiAddingResponse responseToAddition(int taxiId){
-        List<TaxiInfo> taxiList = new ArrayList<>();
+        List<TaxiNetworkInfo> taxiList = new ArrayList<>();
 
         for(Integer key: listOfTaxis.keySet()){
             if(key != taxiId){

@@ -8,20 +8,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class TaxiInfo {
+public class TaxiNetworkInfo {
     private int id;
     private String ipAddress;
     private int portNumber;
 
-    public TaxiInfo() {}
+    public TaxiNetworkInfo() {}
 
-    public TaxiInfo(int id, String ipAddress, int portNumber) {
+    public TaxiNetworkInfo(int id, String ipAddress, int portNumber) {
         this.id = id;
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
     }
 
-    public TaxiInfo(TaxiInformation taxiInformation){
+    public TaxiNetworkInfo(TaxiInformation taxiInformation){
         this.id = taxiInformation.getId();
         this.ipAddress = taxiInformation.getIpAddress();
         this.portNumber = taxiInformation.getPortNumber();

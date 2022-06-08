@@ -14,6 +14,8 @@ public class RideRequest {
         this.startPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),
                 rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX));
 
+        //this.startPosition = new Position(2,3);
+
         this.endPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),
                 rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX));
 

@@ -1,5 +1,7 @@
 package SETA.Data;
 
+import com.example.grpc.TaxiNetworkServiceOuterClass;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,6 +17,11 @@ public class Position {
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Position(TaxiNetworkServiceOuterClass.Position position){
+        this.x = position.getX();
+        this.y = position.getY();
     }
 
     public Position() {}
@@ -39,6 +46,23 @@ public class Position {
         double x = startingPosition.x - this.x;
         double y = startingPosition.y - this.y;
         return Math.sqrt(Math.exp(x) + Math.exp(y));
+    }
+
+    public Position getRechargeStation(){
+        switch (this.getDistrict()){
+            case 1: //NW
+                return new Position(0, 0);
+            case 2: //NE
+                return new Position(0, 9);
+            case 3: //SW
+                return new Position(9, 0);
+            default:
+                return new Position(9, 9);
+        }
+    }
+
+    public TaxiNetworkServiceOuterClass.Position toProtoPosition(){
+        return TaxiNetworkServiceOuterClass.Position.newBuilder().setX(this.x).setY(this.y).build();
     }
 
     public int getX() {

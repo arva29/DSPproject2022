@@ -1,6 +1,6 @@
 package AdministratorServer.Responses;
 
-import AdministratorServer.Beans.TaxiInfo;
+import AdministratorServer.Beans.TaxiNetworkInfo;
 import SETA.Data.Position;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,9 +13,9 @@ import java.util.List;
 public class TaxiAddingResponse {
 
     private Position position;
-    private List<TaxiInfo> taxiList;
+    private List<TaxiNetworkInfo> taxiList;
 
-    public TaxiAddingResponse(Position position, List<TaxiInfo> taxiList) {
+    public TaxiAddingResponse(Position position, List<TaxiNetworkInfo> taxiList) {
         this.position = position;
         this.taxiList = taxiList;
     }
@@ -26,7 +26,7 @@ public class TaxiAddingResponse {
         return position;
     }
 
-    public List<TaxiInfo> getTaxiList() {
+    public List<TaxiNetworkInfo> getTaxiList() {
         return taxiList;
     }
 

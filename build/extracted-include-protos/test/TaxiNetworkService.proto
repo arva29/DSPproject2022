@@ -7,8 +7,33 @@ message TaxiInformation {
   int32 portNumber = 3;
 }
 
+message Position{
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message ElectionMessage{
+  int32 rideRequestId = 1;
+  Position startPosition = 2;
+  int32 taxiId = 3;
+  double distance = 4;
+  int32 batteryLvl = 5;
+}
+
+message ElectionReply{
+  int32 rideRequestId = 1;
+  ReplyMessage message = 2;
+  int32 taxiId = 3;
+}
+
+enum ReplyMessage {
+  OK = 0;
+  STOP = 1;
+}
+
 message Empty {}
 
 service TaxiNetworkService{
   rpc notifyNewTaxiPresence(TaxiInformation) returns(Empty);
+  rpc electionMessage(ElectionMessage) returns(ElectionReply);
 }

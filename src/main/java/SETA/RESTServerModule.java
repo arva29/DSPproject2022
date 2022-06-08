@@ -1,8 +1,7 @@
 package SETA;
 
-import AdministratorServer.Beans.TaxiInfo;
+import AdministratorServer.Beans.TaxiNetworkInfo;
 import AdministratorServer.Responses.TaxiAddingResponse;
-import SETA.Data.Taxi;
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -12,24 +11,33 @@ import com.sun.jersey.api.client.WebResource;
 public class RESTServerModule {
     private final String SERVER_ADDRESS = "http://localhost:1337";
 
-    public Taxi addTaxiToNetwork(TaxiInfo taxiInfo){
+    public void addTaxiToNetwork(){
         Client client = Client.create();
         ClientResponse clientResponse;
 
         String postPath = "/taxi/add";
-        clientResponse = postRequest(client,SERVER_ADDRESS + postPath, taxiInfo);
+        clientResponse = postRequest(client,SERVER_ADDRESS + postPath, Taxi.getTaxiNetworkInfo());
         TaxiAddingResponse response = clientResponse.getEntity(TaxiAddingResponse.class);
 
-        return new Taxi(taxiInfo,
-                response.getPosition(),
-                response.getTaxiList()
-        );
+        Taxi.setPosition(response.getPosition());
+        if(response.getTaxiList() != null) {
+            Taxi.fillTaxiNetwork(response.getTaxiList());
+        }
     }
 
-    private ClientResponse postRequest(Client client, String url, TaxiInfo t){
+    public void removeTaxiFromNetwork(){
+        Client client = Client.create();
+        ClientResponse clientResponse;
+
+        String removePath = "/taxi/remove";
+        clientResponse = deleteRequest(client,SERVER_ADDRESS + removePath, Taxi.getTaxiNetworkInfo());
+        clientResponse.close();
+    }
+
+    private ClientResponse postRequest(Client client, String url, TaxiNetworkInfo t){
         WebResource webResource = client.resource(url);
         String input = new Gson().toJson(t);
-        System.out.println("-----> " + input);
+        //System.out.println("-----> " + input);
         try {
             return webResource.type("application/json").post(ClientResponse.class, input);
         } catch (ClientHandlerException e) {
@@ -42,6 +50,18 @@ public class RESTServerModule {
         WebResource webResource = client.resource(url);
         try {
             return webResource.type("application/json").get(ClientResponse.class);
+        } catch (ClientHandlerException e) {
+            System.out.println("Server non disponibile");
+            return null;
+        }
+    }
+
+    private ClientResponse deleteRequest(Client client, String url, TaxiNetworkInfo t){
+        WebResource webResource = client.resource(url);
+        String input = new Gson().toJson(t);
+
+        try {
+            return webResource.type("application/json").delete(ClientResponse.class, input);
         } catch (ClientHandlerException e) {
             System.out.println("Server non disponibile");
             return null;
