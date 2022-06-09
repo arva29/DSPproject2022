@@ -2,8 +2,8 @@ AdministratorServer/Responses/TaxiAddingResponse.java
  AdministratorServer.Responses.TaxiAddingResponse
 AdministratorServer/services/AdministratorServices.java
  AdministratorServer.services.AdministratorServices
-AdministratorServer/Responses/AverageStatisticsResponse.java
- AdministratorServer.Responses.AverageStatisticsResponse
+SETA/TaxiNetworkServiceImpl.java
+ SETA.TaxiNetworkServiceImpl
 SETA/Data/Position.java
  SETA.Data.Position
 AdministratorServer/services/TaxiServices.java
@@ -54,6 +54,18 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$Position$1
  com.example.grpc.TaxiNetworkServiceOuterClass$Position$Builder
  com.example.grpc.TaxiNetworkServiceOuterClass$PositionOrBuilder
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeMessage
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeMessage$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeMessage$Builder
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeMessageOrBuilder
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargePermission
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargePermission$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargePermission$Builder
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargePermissionOrBuilder
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeReply
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeReply$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeReply$Builder
+ com.example.grpc.TaxiNetworkServiceOuterClass$RechargeReplyOrBuilder
  com.example.grpc.TaxiNetworkServiceOuterClass$ReplyMessage
  com.example.grpc.TaxiNetworkServiceOuterClass$ReplyMessage$1
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation
@@ -68,17 +80,6 @@ AdministratorServer/Responses/LastStatisticsByIdResponse.java
  AdministratorServer.Responses.LastStatisticsByIdResponse
 SETA/Simulators/Simulator.java
  SETA.Simulators.Simulator
-SETA/SetaProcess.java
- SETA.SetaProcess
-AdministratorServer/Beans/TaxiNetworkInfo.java
- AdministratorServer.Beans.TaxiNetworkInfo
-SETA/NetworkCommunicationModule.java
- SETA.NetworkCommunicationModule
- SETA.NetworkCommunicationModule$1
- SETA.NetworkCommunicationModule$ElectionTask
- SETA.NetworkCommunicationModule$ElectionTask$1
-SETA/TaxiNetworkServiceImpl.java
- SETA.TaxiNetworkServiceImpl
 SETA/RideManagementModule.java
  SETA.RideManagementModule
  SETA.RideManagementModule$1
@@ -86,3 +87,14 @@ SETA/RESTServerModule.java
  SETA.RESTServerModule
 SETA/Taxi.java
  SETA.Taxi
+AdministratorServer/Beans/TaxiNetworkInfo.java
+ AdministratorServer.Beans.TaxiNetworkInfo
+SETA/SetaProcess.java
+ SETA.SetaProcess
+SETA/NetworkCommunicationModule.java
+ SETA.NetworkCommunicationModule
+ SETA.NetworkCommunicationModule$1
+ SETA.NetworkCommunicationModule$ElectionTask
+ SETA.NetworkCommunicationModule$ElectionTask$1
+AdministratorServer/Responses/AverageStatisticsResponse.java
+ AdministratorServer.Responses.AverageStatisticsResponse

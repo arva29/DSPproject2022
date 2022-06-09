@@ -38,17 +38,18 @@ public class SetaProcess {
              * TODO - REMOVE COMMENT
              */
             //while (true){
-                //Thread.sleep(5000);
+            for(int i=0;i<4;i++){
+                Thread.sleep(5000);
 
                 SetaProcess.publishRideRequest(client);
-                //SetaProcess.publishRideRequest(client);
+                SetaProcess.publishRideRequest(client);
 
-                Thread.sleep(10000);
+                Thread.sleep(5000);
 
                 /*if (client.isConnected())
                     client.disconnect();
                 System.out.println("Publisher " + SetaProcess.CLIENT_ID + " disconnected");*/
-            //}
+            }
 
         } catch (MqttException me) {
             System.out.println("reason " + me.getReasonCode());

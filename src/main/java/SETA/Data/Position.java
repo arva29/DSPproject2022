@@ -45,7 +45,8 @@ public class Position {
     public double getDistance(Position startingPosition){
         double x = startingPosition.x - this.x;
         double y = startingPosition.y - this.y;
-        return Math.sqrt(Math.exp(x) + Math.exp(y));
+        //System.out.println("DISTANCE (" + this.x + "," + this.y + ")-(" + startingPosition.x + "," + startingPosition.y + ") ------> " + Math.sqrt(Math.pow(x,2) + Math.pow(y,2)));
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public Position getRechargeStation(){

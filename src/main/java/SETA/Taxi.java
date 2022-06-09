@@ -2,7 +2,7 @@ package SETA;
 
 import AdministratorServer.Beans.TaxiNetworkInfo;
 import SETA.Data.Position;
-import SETA.Data.RideRequest;
+import com.example.grpc.TaxiNetworkServiceOuterClass;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.ArrayList;
@@ -12,7 +12,8 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Taxi {
-    private static AtomicBoolean eligible = new AtomicBoolean(true);
+    private static AtomicBoolean availableForRide = new AtomicBoolean(true);
+    private static boolean recharging = false;
 
     private static final int ID = new Random().nextInt(1000) + 1400;
     //private static final int ID = 1440;
@@ -23,6 +24,7 @@ public class Taxi {
     private static Position position;
     private static final TaxiNetworkInfo taxiNetworkInfo = new TaxiNetworkInfo(ID, IP_ADDRESS, PORT);
     private static final List<TaxiNetworkInfo> taxiNetwork = new ArrayList<>();
+    private static final List<TaxiNetworkInfo> rechargeQueue = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException, MqttException {
 
@@ -50,9 +52,17 @@ public class Taxi {
                 if(scanner.nextLine().equals("quit")){
                     break;
                 } else if(scanner.nextLine().equals("recharge")){
-                    /**
-                     * TODO - RECHARGE PROTOCOL
-                     */
+                    if(batteryLvl < 100) {
+                        setAvailableForRide(false);
+                        /**
+                         * todo Da rivedere trigger sopra
+                         */
+                        try {
+                            rideManagement.recharge(false);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
             try {
@@ -97,12 +107,38 @@ public class Taxi {
         taxiNetwork.addAll(taxiList);
     }
 
-    public static AtomicBoolean getEligible() {
-        return eligible;
+    public static AtomicBoolean getAvailableForRide() {
+        return availableForRide;
     }
 
-    public static void setEligible(boolean value) {
-        Taxi.eligible.set(value);
+    public static void setAvailableForRide(boolean value) {
+        Taxi.availableForRide.set(value);
+    }
+
+    public static boolean isRecharging() {
+        return recharging;
+    }
+
+    public static void setRecharging(boolean recharging) {
+        Taxi.recharging = recharging;
+    }
+
+    public static void addToRechargeQueue(TaxiNetworkInfo taxi){
+        rechargeQueue.add(taxi);
+    }
+
+    public static List<TaxiNetworkInfo> getRechargeQueue(){
+        return rechargeQueue;
+    }
+
+    public static void clearRechargingQueue(){
+        rechargeQueue.clear();
+    }
+
+    public static void addAllToRechargeQueue(List<TaxiNetworkServiceOuterClass.TaxiInformation> taxiList){
+        for(TaxiNetworkServiceOuterClass.TaxiInformation i: taxiList){
+            addToRechargeQueue(new TaxiNetworkInfo(i));
+        }
     }
 
     private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule) throws MqttException {
@@ -113,14 +149,5 @@ public class Taxi {
         /**
          * TODO - Ending task - Notify other taxis ??
          */
-    }
-
-    public static void accomplishRide(RideRequest rideRequest) throws InterruptedException {
-        Thread.sleep(5000);
-        batteryLvl -= (int)Math.ceil(position.getDistance(rideRequest.getStartPosition()) + rideRequest.getStartPosition().getDistance(rideRequest.getEndPosition()));
-        System.out.println("BATTERY: " + batteryLvl);
-        position = rideRequest.getEndPosition();
-        System.out.println("POSITION: " + position.getX() + "," + position.getY());
-        eligible.set(true);
     }
 }

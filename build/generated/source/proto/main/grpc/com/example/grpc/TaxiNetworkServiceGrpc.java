@@ -89,6 +89,68 @@ public final class TaxiNetworkServiceGrpc {
     return getElectionMessageMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage,
+      com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply> getRechargeMessageMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "rechargeMessage",
+      requestType = com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage.class,
+      responseType = com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage,
+      com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply> getRechargeMessageMethod() {
+    io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage, com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply> getRechargeMessageMethod;
+    if ((getRechargeMessageMethod = TaxiNetworkServiceGrpc.getRechargeMessageMethod) == null) {
+      synchronized (TaxiNetworkServiceGrpc.class) {
+        if ((getRechargeMessageMethod = TaxiNetworkServiceGrpc.getRechargeMessageMethod) == null) {
+          TaxiNetworkServiceGrpc.getRechargeMessageMethod = getRechargeMessageMethod =
+              io.grpc.MethodDescriptor.<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage, com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "rechargeMessage"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply.getDefaultInstance()))
+              .setSchemaDescriptor(new TaxiNetworkServiceMethodDescriptorSupplier("rechargeMessage"))
+              .build();
+        }
+      }
+    }
+    return getRechargeMessageMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission,
+      com.example.grpc.TaxiNetworkServiceOuterClass.Empty> getNotifyPermissionToRechargeMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "notifyPermissionToRecharge",
+      requestType = com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission.class,
+      responseType = com.example.grpc.TaxiNetworkServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission,
+      com.example.grpc.TaxiNetworkServiceOuterClass.Empty> getNotifyPermissionToRechargeMethod() {
+    io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission, com.example.grpc.TaxiNetworkServiceOuterClass.Empty> getNotifyPermissionToRechargeMethod;
+    if ((getNotifyPermissionToRechargeMethod = TaxiNetworkServiceGrpc.getNotifyPermissionToRechargeMethod) == null) {
+      synchronized (TaxiNetworkServiceGrpc.class) {
+        if ((getNotifyPermissionToRechargeMethod = TaxiNetworkServiceGrpc.getNotifyPermissionToRechargeMethod) == null) {
+          TaxiNetworkServiceGrpc.getNotifyPermissionToRechargeMethod = getNotifyPermissionToRechargeMethod =
+              io.grpc.MethodDescriptor.<com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission, com.example.grpc.TaxiNetworkServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "notifyPermissionToRecharge"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new TaxiNetworkServiceMethodDescriptorSupplier("notifyPermissionToRecharge"))
+              .build();
+        }
+      }
+    }
+    return getNotifyPermissionToRechargeMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -130,6 +192,20 @@ public final class TaxiNetworkServiceGrpc {
       asyncUnimplementedUnaryCall(getElectionMessageMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void rechargeMessage(com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply> responseObserver) {
+      asyncUnimplementedUnaryCall(getRechargeMessageMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void notifyPermissionToRecharge(com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getNotifyPermissionToRechargeMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -146,6 +222,20 @@ public final class TaxiNetworkServiceGrpc {
                 com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage,
                 com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply>(
                   this, METHODID_ELECTION_MESSAGE)))
+          .addMethod(
+            getRechargeMessageMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage,
+                com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply>(
+                  this, METHODID_RECHARGE_MESSAGE)))
+          .addMethod(
+            getNotifyPermissionToRechargeMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission,
+                com.example.grpc.TaxiNetworkServiceOuterClass.Empty>(
+                  this, METHODID_NOTIFY_PERMISSION_TO_RECHARGE)))
           .build();
     }
   }
@@ -183,6 +273,22 @@ public final class TaxiNetworkServiceGrpc {
       asyncUnaryCall(
           getChannel().newCall(getElectionMessageMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void rechargeMessage(com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getRechargeMessageMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void notifyPermissionToRecharge(com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getNotifyPermissionToRechargeMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -215,6 +321,20 @@ public final class TaxiNetworkServiceGrpc {
     public com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply electionMessage(com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request) {
       return blockingUnaryCall(
           getChannel(), getElectionMessageMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply rechargeMessage(com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage request) {
+      return blockingUnaryCall(
+          getChannel(), getRechargeMessageMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.example.grpc.TaxiNetworkServiceOuterClass.Empty notifyPermissionToRecharge(com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission request) {
+      return blockingUnaryCall(
+          getChannel(), getNotifyPermissionToRechargeMethod(), getCallOptions(), request);
     }
   }
 
@@ -251,10 +371,28 @@ public final class TaxiNetworkServiceGrpc {
       return futureUnaryCall(
           getChannel().newCall(getElectionMessageMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply> rechargeMessage(
+        com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage request) {
+      return futureUnaryCall(
+          getChannel().newCall(getRechargeMessageMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> notifyPermissionToRecharge(
+        com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission request) {
+      return futureUnaryCall(
+          getChannel().newCall(getNotifyPermissionToRechargeMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_NOTIFY_NEW_TAXI_PRESENCE = 0;
   private static final int METHODID_ELECTION_MESSAGE = 1;
+  private static final int METHODID_RECHARGE_MESSAGE = 2;
+  private static final int METHODID_NOTIFY_PERMISSION_TO_RECHARGE = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -280,6 +418,14 @@ public final class TaxiNetworkServiceGrpc {
         case METHODID_ELECTION_MESSAGE:
           serviceImpl.electionMessage((com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage) request,
               (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply>) responseObserver);
+          break;
+        case METHODID_RECHARGE_MESSAGE:
+          serviceImpl.rechargeMessage((com.example.grpc.TaxiNetworkServiceOuterClass.RechargeMessage) request,
+              (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply>) responseObserver);
+          break;
+        case METHODID_NOTIFY_PERMISSION_TO_RECHARGE:
+          serviceImpl.notifyPermissionToRecharge((com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission) request,
+              (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -344,6 +490,8 @@ public final class TaxiNetworkServiceGrpc {
               .setSchemaDescriptor(new TaxiNetworkServiceFileDescriptorSupplier())
               .addMethod(getNotifyNewTaxiPresenceMethod())
               .addMethod(getElectionMessageMethod())
+              .addMethod(getRechargeMessageMethod())
+              .addMethod(getNotifyPermissionToRechargeMethod())
               .build();
         }
       }
