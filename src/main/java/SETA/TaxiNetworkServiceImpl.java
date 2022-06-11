@@ -27,27 +27,31 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
 
         ElectionReply reply;
 
-        if(Taxi.getAvailableForRide().get()) { //NOT INVOLVED IN AN OTHER RIDE OR RECHARGE PROCESS
+        if(Taxi.isFree()) { //NOT INVOLVED IN AN OTHER RIDE OR RECHARGE PROCESS
             if (new Position(request.getStartPosition()).getDistrict() == Taxi.getPosition().getDistrict()) { //CHECK IF REQUEST IS FROM SAME DISTRICT
-                if (request.getDistance() > Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) { //DISTANCE COMPARISON
-                    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
-                } else if (request.getDistance() < Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) {
-                    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
-                } else {
-                    if (request.getBatteryLvl() > Taxi.getBatteryLvl()){    //BATTERY LEVEL COMPARISON
-                        reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
-                    } else if (request.getBatteryLvl() < Taxi.getBatteryLvl()){
+                if(Taxi.getEligibilityMap().get(request.getRideRequestId())) {  //IF ALREADY NOT ELIGIBLE FOR THIS RIDE
+                    if (request.getDistance() > Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) { //DISTANCE COMPARISON
                         reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
-                    } else {    //ID COMPARISON
-                        //System.out.println("ID REQ: " + request.getTaxiId() + " MY ID: " + Taxi.getTaxiNetworkInfo().getId());
-                        if(request.getTaxiId() > Taxi.getTaxiNetworkInfo().getId()){
+                    } else if (request.getDistance() < Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) {
+                        reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                    } else {
+                        if (request.getBatteryLvl() > Taxi.getBatteryLvl()) {    //BATTERY LEVEL COMPARISON
                             reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
-                        } else {
+                        } else if (request.getBatteryLvl() < Taxi.getBatteryLvl()) {
                             reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                        } else {    //ID COMPARISON
+                            //System.out.println("ID REQ: " + request.getTaxiId() + " MY ID: " + Taxi.getTaxiNetworkInfo().getId());
+                            if (request.getTaxiId() > Taxi.getTaxiNetworkInfo().getId()) {
+                                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                            } else {
+                                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                            }
                         }
                     }
+                } else {
+                    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
                 }
-            }  else {
+            } else {
                 reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
             }
         } else {
@@ -62,7 +66,7 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
     public void rechargeMessage(RechargeMessage request, StreamObserver<RechargeReply> responseObserver) {
         RechargeReply reply;
 
-        if(Taxi.getAvailableForRide().get()){ //If free for ride not asking for recharge
+        if(Taxi.isFree()){ //If free for ride not asking for recharge
             reply = RechargeReply.newBuilder().setMessage(ReplyMessage.OK).build();
         } else {
             if(request.getDistrict() == Taxi.getPosition().getDistrict()){ //Not free but other district

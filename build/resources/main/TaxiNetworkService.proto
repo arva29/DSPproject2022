@@ -26,6 +26,20 @@ message ElectionReply{
   int32 taxiId = 3;
 }
 
+message RechargeMessage {
+  TaxiInformation taxiInfo = 1;
+  int32 district = 2;
+  string timestamp = 3;
+}
+
+message RechargePermission {
+  repeated TaxiInformation rechargeQueue = 1;
+}
+
+message RechargeReply {
+  ReplyMessage message = 1;
+}
+
 enum ReplyMessage {
   OK = 0;
   STOP = 1;
@@ -36,4 +50,6 @@ message Empty {}
 service TaxiNetworkService{
   rpc notifyNewTaxiPresence(TaxiInformation) returns(Empty);
   rpc electionMessage(ElectionMessage) returns(ElectionReply);
+  rpc rechargeMessage(RechargeMessage) returns(RechargeReply);
+  rpc notifyPermissionToRecharge(RechargePermission) returns(Empty);
 }

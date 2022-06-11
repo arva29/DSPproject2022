@@ -5,8 +5,7 @@ import SETA.Data.RideRequest;
 import com.google.gson.Gson;
 import org.eclipse.paho.client.mqttv3.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class RideManagementModule extends Thread{
     private final String BROKER = "tcp://localhost:1883";
@@ -45,14 +44,14 @@ public class RideManagementModule extends Thread{
 
                     RideRequest rideRequest = new Gson().fromJson(new String(message.getPayload()), RideRequest.class);
 
-                    if (rideRequest.getDistrict() == district) {
+                    if (Taxi.isFree() && rideRequest.getDistrict() == district) {
                         networkCommunicationModule.startElection(rideRequest, thisModule);
                     }
 
                 }
 
                 public void connectionLost(Throwable cause) {
-                    System.err.println(CLIENT_ID + " Connection lost! cause:" + cause.getMessage() + "-  Thread PID: " + Thread.currentThread().getId());
+                    System.err.println(CLIENT_ID + " Connection lost! cause:" + cause.getMessage() + " - Stack Trace: " + Arrays.toString(cause.getStackTrace()) + " - Thread PID: " + Thread.currentThread().getId());
                 }
 
                 public void deliveryComplete(IMqttDeliveryToken token) {
@@ -76,7 +75,9 @@ public class RideManagementModule extends Thread{
     }
 
     public void disconnect() throws MqttException {
-        client.disconnect();
+        if(client.isConnected()) {
+            client.disconnect();
+        }
         System.out.println(" -- MQTT CLIENT DISCONNETTED -- ");
     }
 
@@ -87,9 +88,9 @@ public class RideManagementModule extends Thread{
      * @throws MqttException
      */
     public void accomplishRide(RideRequest rideRequest) throws InterruptedException, MqttException {
-        System.out.println("ACCOMPLISH RIDE - " + rideRequest.getId());
-        Thread.sleep(5000);
 
+        Thread.sleep(5000);
+        System.out.println("ACCOMPLISHED RIDE - " + rideRequest.getId());
         Taxi.setBatteryLvl(Taxi.getBatteryLvl() - (int)Math.ceil(Taxi.getPosition().getDistance(rideRequest.getStartPosition()) + rideRequest.getStartPosition().getDistance(rideRequest.getEndPosition())));
         System.out.println("BATTERY: " + Taxi.getBatteryLvl());
         Taxi.setPosition(rideRequest.getEndPosition());
@@ -98,8 +99,11 @@ public class RideManagementModule extends Thread{
         if (Taxi.getBatteryLvl() < 30){
             recharge(false);
         } else {
-            Taxi.setAvailableForRide(true);
+            Taxi.setFree(true);
+            //Taxi.getFreeLock().notify();
         }
+
+        notifyAccomplishedRide(rideRequest);
 
         if(Taxi.getPosition().getDistrict() != district){
             changeDistrict();
@@ -140,11 +144,17 @@ public class RideManagementModule extends Thread{
      * @throws InterruptedException
      */
     public void completeRecharging() throws InterruptedException {
-        Thread.sleep(10000);
+        Taxi.setRecharging(true);
+        if(Taxi.isFree()){Taxi.setFree(false);}
+        Taxi.setBatteryLvl(Taxi.getBatteryLvl() - (int)Math.ceil(Taxi.getPosition().getDistance(Taxi.getPosition().getRechargeStation())));
         Taxi.setPosition(Taxi.getPosition().getRechargeStation());
+        System.out.println(" ...Starting recharging ");
+        Thread.sleep(10000);
         Taxi.setBatteryLvl(100);
-        Taxi.setAvailableForRide(true);
+        Taxi.setFree(true);
+        Taxi.setRecharging(false);
         notifyFreeChargingStation();
+        System.out.println(" - RICARICA EFFETTUATA - ");
     }
 
     /**
@@ -159,5 +169,25 @@ public class RideManagementModule extends Thread{
             networkCommunicationModule.notifyPendingTaxi(nextTaxiToRecharge, Taxi.getRechargeQueue());
             Taxi.clearRechargingQueue();
         }
+    }
+
+    /**
+     * Method to notify SETA process the ride request that the taxi has accomplished
+     * @param rideRequest
+     * @throws MqttException
+     */
+    private void notifyAccomplishedRide(RideRequest rideRequest) throws MqttException {
+        final String notifyTopic = "seta/smartcity/rides/accomplished";
+
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(rideRequest); //RideRequest to json string
+
+        MqttMessage message = new MqttMessage(jsonString.getBytes());
+
+        // Set the QoS on the Message
+        message.setQos(QOS);
+        System.out.println(CLIENT_ID + " Publishing message: " + jsonString + " ...");
+        client.publish(notifyTopic, message);
+        System.out.println(CLIENT_ID + " Message published");
     }
 }

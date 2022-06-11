@@ -2,8 +2,8 @@ AdministratorServer/Responses/TaxiAddingResponse.java
  AdministratorServer.Responses.TaxiAddingResponse
 AdministratorServer/services/AdministratorServices.java
  AdministratorServer.services.AdministratorServices
-SETA/TaxiNetworkServiceImpl.java
- SETA.TaxiNetworkServiceImpl
+AdministratorServer/Responses/AverageStatisticsResponse.java
+ AdministratorServer.Responses.AverageStatisticsResponse
 SETA/Data/Position.java
  SETA.Data.Position
 AdministratorServer/services/TaxiServices.java
@@ -72,29 +72,32 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation$1
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation$Builder
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformationOrBuilder
-SETA/Data/RideRequest.java
- SETA.Data.RideRequest
+SETA/SetaProcess.java
+ SETA.SetaProcess
 AdministratorServer/Beans/StatisticsRecord.java
  AdministratorServer.Beans.StatisticsRecord
 AdministratorServer/Responses/LastStatisticsByIdResponse.java
  AdministratorServer.Responses.LastStatisticsByIdResponse
 SETA/Simulators/Simulator.java
  SETA.Simulators.Simulator
-SETA/RideManagementModule.java
- SETA.RideManagementModule
- SETA.RideManagementModule$1
 SETA/RESTServerModule.java
  SETA.RESTServerModule
-SETA/Taxi.java
- SETA.Taxi
 AdministratorServer/Beans/TaxiNetworkInfo.java
  AdministratorServer.Beans.TaxiNetworkInfo
-SETA/SetaProcess.java
- SETA.SetaProcess
+SETA/Data/RideRequest.java
+ SETA.Data.RideRequest
 SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule
  SETA.NetworkCommunicationModule$1
+ SETA.NetworkCommunicationModule$2
  SETA.NetworkCommunicationModule$ElectionTask
  SETA.NetworkCommunicationModule$ElectionTask$1
-AdministratorServer/Responses/AverageStatisticsResponse.java
- AdministratorServer.Responses.AverageStatisticsResponse
+ SETA.NetworkCommunicationModule$RechargeTask
+ SETA.NetworkCommunicationModule$RechargeTask$1
+SETA/TaxiNetworkServiceImpl.java
+ SETA.TaxiNetworkServiceImpl
+SETA/RideManagementModule.java
+ SETA.RideManagementModule
+ SETA.RideManagementModule$1
+SETA/Taxi.java
+ SETA.Taxi

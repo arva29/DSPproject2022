@@ -12,6 +12,7 @@ import io.grpc.stub.StreamObserver;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -75,6 +76,9 @@ public class NetworkCommunicationModule extends Thread{
     }
 
     public void startElection(RideRequest rideRequest, RideManagementModule rideMngModule) throws InterruptedException, MqttException {
+        Taxi.getEligibilityMap().put(rideRequest.getId(), true);
+        System.out.println("MAP SIZE = " + Taxi.getEligibilityMap().size());
+
         if(Taxi.getTaxiNetwork().size() != 0) { //If only 1 taxi, it directly takes the ride
             ExecutorService executor = Executors.newFixedThreadPool(Taxi.getTaxiNetwork().size());
 
@@ -92,12 +96,19 @@ public class NetworkCommunicationModule extends Thread{
             }
         }
 
-        if(Taxi.getAvailableForRide().get()){
-            Taxi.getAvailableForRide().set(false);
-            rideMngModule.accomplishRide(rideRequest);
-        } else {
-            Taxi.setAvailableForRide(true);
+        /**
+         * TODO - Rivedere tutto recharge e ride election
+         */
+
+        if(Taxi.getEligibilityMap().get(rideRequest.getId())){
+            Taxi.setFree(false);
+            try {
+                rideMngModule.accomplishRide(rideRequest);
+            } catch (InterruptedException | MqttException e) {
+                e.printStackTrace();
+            }
         }
+        Taxi.getEligibilityMap().remove(rideRequest.getId());
     }
 
     public void notifyPendingTaxi(TaxiNetworkInfo taxi, List<TaxiNetworkInfo> rechargeQueue) throws InterruptedException {
@@ -154,11 +165,10 @@ public class NetworkCommunicationModule extends Thread{
             }
         }
 
-        if(rechargeReplyCounter == Taxi.getTaxiNetwork().size()){
-            return true;
-        } else {
-            return false;
-        }
+        boolean value = (rechargeReplyCounter == Taxi.getTaxiNetwork().size());
+
+        rechargeReplyCounter = 0;
+        return value;
     }
 
     private class ElectionTask implements Runnable{
@@ -192,13 +202,13 @@ public class NetworkCommunicationModule extends Thread{
                 public void onNext(ElectionReply reply) {
                     System.out.println(" - REPLY - \nFROM: " + reply.getTaxiId() + "\nMESSAGE: " + reply.getMessage() + "\n");
                     if (reply.getMessage().equals(ReplyMessage.STOP)) {
-                        Taxi.setAvailableForRide(false);
+                        Taxi.getEligibilityMap().put(rideRequest.getId(), false); //Replace true value with false one
                     }
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    System.err.println("ELECTION MESSAGE ERROR: " + t.getMessage());
+                    System.err.println("ELECTION MESSAGE ERROR: " + t.getMessage() + " - " + Arrays.toString(t.getStackTrace()));
                 }
 
                 @Override
@@ -238,6 +248,7 @@ public class NetworkCommunicationModule extends Thread{
             stub.rechargeMessage(message, new StreamObserver<RechargeReply>() {
                 @Override
                 public void onNext(RechargeReply reply) {
+                    System.out.println(" - RECHARGE REPLY - \nMESSAGE: " + reply.getMessage() + "\n");
                     if(reply.getMessage().equals(ReplyMessage.OK)){
                         incrementRechargeReplyCounter();
                     }

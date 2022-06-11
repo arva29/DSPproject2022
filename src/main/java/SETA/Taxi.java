@@ -5,22 +5,20 @@ import SETA.Data.Position;
 import com.example.grpc.TaxiNetworkServiceOuterClass;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.*;
 
 public class Taxi {
-    private static AtomicBoolean availableForRide = new AtomicBoolean(true);
-    private static boolean recharging = false;
+    private static Boolean free = true; //True if it is free to accept a ride
+    private static final Object freeLock = new Object();
+    private static Boolean recharging = false; //True if it is recharging
+    private static final Map<Integer, Boolean> eligibilityMap = new HashMap<>();
 
     private static final int ID = new Random().nextInt(1000) + 1400;
     //private static final int ID = 1440;
     private static final String IP_ADDRESS = "127.0.0.1";
     private static final int PORT = ID;
 
-    private static int batteryLvl = 100;
+    private static int batteryLvl = 90;
     private static Position position;
     private static final TaxiNetworkInfo taxiNetworkInfo = new TaxiNetworkInfo(ID, IP_ADDRESS, PORT);
     private static final List<TaxiNetworkInfo> taxiNetwork = new ArrayList<>();
@@ -48,25 +46,35 @@ public class Taxi {
 
         Thread stdinThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
+            String line;
             while (true){
-                if(scanner.nextLine().equals("quit")){
+                line = scanner.nextLine();
+                if(line.equals("quit")){
                     break;
-                } else if(scanner.nextLine().equals("recharge")){
+                } else if(line.equals("recharge")){
                     if(batteryLvl < 100) {
-                        setAvailableForRide(false);
-                        /**
-                         * todo Da rivedere trigger sopra
-                         */
+                        //if(!isFree()){
+                        //    System.out.println("..waiting");
+                        //    getFreeLock().wait();
+                        //}
                         try {
                             rideManagement.recharge(false);
-                        } catch (InterruptedException e) {
+                        } catch (InterruptedException | MqttException e) {
                             e.printStackTrace();
                         }
                     }
                 }
             }
             try {
-                leaveNetwork(restServerModule, rideManagement, networkCommunicationModule);
+                /**
+                 * todo SOLVE WITH SYNC ????
+                 */
+                while (true) {
+                    if(free) {
+                        leaveNetwork(restServerModule, rideManagement, networkCommunicationModule);
+                        break;
+                    }
+                }
             } catch (MqttException e) {
                 e.printStackTrace();
             }
@@ -75,7 +83,7 @@ public class Taxi {
 
     }
 
-    public static void addTaxiToNetwork(TaxiNetworkInfo newTaxi){
+    public static synchronized void addTaxiToNetwork(TaxiNetworkInfo newTaxi){
         taxiNetwork.add(newTaxi);
     }
 
@@ -97,6 +105,7 @@ public class Taxi {
 
     public static void setPosition(Position position) {
         Taxi.position = position;
+        System.out.println("New position -> (" + position.getX() + "," + position.getY() + ")");
     }
 
     public static TaxiNetworkInfo getTaxiNetworkInfo() {
@@ -107,20 +116,29 @@ public class Taxi {
         taxiNetwork.addAll(taxiList);
     }
 
-    public static AtomicBoolean getAvailableForRide() {
-        return availableForRide;
+    public static synchronized Boolean isFree() {
+        return free;
     }
 
-    public static void setAvailableForRide(boolean value) {
-        Taxi.availableForRide.set(value);
+    public static synchronized void setFree(boolean free) {
+        System.out.println("------ free -> " + free);
+        Taxi.free = free;
     }
 
-    public static boolean isRecharging() {
+    public static synchronized Object getFreeLock(){
+        return freeLock;
+    }
+
+    public static synchronized Boolean isRecharging() {
         return recharging;
     }
 
-    public static void setRecharging(boolean recharging) {
+    public static synchronized void setRecharging(boolean recharging) {
         Taxi.recharging = recharging;
+    }
+
+    public static synchronized Map<Integer, Boolean> getEligibilityMap(){
+        return eligibilityMap;
     }
 
     public static void addToRechargeQueue(TaxiNetworkInfo taxi){
