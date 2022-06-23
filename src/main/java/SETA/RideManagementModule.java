@@ -44,10 +44,15 @@ public class RideManagementModule extends Thread{
 
                     RideRequest rideRequest = new Gson().fromJson(new String(message.getPayload()), RideRequest.class);
 
-                    if (Taxi.isFree() && rideRequest.getDistrict() == district) {
-                        networkCommunicationModule.startElection(rideRequest, thisModule);
-                    }
+                    //System.out.println("Message arrived (" + rideRequest.getId() + ")! - FREE: " + Taxi.isFree() + " - ALREADY ANSWERED - " + !Taxi.rideAlreadyAccomplished(rideRequest.getId()));
 
+                    if (rideRequest.getDistrict() == district) {
+                        if(Taxi.isFree() && !Taxi.isAskingForRecharging() && !Taxi.rideAlreadyAccomplished(rideRequest.getId())) { //If not free Taxi doesn't take into consideration the request
+
+                            networkCommunicationModule.startElection(rideRequest, thisModule);
+
+                        }
+                    }
                 }
 
                 public void connectionLost(Throwable cause) {
@@ -88,7 +93,7 @@ public class RideManagementModule extends Thread{
      * @throws MqttException
      */
     public void accomplishRide(RideRequest rideRequest) throws InterruptedException, MqttException {
-
+        System.out.println("\n ... on the road!\n");
         Thread.sleep(5000);
         System.out.println("ACCOMPLISHED RIDE - " + rideRequest.getId());
         Taxi.setBatteryLvl(Taxi.getBatteryLvl() - (int)Math.ceil(Taxi.getPosition().getDistance(rideRequest.getStartPosition()) + rideRequest.getStartPosition().getDistance(rideRequest.getEndPosition())));
@@ -100,7 +105,8 @@ public class RideManagementModule extends Thread{
             recharge(false);
         } else {
             Taxi.setFree(true);
-            //Taxi.getFreeLock().notify();
+            Taxi.setEligible(true);
+            System.out.println();
         }
 
         notifyAccomplishedRide(rideRequest);
@@ -130,6 +136,7 @@ public class RideManagementModule extends Thread{
      * @throws MqttException
      */
     public void recharge(boolean directAccess) throws InterruptedException, MqttException {
+        if(Taxi.isFree()) Taxi.setFree(false);
         if(!directAccess){
             if(networkCommunicationModule.askingForRecharge()){
                 completeRecharging();
@@ -144,6 +151,7 @@ public class RideManagementModule extends Thread{
      * @throws InterruptedException
      */
     public void completeRecharging() throws InterruptedException {
+        Taxi.setAskingForRecharging(false);
         Taxi.setRecharging(true);
         if(Taxi.isFree()){Taxi.setFree(false);}
         Taxi.setBatteryLvl(Taxi.getBatteryLvl() - (int)Math.ceil(Taxi.getPosition().getDistance(Taxi.getPosition().getRechargeStation())));
@@ -152,9 +160,10 @@ public class RideManagementModule extends Thread{
         Thread.sleep(10000);
         Taxi.setBatteryLvl(100);
         Taxi.setFree(true);
+        Taxi.setEligible(true);
         Taxi.setRecharging(false);
-        notifyFreeChargingStation();
         System.out.println(" - RICARICA EFFETTUATA - ");
+        notifyFreeChargingStation();
     }
 
     /**
@@ -163,9 +172,21 @@ public class RideManagementModule extends Thread{
      * @throws InterruptedException
      */
     private void notifyFreeChargingStation() throws InterruptedException {
+
+        System.err.println("Recharge Queue BEFORE");
+        for(TaxiNetworkInfo i: Taxi.getRechargeQueue()){
+            System.err.println("ID - " + i.getId());
+        }
+
         if(Taxi.getRechargeQueue().size() > 0){
             TaxiNetworkInfo nextTaxiToRecharge = Taxi.getRechargeQueue().get(0);
             Taxi.getRechargeQueue().remove(0);
+
+            System.err.println("\nRecharge Queue AFTER");
+            for(TaxiNetworkInfo i: Taxi.getRechargeQueue()){
+                System.err.println("ID - " + i.getId());
+            }
+
             networkCommunicationModule.notifyPendingTaxi(nextTaxiToRecharge, Taxi.getRechargeQueue());
             Taxi.clearRechargingQueue();
         }
@@ -186,8 +207,9 @@ public class RideManagementModule extends Thread{
 
         // Set the QoS on the Message
         message.setQos(QOS);
-        System.out.println(CLIENT_ID + " Publishing message: " + jsonString + " ...");
+        //System.out.println(CLIENT_ID + " Publishing message: " + jsonString + " ...");
         client.publish(notifyTopic, message);
-        System.out.println(CLIENT_ID + " Message published");
+        //System.out.println(CLIENT_ID + " Message published");
     }
+
 }

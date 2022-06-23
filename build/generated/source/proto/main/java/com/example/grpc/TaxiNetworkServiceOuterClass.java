@@ -820,6 +820,492 @@ public final class TaxiNetworkServiceOuterClass {
 
   }
 
+  public interface TaxiLeavingOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:com.example.grpc.TaxiLeaving)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int32 id = 1;</code>
+     * @return The id.
+     */
+    int getId();
+  }
+  /**
+   * Protobuf type {@code com.example.grpc.TaxiLeaving}
+   */
+  public  static final class TaxiLeaving extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:com.example.grpc.TaxiLeaving)
+      TaxiLeavingOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use TaxiLeaving.newBuilder() to construct.
+    private TaxiLeaving(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private TaxiLeaving() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new TaxiLeaving();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private TaxiLeaving(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              id_ = input.readInt32();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.example.grpc.TaxiNetworkServiceOuterClass.internal_static_com_example_grpc_TaxiLeaving_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.example.grpc.TaxiNetworkServiceOuterClass.internal_static_com_example_grpc_TaxiLeaving_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.class, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.Builder.class);
+    }
+
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>int32 id = 1;</code>
+     * @return The id.
+     */
+    public int getId() {
+      return id_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (id_ != 0) {
+        output.writeInt32(1, id_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (id_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving)) {
+        return super.equals(obj);
+      }
+      com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving other = (com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving) obj;
+
+      if (getId()
+          != other.getId()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + ID_FIELD_NUMBER;
+      hash = (53 * hash) + getId();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code com.example.grpc.TaxiLeaving}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:com.example.grpc.TaxiLeaving)
+        com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeavingOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.example.grpc.TaxiNetworkServiceOuterClass.internal_static_com_example_grpc_TaxiLeaving_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.example.grpc.TaxiNetworkServiceOuterClass.internal_static_com_example_grpc_TaxiLeaving_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.class, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.Builder.class);
+      }
+
+      // Construct using com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.example.grpc.TaxiNetworkServiceOuterClass.internal_static_com_example_grpc_TaxiLeaving_descriptor;
+      }
+
+      @java.lang.Override
+      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving getDefaultInstanceForType() {
+        return com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving build() {
+        com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving buildPartial() {
+        com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving result = new com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving(this);
+        result.id_ = id_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving) {
+          return mergeFrom((com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving other) {
+        if (other == com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.getDefaultInstance()) return this;
+        if (other.getId() != 0) {
+          setId(other.getId());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int id_ ;
+      /**
+       * <code>int32 id = 1;</code>
+       * @return The id.
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>int32 id = 1;</code>
+       * @param value The id to set.
+       * @return This builder for chaining.
+       */
+      public Builder setId(int value) {
+        
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 id = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearId() {
+        
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:com.example.grpc.TaxiLeaving)
+    }
+
+    // @@protoc_insertion_point(class_scope:com.example.grpc.TaxiLeaving)
+    private static final com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving();
+    }
+
+    public static com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<TaxiLeaving>
+        PARSER = new com.google.protobuf.AbstractParser<TaxiLeaving>() {
+      @java.lang.Override
+      public TaxiLeaving parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new TaxiLeaving(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<TaxiLeaving> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<TaxiLeaving> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface PositionOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.example.grpc.Position)
       com.google.protobuf.MessageOrBuilder {
@@ -3762,30 +4248,6 @@ public final class TaxiNetworkServiceOuterClass {
   public interface RechargePermissionOrBuilder extends
       // @@protoc_insertion_point(interface_extends:com.example.grpc.RechargePermission)
       com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    java.util.List<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation> 
-        getRechargeQueueList();
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation getRechargeQueue(int index);
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    int getRechargeQueueCount();
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    java.util.List<? extends com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder> 
-        getRechargeQueueOrBuilderList();
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder getRechargeQueueOrBuilder(
-        int index);
   }
   /**
    * Protobuf type {@code com.example.grpc.RechargePermission}
@@ -3800,7 +4262,6 @@ public final class TaxiNetworkServiceOuterClass {
       super(builder);
     }
     private RechargePermission() {
-      rechargeQueue_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -3823,7 +4284,6 @@ public final class TaxiNetworkServiceOuterClass {
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
-      int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
@@ -3834,15 +4294,6 @@ public final class TaxiNetworkServiceOuterClass {
             case 0:
               done = true;
               break;
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                rechargeQueue_ = new java.util.ArrayList<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              rechargeQueue_.add(
-                  input.readMessage(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.parser(), extensionRegistry));
-              break;
-            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -3858,9 +4309,6 @@ public final class TaxiNetworkServiceOuterClass {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          rechargeQueue_ = java.util.Collections.unmodifiableList(rechargeQueue_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -3878,41 +4326,6 @@ public final class TaxiNetworkServiceOuterClass {
               com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission.class, com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission.Builder.class);
     }
 
-    public static final int RECHARGEQUEUE_FIELD_NUMBER = 1;
-    private java.util.List<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation> rechargeQueue_;
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    public java.util.List<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation> getRechargeQueueList() {
-      return rechargeQueue_;
-    }
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    public java.util.List<? extends com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder> 
-        getRechargeQueueOrBuilderList() {
-      return rechargeQueue_;
-    }
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    public int getRechargeQueueCount() {
-      return rechargeQueue_.size();
-    }
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation getRechargeQueue(int index) {
-      return rechargeQueue_.get(index);
-    }
-    /**
-     * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-     */
-    public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder getRechargeQueueOrBuilder(
-        int index) {
-      return rechargeQueue_.get(index);
-    }
-
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -3927,9 +4340,6 @@ public final class TaxiNetworkServiceOuterClass {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      for (int i = 0; i < rechargeQueue_.size(); i++) {
-        output.writeMessage(1, rechargeQueue_.get(i));
-      }
       unknownFields.writeTo(output);
     }
 
@@ -3939,10 +4349,6 @@ public final class TaxiNetworkServiceOuterClass {
       if (size != -1) return size;
 
       size = 0;
-      for (int i = 0; i < rechargeQueue_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, rechargeQueue_.get(i));
-      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -3958,8 +4364,6 @@ public final class TaxiNetworkServiceOuterClass {
       }
       com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission other = (com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission) obj;
 
-      if (!getRechargeQueueList()
-          .equals(other.getRechargeQueueList())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -3971,10 +4375,6 @@ public final class TaxiNetworkServiceOuterClass {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (getRechargeQueueCount() > 0) {
-        hash = (37 * hash) + RECHARGEQUEUE_FIELD_NUMBER;
-        hash = (53 * hash) + getRechargeQueueList().hashCode();
-      }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -4103,18 +4503,11 @@ public final class TaxiNetworkServiceOuterClass {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getRechargeQueueFieldBuilder();
         }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        if (rechargeQueueBuilder_ == null) {
-          rechargeQueue_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          rechargeQueueBuilder_.clear();
-        }
         return this;
       }
 
@@ -4141,16 +4534,6 @@ public final class TaxiNetworkServiceOuterClass {
       @java.lang.Override
       public com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission buildPartial() {
         com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission result = new com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission(this);
-        int from_bitField0_ = bitField0_;
-        if (rechargeQueueBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) != 0)) {
-            rechargeQueue_ = java.util.Collections.unmodifiableList(rechargeQueue_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.rechargeQueue_ = rechargeQueue_;
-        } else {
-          result.rechargeQueue_ = rechargeQueueBuilder_.build();
-        }
         onBuilt();
         return result;
       }
@@ -4199,32 +4582,6 @@ public final class TaxiNetworkServiceOuterClass {
 
       public Builder mergeFrom(com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission other) {
         if (other == com.example.grpc.TaxiNetworkServiceOuterClass.RechargePermission.getDefaultInstance()) return this;
-        if (rechargeQueueBuilder_ == null) {
-          if (!other.rechargeQueue_.isEmpty()) {
-            if (rechargeQueue_.isEmpty()) {
-              rechargeQueue_ = other.rechargeQueue_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureRechargeQueueIsMutable();
-              rechargeQueue_.addAll(other.rechargeQueue_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.rechargeQueue_.isEmpty()) {
-            if (rechargeQueueBuilder_.isEmpty()) {
-              rechargeQueueBuilder_.dispose();
-              rechargeQueueBuilder_ = null;
-              rechargeQueue_ = other.rechargeQueue_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              rechargeQueueBuilder_ = 
-                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getRechargeQueueFieldBuilder() : null;
-            } else {
-              rechargeQueueBuilder_.addAllMessages(other.rechargeQueue_);
-            }
-          }
-        }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
@@ -4252,247 +4609,6 @@ public final class TaxiNetworkServiceOuterClass {
           }
         }
         return this;
-      }
-      private int bitField0_;
-
-      private java.util.List<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation> rechargeQueue_ =
-        java.util.Collections.emptyList();
-      private void ensureRechargeQueueIsMutable() {
-        if (!((bitField0_ & 0x00000001) != 0)) {
-          rechargeQueue_ = new java.util.ArrayList<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation>(rechargeQueue_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder> rechargeQueueBuilder_;
-
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public java.util.List<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation> getRechargeQueueList() {
-        if (rechargeQueueBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(rechargeQueue_);
-        } else {
-          return rechargeQueueBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public int getRechargeQueueCount() {
-        if (rechargeQueueBuilder_ == null) {
-          return rechargeQueue_.size();
-        } else {
-          return rechargeQueueBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation getRechargeQueue(int index) {
-        if (rechargeQueueBuilder_ == null) {
-          return rechargeQueue_.get(index);
-        } else {
-          return rechargeQueueBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder setRechargeQueue(
-          int index, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation value) {
-        if (rechargeQueueBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.set(index, value);
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder setRechargeQueue(
-          int index, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder builderForValue) {
-        if (rechargeQueueBuilder_ == null) {
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder addRechargeQueue(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation value) {
-        if (rechargeQueueBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.add(value);
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder addRechargeQueue(
-          int index, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation value) {
-        if (rechargeQueueBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.add(index, value);
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder addRechargeQueue(
-          com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder builderForValue) {
-        if (rechargeQueueBuilder_ == null) {
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.add(builderForValue.build());
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder addRechargeQueue(
-          int index, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder builderForValue) {
-        if (rechargeQueueBuilder_ == null) {
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder addAllRechargeQueue(
-          java.lang.Iterable<? extends com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation> values) {
-        if (rechargeQueueBuilder_ == null) {
-          ensureRechargeQueueIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, rechargeQueue_);
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder clearRechargeQueue() {
-        if (rechargeQueueBuilder_ == null) {
-          rechargeQueue_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public Builder removeRechargeQueue(int index) {
-        if (rechargeQueueBuilder_ == null) {
-          ensureRechargeQueueIsMutable();
-          rechargeQueue_.remove(index);
-          onChanged();
-        } else {
-          rechargeQueueBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder getRechargeQueueBuilder(
-          int index) {
-        return getRechargeQueueFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder getRechargeQueueOrBuilder(
-          int index) {
-        if (rechargeQueueBuilder_ == null) {
-          return rechargeQueue_.get(index);  } else {
-          return rechargeQueueBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public java.util.List<? extends com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder> 
-           getRechargeQueueOrBuilderList() {
-        if (rechargeQueueBuilder_ != null) {
-          return rechargeQueueBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(rechargeQueue_);
-        }
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder addRechargeQueueBuilder() {
-        return getRechargeQueueFieldBuilder().addBuilder(
-            com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder addRechargeQueueBuilder(
-          int index) {
-        return getRechargeQueueFieldBuilder().addBuilder(
-            index, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .com.example.grpc.TaxiInformation rechargeQueue = 1;</code>
-       */
-      public java.util.List<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder> 
-           getRechargeQueueBuilderList() {
-        return getRechargeQueueFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilderV3<
-          com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder> 
-          getRechargeQueueFieldBuilder() {
-        if (rechargeQueueBuilder_ == null) {
-          rechargeQueueBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation.Builder, com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformationOrBuilder>(
-                  rechargeQueue_,
-                  ((bitField0_ & 0x00000001) != 0),
-                  getParentForChildren(),
-                  isClean());
-          rechargeQueue_ = null;
-        }
-        return rechargeQueueBuilder_;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -5494,6 +5610,11 @@ public final class TaxiNetworkServiceOuterClass {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_com_example_grpc_TaxiInformation_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_com_example_grpc_TaxiLeaving_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_com_example_grpc_TaxiLeaving_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_com_example_grpc_Position_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -5539,32 +5660,33 @@ public final class TaxiNetworkServiceOuterClass {
     java.lang.String[] descriptorData = {
       "\n\030TaxiNetworkService.proto\022\020com.example." +
       "grpc\"D\n\017TaxiInformation\022\n\n\002id\030\001 \001(\005\022\021\n\ti" +
-      "pAddress\030\002 \001(\t\022\022\n\nportNumber\030\003 \001(\005\" \n\010Po" +
-      "sition\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"\221\001\n\017Electio" +
-      "nMessage\022\025\n\rrideRequestId\030\001 \001(\005\0221\n\rstart" +
-      "Position\030\002 \001(\0132\032.com.example.grpc.Positi" +
-      "on\022\016\n\006taxiId\030\003 \001(\005\022\020\n\010distance\030\004 \001(\001\022\022\n\n" +
-      "batteryLvl\030\005 \001(\005\"g\n\rElectionReply\022\025\n\rrid" +
-      "eRequestId\030\001 \001(\005\022/\n\007message\030\002 \001(\0162\036.com." +
-      "example.grpc.ReplyMessage\022\016\n\006taxiId\030\003 \001(" +
-      "\005\"k\n\017RechargeMessage\0223\n\010taxiInfo\030\001 \001(\0132!" +
-      ".com.example.grpc.TaxiInformation\022\020\n\010dis" +
-      "trict\030\002 \001(\005\022\021\n\ttimestamp\030\003 \001(\t\"N\n\022Rechar" +
-      "gePermission\0228\n\rrechargeQueue\030\001 \003(\0132!.co" +
-      "m.example.grpc.TaxiInformation\"@\n\rRechar" +
-      "geReply\022/\n\007message\030\001 \001(\0162\036.com.example.g" +
-      "rpc.ReplyMessage\"\007\n\005Empty* \n\014ReplyMessag" +
-      "e\022\006\n\002OK\020\000\022\010\n\004STOP\020\0012\364\002\n\022TaxiNetworkServi" +
-      "ce\022S\n\025notifyNewTaxiPresence\022!.com.exampl" +
-      "e.grpc.TaxiInformation\032\027.com.example.grp" +
-      "c.Empty\022U\n\017electionMessage\022!.com.example" +
-      ".grpc.ElectionMessage\032\037.com.example.grpc" +
-      ".ElectionReply\022U\n\017rechargeMessage\022!.com." +
-      "example.grpc.RechargeMessage\032\037.com.examp" +
-      "le.grpc.RechargeReply\022[\n\032notifyPermissio" +
-      "nToRecharge\022$.com.example.grpc.RechargeP" +
-      "ermission\032\027.com.example.grpc.Emptyb\006prot" +
-      "o3"
+      "pAddress\030\002 \001(\t\022\022\n\nportNumber\030\003 \001(\005\"\031\n\013Ta" +
+      "xiLeaving\022\n\n\002id\030\001 \001(\005\" \n\010Position\022\t\n\001x\030\001" +
+      " \001(\005\022\t\n\001y\030\002 \001(\005\"\221\001\n\017ElectionMessage\022\025\n\rr" +
+      "ideRequestId\030\001 \001(\005\0221\n\rstartPosition\030\002 \001(" +
+      "\0132\032.com.example.grpc.Position\022\016\n\006taxiId\030" +
+      "\003 \001(\005\022\020\n\010distance\030\004 \001(\001\022\022\n\nbatteryLvl\030\005 " +
+      "\001(\005\"g\n\rElectionReply\022\025\n\rrideRequestId\030\001 " +
+      "\001(\005\022/\n\007message\030\002 \001(\0162\036.com.example.grpc." +
+      "ReplyMessage\022\016\n\006taxiId\030\003 \001(\005\"k\n\017Recharge" +
+      "Message\0223\n\010taxiInfo\030\001 \001(\0132!.com.example." +
+      "grpc.TaxiInformation\022\020\n\010district\030\002 \001(\005\022\021" +
+      "\n\ttimestamp\030\003 \001(\t\"\024\n\022RechargePermission\"" +
+      "@\n\rRechargeReply\022/\n\007message\030\001 \001(\0162\036.com." +
+      "example.grpc.ReplyMessage\"\007\n\005Empty* \n\014Re" +
+      "plyMessage\022\006\n\002OK\020\000\022\010\n\004STOP\020\0012\310\003\n\022TaxiNet" +
+      "workService\022S\n\025notifyNewTaxiPresence\022!.c" +
+      "om.example.grpc.TaxiInformation\032\027.com.ex" +
+      "ample.grpc.Empty\022R\n\030notifyTaxiLeavingNet" +
+      "work\022\035.com.example.grpc.TaxiLeaving\032\027.co" +
+      "m.example.grpc.Empty\022U\n\017electionMessage\022" +
+      "!.com.example.grpc.ElectionMessage\032\037.com" +
+      ".example.grpc.ElectionReply\022U\n\017rechargeM" +
+      "essage\022!.com.example.grpc.RechargeMessag" +
+      "e\032\037.com.example.grpc.RechargeReply\022[\n\032no" +
+      "tifyPermissionToRecharge\022$.com.example.g" +
+      "rpc.RechargePermission\032\027.com.example.grp" +
+      "c.Emptyb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5576,44 +5698,50 @@ public final class TaxiNetworkServiceOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_TaxiInformation_descriptor,
         new java.lang.String[] { "Id", "IpAddress", "PortNumber", });
-    internal_static_com_example_grpc_Position_descriptor =
+    internal_static_com_example_grpc_TaxiLeaving_descriptor =
       getDescriptor().getMessageTypes().get(1);
+    internal_static_com_example_grpc_TaxiLeaving_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_com_example_grpc_TaxiLeaving_descriptor,
+        new java.lang.String[] { "Id", });
+    internal_static_com_example_grpc_Position_descriptor =
+      getDescriptor().getMessageTypes().get(2);
     internal_static_com_example_grpc_Position_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_Position_descriptor,
         new java.lang.String[] { "X", "Y", });
     internal_static_com_example_grpc_ElectionMessage_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+      getDescriptor().getMessageTypes().get(3);
     internal_static_com_example_grpc_ElectionMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_ElectionMessage_descriptor,
         new java.lang.String[] { "RideRequestId", "StartPosition", "TaxiId", "Distance", "BatteryLvl", });
     internal_static_com_example_grpc_ElectionReply_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_com_example_grpc_ElectionReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_ElectionReply_descriptor,
         new java.lang.String[] { "RideRequestId", "Message", "TaxiId", });
     internal_static_com_example_grpc_RechargeMessage_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_com_example_grpc_RechargeMessage_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_RechargeMessage_descriptor,
         new java.lang.String[] { "TaxiInfo", "District", "Timestamp", });
     internal_static_com_example_grpc_RechargePermission_descriptor =
-      getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(6);
     internal_static_com_example_grpc_RechargePermission_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_RechargePermission_descriptor,
-        new java.lang.String[] { "RechargeQueue", });
+        new java.lang.String[] { });
     internal_static_com_example_grpc_RechargeReply_descriptor =
-      getDescriptor().getMessageTypes().get(6);
+      getDescriptor().getMessageTypes().get(7);
     internal_static_com_example_grpc_RechargeReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_RechargeReply_descriptor,
         new java.lang.String[] { "Message", });
     internal_static_com_example_grpc_Empty_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_com_example_grpc_Empty_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_Empty_descriptor,

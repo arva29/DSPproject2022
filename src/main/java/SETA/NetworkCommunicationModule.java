@@ -12,6 +12,7 @@ import io.grpc.stub.StreamObserver;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -38,18 +39,18 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
-    public void notifyPresenceToNetwork(List<TaxiNetworkInfo> taxiList, TaxiNetworkInfo taxiToNotify) throws InterruptedException {
+    public void notifyPresenceToNetwork() throws InterruptedException {
 
-        for(TaxiNetworkInfo taxi: taxiList){
+        for(TaxiNetworkInfo taxi: Taxi.getTaxiNetwork()){
             ManagedChannel channel = ManagedChannelBuilder
                     .forTarget(taxi.getIpAddress()+":"+taxi.getPortNumber())
                     .usePlaintext()
                     .build();
             TaxiNetworkServiceStub stub = newStub(channel);
 
-            TaxiInformation request = TaxiInformation.newBuilder().setId(taxiToNotify.getId())
-                    .setIpAddress(taxiToNotify.getIpAddress())
-                    .setPortNumber(taxiToNotify.getPortNumber())
+            TaxiInformation request = TaxiInformation.newBuilder().setId(Taxi.getTaxiNetworkInfo().getId())
+                    .setIpAddress(Taxi.getTaxiNetworkInfo().getIpAddress())
+                    .setPortNumber(Taxi.getTaxiNetworkInfo().getPortNumber())
                     .build();
 
             //calling the RPC method. since it is asynchronous, we need to define handlers
@@ -75,9 +76,45 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
+    public void notifyLeavingNetwork() throws InterruptedException {
+
+        for(TaxiNetworkInfo taxi: Taxi.getTaxiNetwork()){
+            ManagedChannel channel = ManagedChannelBuilder
+                    .forTarget(taxi.getIpAddress()+":"+taxi.getPortNumber())
+                    .usePlaintext()
+                    .build();
+            TaxiNetworkServiceStub stub = newStub(channel);
+
+            TaxiLeaving message = TaxiLeaving.newBuilder().setId(Taxi.getTaxiNetworkInfo().getId()).build();
+
+            //calling the RPC method. since it is asynchronous, we need to define handlers
+            stub.notifyTaxiLeavingNetwork(message, new StreamObserver<Empty>() {
+
+                //this hanlder takes care of each item received in the stream
+                public void onNext(Empty response) {}
+
+                //if there are some errors, this method will be called
+                public void onError(Throwable throwable) {
+                    System.out.println("NOTIFY TO LEAVING ERROR: "+ throwable.getMessage());
+                }
+
+                //when the stream is completed (the server called "onCompleted") just close the channel
+                public void onCompleted() {
+                    channel.shutdownNow();
+                }
+
+            });
+
+            //you need this. otherwise the method will terminate before that answers from the server are received
+            channel.awaitTermination(10, TimeUnit.SECONDS);
+        }
+
+    }
+
     public void startElection(RideRequest rideRequest, RideManagementModule rideMngModule) throws InterruptedException, MqttException {
-        Taxi.getEligibilityMap().put(rideRequest.getId(), true);
-        System.out.println("MAP SIZE = " + Taxi.getEligibilityMap().size());
+
+        Taxi.setCurrentElection(rideRequest.getId());
+        Taxi.setInElection(true);
 
         if(Taxi.getTaxiNetwork().size() != 0) { //If only 1 taxi, it directly takes the ride
             ExecutorService executor = Executors.newFixedThreadPool(Taxi.getTaxiNetwork().size());
@@ -96,19 +133,22 @@ public class NetworkCommunicationModule extends Thread{
             }
         }
 
-        /**
-         * TODO - Rivedere tutto recharge e ride election
-         */
+        Taxi.setInElection(false);
+        Taxi.setCurrentElection(-1);
 
-        if(Taxi.getEligibilityMap().get(rideRequest.getId())){
+        if(Taxi.isEligible()){ //If eligible at the end of the election the Taxi take the ride
             Taxi.setFree(false);
+            //Taxi.addToAccomplishedRide(rideRequest.getId());
             try {
                 rideMngModule.accomplishRide(rideRequest);
             } catch (InterruptedException | MqttException e) {
                 e.printStackTrace();
             }
+        } else {
+            Taxi.setEligible(true);
+            Taxi.notifyEligibility();
         }
-        Taxi.getEligibilityMap().remove(rideRequest.getId());
+
     }
 
     public void notifyPendingTaxi(TaxiNetworkInfo taxi, List<TaxiNetworkInfo> rechargeQueue) throws InterruptedException {
@@ -118,16 +158,7 @@ public class NetworkCommunicationModule extends Thread{
                 .build();
         TaxiNetworkServiceStub stub = newStub(channel);
 
-        RechargePermission.Builder requestBuilder = RechargePermission.newBuilder();
-        for(TaxiNetworkInfo i: rechargeQueue){
-            TaxiInformation info = TaxiInformation.newBuilder().setId(i.getId())
-                    .setIpAddress(i.getIpAddress())
-                    .setPortNumber(i.getPortNumber())
-                    .build();
-
-            requestBuilder.addRechargeQueue(info);
-        }
-        RechargePermission request = requestBuilder.build();
+        RechargePermission request = RechargePermission.newBuilder().build();
 
         //calling the RPC method. since it is asynchronous, we need to define handlers
         stub.notifyPermissionToRecharge(request, new StreamObserver<Empty>() {
@@ -148,10 +179,12 @@ public class NetworkCommunicationModule extends Thread{
     }
 
     public boolean askingForRecharge(){
-        if(Taxi.getTaxiNetwork().size() != 0) { //If only 1 taxi, it directly takes the ride
-            ExecutorService executor = Executors.newFixedThreadPool(Taxi.getTaxiNetwork().size());
+        Taxi.setAskingForRecharging(true);
+        List<TaxiNetworkInfo> networkSnapshot = Taxi.getTaxiNetwork();
+        if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
+            ExecutorService executor = Executors.newFixedThreadPool(networkSnapshot.size());
 
-            for (TaxiNetworkInfo taxi : Taxi.getTaxiNetwork()) {
+            for (TaxiNetworkInfo taxi : networkSnapshot) {
                 Runnable rechargeTask = new RechargeTask(taxi);
 
                 executor.execute(rechargeTask);
@@ -165,7 +198,7 @@ public class NetworkCommunicationModule extends Thread{
             }
         }
 
-        boolean value = (rechargeReplyCounter == Taxi.getTaxiNetwork().size());
+        boolean value = (rechargeReplyCounter == networkSnapshot.size());
 
         rechargeReplyCounter = 0;
         return value;
@@ -200,9 +233,9 @@ public class NetworkCommunicationModule extends Thread{
             stub.electionMessage(message, new StreamObserver<ElectionReply>() {
                 @Override
                 public void onNext(ElectionReply reply) {
-                    System.out.println(" - REPLY - \nFROM: " + reply.getTaxiId() + "\nMESSAGE: " + reply.getMessage() + "\n");
+                    System.out.println(" - REPLY " + reply.getRideRequestId() + " - \nFROM: " + reply.getTaxiId() + "\nMESSAGE: " + reply.getMessage() + "\n");
                     if (reply.getMessage().equals(ReplyMessage.STOP)) {
-                        Taxi.getEligibilityMap().put(rideRequest.getId(), false); //Replace true value with false one
+                       Taxi.setEligible(false); //Replace true value with false one
                     }
                 }
 
@@ -236,13 +269,14 @@ public class NetworkCommunicationModule extends Thread{
                     .build();
             TaxiNetworkServiceStub stub = newStub(channel);
 
-            TaxiInformation taxiInfo = TaxiInformation.newBuilder().setId(taxi.getId())
-                    .setIpAddress(taxi.getIpAddress())
-                    .setPortNumber(taxi.getPortNumber())
+            TaxiInformation taxiInfo = TaxiInformation.newBuilder().setId(Taxi.getTaxiNetworkInfo().getId())
+                    .setIpAddress(Taxi.getTaxiNetworkInfo().getIpAddress())
+                    .setPortNumber(Taxi.getTaxiNetworkInfo().getPortNumber())
                     .build();
             RechargeMessage message = RechargeMessage.newBuilder()
                     .setTaxiInfo(taxiInfo)
                     .setDistrict(Taxi.getPosition().getDistrict())
+                    .setTimestamp(new Timestamp(System.currentTimeMillis()).toString())
                     .build();
 
             stub.rechargeMessage(message, new StreamObserver<RechargeReply>() {

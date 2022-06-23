@@ -2,16 +2,21 @@ package SETA;
 
 import AdministratorServer.Beans.TaxiNetworkInfo;
 import SETA.Data.Position;
+import SETA.Data.RechargingTrigger;
 import com.example.grpc.TaxiNetworkServiceOuterClass;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public class Taxi {
     private static Boolean free = true; //True if it is free to accept a ride
-    private static final Object freeLock = new Object();
+    private static Boolean inElection = false; //True if Taxi is involved in an election
+    private static Boolean eligible = true; //True if Taxi is involved in an election
     private static Boolean recharging = false; //True if it is recharging
-    private static final Map<Integer, Boolean> eligibilityMap = new HashMap<>();
+    private static int currentElection = 0; //Request ID for the current election
+    private static RechargingTrigger askingForRecharging = new RechargingTrigger(false); //True if it is asking for recharging
+    public static final Object electionLock = new Object();
 
     private static final int ID = new Random().nextInt(1000) + 1400;
     //private static final int ID = 1440;
@@ -23,6 +28,7 @@ public class Taxi {
     private static final TaxiNetworkInfo taxiNetworkInfo = new TaxiNetworkInfo(ID, IP_ADDRESS, PORT);
     private static final List<TaxiNetworkInfo> taxiNetwork = new ArrayList<>();
     private static final List<TaxiNetworkInfo> rechargeQueue = new ArrayList<>();
+    private static final List<Integer> rideAccomplished = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException, MqttException {
 
@@ -37,7 +43,7 @@ public class Taxi {
 
         networkCommunicationModule = new NetworkCommunicationModule();
         networkCommunicationModule.start();
-        networkCommunicationModule.notifyPresenceToNetwork(taxiNetwork, taxiNetworkInfo);
+        networkCommunicationModule.notifyPresenceToNetwork();
 
         System.out.println("--- TAXI ---\n - ID: " + ID + "\n - POS: " + position.getX() + "," + position.getY() + "\n");
 
@@ -50,13 +56,25 @@ public class Taxi {
             while (true){
                 line = scanner.nextLine();
                 if(line.equals("quit")){
+                    if(!isFree() || isInElection() || isAskingForRecharging() || isRecharging()){ //Taxi can quit the network only if it is free
+                        System.out.println("..waiting");
+                        try {
+                            waitForEligibility();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
                 } else if(line.equals("recharge")){
                     if(batteryLvl < 100) {
-                        //if(!isFree()){
-                        //    System.out.println("..waiting");
-                        //    getFreeLock().wait();
-                        //}
+                        if(!isFree()){ // ?????
+                            System.out.println("..waiting");
+                            try {
+                                waitForEligibility();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         try {
                             rideManagement.recharge(false);
                         } catch (InterruptedException | MqttException e) {
@@ -66,16 +84,13 @@ public class Taxi {
                 }
             }
             try {
-                /**
-                 * todo SOLVE WITH SYNC ????
-                 */
                 while (true) {
                     if(free) {
                         leaveNetwork(restServerModule, rideManagement, networkCommunicationModule);
                         break;
                     }
                 }
-            } catch (MqttException e) {
+            } catch (MqttException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
@@ -85,6 +100,10 @@ public class Taxi {
 
     public static synchronized void addTaxiToNetwork(TaxiNetworkInfo newTaxi){
         taxiNetwork.add(newTaxi);
+    }
+
+    public static synchronized void removeTaxiFromNetwork(int id){
+        taxiNetwork.removeIf(i -> i.getId() == id);
     }
 
     public static synchronized List<TaxiNetworkInfo> getTaxiNetwork(){
@@ -105,7 +124,7 @@ public class Taxi {
 
     public static void setPosition(Position position) {
         Taxi.position = position;
-        System.out.println("New position -> (" + position.getX() + "," + position.getY() + ")");
+        //System.out.println("New position -> (" + position.getX() + "," + position.getY() + ")");
     }
 
     public static TaxiNetworkInfo getTaxiNetworkInfo() {
@@ -120,13 +139,34 @@ public class Taxi {
         return free;
     }
 
-    public static synchronized void setFree(boolean free) {
-        System.out.println("------ free -> " + free);
+    public static synchronized void setFree(boolean free) throws InterruptedException {
+
         Taxi.free = free;
+
+        if(free){
+            Taxi.notifyEligibility();
+        }
+        //System.out.println("--- Free -> " + free);
     }
 
-    public static synchronized Object getFreeLock(){
-        return freeLock;
+    public static synchronized Boolean isInElection() {
+        return inElection;
+    }
+
+    public static synchronized void setInElection(Boolean inElection) {
+
+        Taxi.inElection = inElection;
+        //System.out.println("--- InElection -> " + inElection);
+    }
+
+    public static synchronized Boolean isEligible() {
+        return eligible;
+    }
+
+    public static synchronized void setEligible(Boolean eligible) {
+
+        Taxi.eligible = eligible;
+        //System.out.println("--- Eligible -> " + eligible);
     }
 
     public static synchronized Boolean isRecharging() {
@@ -137,8 +177,25 @@ public class Taxi {
         Taxi.recharging = recharging;
     }
 
-    public static synchronized Map<Integer, Boolean> getEligibilityMap(){
-        return eligibilityMap;
+    public static synchronized Boolean isAskingForRecharging() {
+        return askingForRecharging.getValue();
+    }
+
+    public static synchronized RechargingTrigger getAskingForRecharging() {
+        return askingForRecharging;
+    }
+
+    public static synchronized int getCurrentElection() {
+        return currentElection;
+    }
+
+    public static synchronized void setCurrentElection(int currentElection) {
+        Taxi.currentElection = currentElection;
+    }
+
+    public static synchronized void setAskingForRecharging(Boolean askingForRecharging) {
+        Taxi.askingForRecharging.setValue(askingForRecharging);
+        Taxi.askingForRecharging.setTimestamp(new Timestamp(System.currentTimeMillis()));
     }
 
     public static void addToRechargeQueue(TaxiNetworkInfo taxi){
@@ -153,19 +210,33 @@ public class Taxi {
         rechargeQueue.clear();
     }
 
-    public static void addAllToRechargeQueue(List<TaxiNetworkServiceOuterClass.TaxiInformation> taxiList){
-        for(TaxiNetworkServiceOuterClass.TaxiInformation i: taxiList){
-            addToRechargeQueue(new TaxiNetworkInfo(i));
+    public static synchronized void addToAccomplishedRide(Integer rideRequestId) {
+        rideAccomplished.add(rideRequestId);
+        //System.out.println(" - ADDED " + rideRequestId);
+    }
+
+    public static synchronized boolean rideAlreadyAccomplished(Integer rideRequestId) {
+        return rideAccomplished.contains(rideRequestId);
+    }
+
+    public static void waitForEligibility() throws InterruptedException {
+        synchronized (electionLock){
+            System.out.println("... waiting the taxi to be free!");
+            electionLock.wait();
         }
     }
 
-    private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule) throws MqttException {
+    public static void notifyEligibility() throws InterruptedException {
+        synchronized (electionLock){
+            System.out.println("Taxi is finally free!");
+            electionLock.notifyAll();
+        }
+    }
+
+    private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule) throws MqttException, InterruptedException {
         restServerModule.removeTaxiFromNetwork();
+        networkCommunicationModule.notifyLeavingNetwork();
         rideManagement.disconnect();
         networkCommunicationModule.disconnect();
-
-        /**
-         * TODO - Ending task - Notify other taxis ??
-         */
     }
 }

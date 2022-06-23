@@ -35,7 +35,7 @@ public class SetaProcess {
             System.out.println(SetaProcess.CLIENT_ID + " Connected");
 
             //Thread to read ride request accomplished
-            SubscriberTask subscriberThread = new SubscriberTask(client);
+            SubscriberTask subscriberThread = new SubscriberTask();
             subscriberThread.start();
 
 
@@ -45,10 +45,14 @@ public class SetaProcess {
             //while (true){
 
             Scanner scanner = new Scanner(System.in);
+            String a;
             //DEBUG PURPOSE
             while (true) {
-                if (scanner.nextLine().equals("r")) {
+                a = scanner.nextLine();
+                if (a.equals("r")) {
                     SetaProcess.publishRideRequest(client);
+                } else if(a.equals("l")){
+                    printMap();
                 }
             }
                 /*SetaProcess.publishRideRequest(client);
@@ -126,7 +130,13 @@ public class SetaProcess {
     }
 
     public static synchronized void removeRequestToMap(int district, RideRequest rideRequest){
-        pendingRideRequest.get(district).remove(rideRequest);
+
+        for(int i=0; i<pendingRideRequest.get(district).size(); i++){
+            if(pendingRideRequest.get(district).get(i).getId() == rideRequest.getId()){
+                pendingRideRequest.get(district).remove(i);
+            }
+        }
+
     }
 
     public static synchronized List<RideRequest> getRequestOfOneDistrict(int district){
@@ -135,23 +145,18 @@ public class SetaProcess {
 
     private static class SubscriberTask extends Thread{
         private static final String TOPIC = "seta/smartcity/rides/accomplished";
-        private MqttClient client;
-
-        public SubscriberTask(MqttClient client){
-            this.client = client;
-        }
 
         @Override
         public void run() {
             try {
-                client = new MqttClient(BROKER, CLIENT_ID);
+                MqttClient client = new MqttClient(SetaProcess.BROKER, MqttClient.generateClientId());
                 MqttConnectOptions connOpts = new MqttConnectOptions();
                 connOpts.setCleanSession(true);
 
                 // Connect the client
-                System.out.println(CLIENT_ID + " Connecting Broker " + BROKER);
+                System.out.println(client + " Connecting Broker " + BROKER);
                 client.connect(connOpts);
-                System.out.println(CLIENT_ID + " Connected - Thread PID: " + Thread.currentThread().getId());
+                System.out.println(client + " Connected - Thread PID: " + Thread.currentThread().getId());
 
                 // Callback
                 client.setCallback(new MqttCallback() {
@@ -159,13 +164,12 @@ public class SetaProcess {
                     public void messageArrived(String topic, MqttMessage message) throws InterruptedException, MqttException {
 
                         RideRequest rideRequest = new Gson().fromJson(new String(message.getPayload()), RideRequest.class);
-
                         removeRequestToMap(rideRequest.getDistrict(), rideRequest);
 
                     }
 
                     public void connectionLost(Throwable cause) {
-                        System.err.println(CLIENT_ID + " Connection lost! cause:" + cause.getMessage() + " - Stack Trace: " + Arrays.toString(cause.getStackTrace()) + " - Thread PID: " + Thread.currentThread().getId());
+                        System.err.println(client + " Connection lost! cause:" + cause.getMessage() + " - Stack Trace: " + Arrays.toString(cause.getStackTrace()) + " - Thread PID: " + Thread.currentThread().getId());
                     }
 
                     public void deliveryComplete(IMqttDeliveryToken token) {
@@ -174,7 +178,6 @@ public class SetaProcess {
 
                 });
 
-                System.out.println(CLIENT_ID + " Subscribing ... - Thread PID: " + Thread.currentThread().getId());
                 client.subscribe(TOPIC, QOS);
 
             } catch (MqttException me) {
@@ -184,6 +187,16 @@ public class SetaProcess {
                 System.out.println("cause " + me.getCause());
                 System.out.println("except " + me);
                 me.printStackTrace();
+            }
+        }
+    }
+
+    private static void printMap(){
+        System.out.println(" - PENDING REQUESTS - ");
+        for(Integer i: pendingRideRequest.keySet()){
+            System.out.println(" DISTRICT " + i);
+            for (RideRequest r: pendingRideRequest.get(i)){
+                System.out.println(" - " + r.getId());
             }
         }
     }

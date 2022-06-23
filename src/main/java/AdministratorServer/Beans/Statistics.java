@@ -1,13 +1,15 @@
 package AdministratorServer.Beans;
 
+import java.util.List;
+
 public class Statistics {
     private double kmTravelled;
     private int numberOfRides;
-    private double averagePollution;
+    private List<Double> averagePollution;
 
     public Statistics() {}
 
-    public Statistics(double kmTravelled, int numberOfRides, double averagePollution) {
+    public Statistics(double kmTravelled, int numberOfRides, List<Double> averagePollution) {
         this.kmTravelled = kmTravelled;
         this.numberOfRides = numberOfRides;
         this.averagePollution = averagePollution;
@@ -21,7 +23,7 @@ public class Statistics {
         return numberOfRides;
     }
 
-    public double getAveragePollution() {
+    public List<Double> getAveragePollution() {
         return averagePollution;
     }
 }

@@ -46,7 +46,10 @@ public class StatisticsStorage {
         for(int i = allStatistics.size() - 1; i >= allStatistics.size() - n; i--){
             kmTravelled += allStatistics.get(i).getStatistics().getKmTravelled();
             batteryLvl += allStatistics.get(i).getBatteryLvl();
-            pollutionLvl += allStatistics.get(i).getStatistics().getAveragePollution();
+            /**
+             * TODO: Sistemare
+             */
+            //pollutionLvl += allStatistics.get(i).getStatistics().getAveragePollution();
             accomplishedRides += allStatistics.get(i).getStatistics().getNumberOfRides();
         }
 
@@ -77,7 +80,10 @@ public class StatisticsStorage {
                 if(record.getTimestamp().after(t1) && record.getTimestamp().before(t2)){
                     kmTravelled += record.getStatistics().getKmTravelled();
                     batteryLvl += record.getBatteryLvl();
-                    pollutionLvl += record.getStatistics().getAveragePollution();
+                    /**
+                     * TODO: Sistemare
+                     */
+                    //pollutionLvl += record.getStatistics().getAveragePollution();
                     accomplishedRides += record.getStatistics().getNumberOfRides();
                     statsCounter++;
                 }

@@ -2,6 +2,8 @@ AdministratorServer/Responses/TaxiAddingResponse.java
  AdministratorServer.Responses.TaxiAddingResponse
 AdministratorServer/services/AdministratorServices.java
  AdministratorServer.services.AdministratorServices
+SETA/MeasurementsBuffer.java
+ SETA.MeasurementsBuffer
 AdministratorServer/Responses/AverageStatisticsResponse.java
  AdministratorServer.Responses.AverageStatisticsResponse
 SETA/Data/Position.java
@@ -12,6 +14,8 @@ AdministratorServer/Responses/TaxiListResponse.java
  AdministratorServer.Responses.TaxiListResponse
 SETA/Simulators/Buffer.java
  SETA.Simulators.Buffer
+SETA/Data/RechargingTrigger.java
+ SETA.Data.RechargingTrigger
 com/example/grpc/TaxiNetworkServiceGrpc.java
  com.example.grpc.TaxiNetworkServiceGrpc
  com.example.grpc.TaxiNetworkServiceGrpc$1
@@ -72,20 +76,29 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation$1
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformation$Builder
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiInformationOrBuilder
-SETA/SetaProcess.java
- SETA.SetaProcess
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeaving
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeaving$1
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeaving$Builder
+ com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeavingOrBuilder
+SETA/Data/RideRequest.java
+ SETA.Data.RideRequest
 AdministratorServer/Beans/StatisticsRecord.java
  AdministratorServer.Beans.StatisticsRecord
 AdministratorServer/Responses/LastStatisticsByIdResponse.java
  AdministratorServer.Responses.LastStatisticsByIdResponse
 SETA/Simulators/Simulator.java
  SETA.Simulators.Simulator
+SETA/SensorModule.java
+ SETA.SensorModule
 SETA/RESTServerModule.java
  SETA.RESTServerModule
+SETA/SetaProcess.java
+ SETA.SetaProcess
+ SETA.SetaProcess$1
+ SETA.SetaProcess$SubscriberTask
+ SETA.SetaProcess$SubscriberTask$1
 AdministratorServer/Beans/TaxiNetworkInfo.java
  AdministratorServer.Beans.TaxiNetworkInfo
-SETA/Data/RideRequest.java
- SETA.Data.RideRequest
 SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule
  SETA.NetworkCommunicationModule$1

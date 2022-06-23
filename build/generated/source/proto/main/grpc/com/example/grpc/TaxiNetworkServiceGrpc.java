@@ -58,6 +58,37 @@ public final class TaxiNetworkServiceGrpc {
     return getNotifyNewTaxiPresenceMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving,
+      com.example.grpc.TaxiNetworkServiceOuterClass.Empty> getNotifyTaxiLeavingNetworkMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "notifyTaxiLeavingNetwork",
+      requestType = com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.class,
+      responseType = com.example.grpc.TaxiNetworkServiceOuterClass.Empty.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving,
+      com.example.grpc.TaxiNetworkServiceOuterClass.Empty> getNotifyTaxiLeavingNetworkMethod() {
+    io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving, com.example.grpc.TaxiNetworkServiceOuterClass.Empty> getNotifyTaxiLeavingNetworkMethod;
+    if ((getNotifyTaxiLeavingNetworkMethod = TaxiNetworkServiceGrpc.getNotifyTaxiLeavingNetworkMethod) == null) {
+      synchronized (TaxiNetworkServiceGrpc.class) {
+        if ((getNotifyTaxiLeavingNetworkMethod = TaxiNetworkServiceGrpc.getNotifyTaxiLeavingNetworkMethod) == null) {
+          TaxiNetworkServiceGrpc.getNotifyTaxiLeavingNetworkMethod = getNotifyTaxiLeavingNetworkMethod =
+              io.grpc.MethodDescriptor.<com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving, com.example.grpc.TaxiNetworkServiceOuterClass.Empty>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "notifyTaxiLeavingNetwork"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.example.grpc.TaxiNetworkServiceOuterClass.Empty.getDefaultInstance()))
+              .setSchemaDescriptor(new TaxiNetworkServiceMethodDescriptorSupplier("notifyTaxiLeavingNetwork"))
+              .build();
+        }
+      }
+    }
+    return getNotifyTaxiLeavingNetworkMethod;
+  }
+
   private static volatile io.grpc.MethodDescriptor<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage,
       com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> getElectionMessageMethod;
 
@@ -187,6 +218,13 @@ public final class TaxiNetworkServiceGrpc {
 
     /**
      */
+    public void notifyTaxiLeavingNetwork(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> responseObserver) {
+      asyncUnimplementedUnaryCall(getNotifyTaxiLeavingNetworkMethod(), responseObserver);
+    }
+
+    /**
+     */
     public void electionMessage(com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request,
         io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> responseObserver) {
       asyncUnimplementedUnaryCall(getElectionMessageMethod(), responseObserver);
@@ -215,6 +253,13 @@ public final class TaxiNetworkServiceGrpc {
                 com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation,
                 com.example.grpc.TaxiNetworkServiceOuterClass.Empty>(
                   this, METHODID_NOTIFY_NEW_TAXI_PRESENCE)))
+          .addMethod(
+            getNotifyTaxiLeavingNetworkMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving,
+                com.example.grpc.TaxiNetworkServiceOuterClass.Empty>(
+                  this, METHODID_NOTIFY_TAXI_LEAVING_NETWORK)))
           .addMethod(
             getElectionMessageMethod(),
             asyncUnaryCall(
@@ -264,6 +309,14 @@ public final class TaxiNetworkServiceGrpc {
         io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getNotifyNewTaxiPresenceMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void notifyTaxiLeavingNetwork(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving request,
+        io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getNotifyTaxiLeavingNetworkMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -318,6 +371,13 @@ public final class TaxiNetworkServiceGrpc {
 
     /**
      */
+    public com.example.grpc.TaxiNetworkServiceOuterClass.Empty notifyTaxiLeavingNetwork(com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving request) {
+      return blockingUnaryCall(
+          getChannel(), getNotifyTaxiLeavingNetworkMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
     public com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply electionMessage(com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request) {
       return blockingUnaryCall(
           getChannel(), getElectionMessageMethod(), getCallOptions(), request);
@@ -366,6 +426,14 @@ public final class TaxiNetworkServiceGrpc {
 
     /**
      */
+    public com.google.common.util.concurrent.ListenableFuture<com.example.grpc.TaxiNetworkServiceOuterClass.Empty> notifyTaxiLeavingNetwork(
+        com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving request) {
+      return futureUnaryCall(
+          getChannel().newCall(getNotifyTaxiLeavingNetworkMethod(), getCallOptions()), request);
+    }
+
+    /**
+     */
     public com.google.common.util.concurrent.ListenableFuture<com.example.grpc.TaxiNetworkServiceOuterClass.ElectionReply> electionMessage(
         com.example.grpc.TaxiNetworkServiceOuterClass.ElectionMessage request) {
       return futureUnaryCall(
@@ -390,9 +458,10 @@ public final class TaxiNetworkServiceGrpc {
   }
 
   private static final int METHODID_NOTIFY_NEW_TAXI_PRESENCE = 0;
-  private static final int METHODID_ELECTION_MESSAGE = 1;
-  private static final int METHODID_RECHARGE_MESSAGE = 2;
-  private static final int METHODID_NOTIFY_PERMISSION_TO_RECHARGE = 3;
+  private static final int METHODID_NOTIFY_TAXI_LEAVING_NETWORK = 1;
+  private static final int METHODID_ELECTION_MESSAGE = 2;
+  private static final int METHODID_RECHARGE_MESSAGE = 3;
+  private static final int METHODID_NOTIFY_PERMISSION_TO_RECHARGE = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -413,6 +482,10 @@ public final class TaxiNetworkServiceGrpc {
       switch (methodId) {
         case METHODID_NOTIFY_NEW_TAXI_PRESENCE:
           serviceImpl.notifyNewTaxiPresence((com.example.grpc.TaxiNetworkServiceOuterClass.TaxiInformation) request,
+              (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty>) responseObserver);
+          break;
+        case METHODID_NOTIFY_TAXI_LEAVING_NETWORK:
+          serviceImpl.notifyTaxiLeavingNetwork((com.example.grpc.TaxiNetworkServiceOuterClass.TaxiLeaving) request,
               (io.grpc.stub.StreamObserver<com.example.grpc.TaxiNetworkServiceOuterClass.Empty>) responseObserver);
           break;
         case METHODID_ELECTION_MESSAGE:
@@ -489,6 +562,7 @@ public final class TaxiNetworkServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new TaxiNetworkServiceFileDescriptorSupplier())
               .addMethod(getNotifyNewTaxiPresenceMethod())
+              .addMethod(getNotifyTaxiLeavingNetworkMethod())
               .addMethod(getElectionMessageMethod())
               .addMethod(getRechargeMessageMethod())
               .addMethod(getNotifyPermissionToRechargeMethod())
