@@ -4,8 +4,8 @@ AdministratorServer/services/AdministratorServices.java
  AdministratorServer.services.AdministratorServices
 SETA/MeasurementsBuffer.java
  SETA.MeasurementsBuffer
-AdministratorServer/Responses/AverageStatisticsResponse.java
- AdministratorServer.Responses.AverageStatisticsResponse
+SETA/TaxiNetworkServiceImpl.java
+ SETA.TaxiNetworkServiceImpl
 SETA/Data/Position.java
  SETA.Data.Position
 AdministratorServer/services/TaxiServices.java
@@ -27,6 +27,8 @@ com/example/grpc/TaxiNetworkServiceGrpc.java
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceImplBase
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceMethodDescriptorSupplier
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceStub
+SETA/StatisticsModule.java
+ SETA.StatisticsModule
 SETA/Simulators/PM10Simulator.java
  SETA.Simulators.PM10Simulator
 AdministratorServer/Beans/TaxiList.java
@@ -80,6 +82,8 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeaving$1
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeaving$Builder
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeavingOrBuilder
+AdministratorServer/services/AdministratorClient.java
+ AdministratorServer.services.AdministratorClient
 SETA/Data/RideRequest.java
  SETA.Data.RideRequest
 AdministratorServer/Beans/StatisticsRecord.java
@@ -88,29 +92,30 @@ AdministratorServer/Responses/LastStatisticsByIdResponse.java
  AdministratorServer.Responses.LastStatisticsByIdResponse
 SETA/Simulators/Simulator.java
  SETA.Simulators.Simulator
-SETA/SensorModule.java
- SETA.SensorModule
+SETA/RideManagementModule.java
+ SETA.RideManagementModule
+ SETA.RideManagementModule$1
 SETA/RESTServerModule.java
  SETA.RESTServerModule
+SETA/Taxi.java
+ SETA.Taxi
+AdministratorServer/Beans/TaxiNetworkInfo.java
+ AdministratorServer.Beans.TaxiNetworkInfo
 SETA/SetaProcess.java
  SETA.SetaProcess
  SETA.SetaProcess$1
+ SETA.SetaProcess$PendingRequestTask
+ SETA.SetaProcess$PendingRequestTask$1
  SETA.SetaProcess$SubscriberTask
  SETA.SetaProcess$SubscriberTask$1
-AdministratorServer/Beans/TaxiNetworkInfo.java
- AdministratorServer.Beans.TaxiNetworkInfo
 SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule
  SETA.NetworkCommunicationModule$1
  SETA.NetworkCommunicationModule$2
+ SETA.NetworkCommunicationModule$3
  SETA.NetworkCommunicationModule$ElectionTask
  SETA.NetworkCommunicationModule$ElectionTask$1
  SETA.NetworkCommunicationModule$RechargeTask
  SETA.NetworkCommunicationModule$RechargeTask$1
-SETA/TaxiNetworkServiceImpl.java
- SETA.TaxiNetworkServiceImpl
-SETA/RideManagementModule.java
- SETA.RideManagementModule
- SETA.RideManagementModule$1
-SETA/Taxi.java
- SETA.Taxi
+AdministratorServer/Responses/AverageStatisticsResponse.java
+ AdministratorServer.Responses.AverageStatisticsResponse

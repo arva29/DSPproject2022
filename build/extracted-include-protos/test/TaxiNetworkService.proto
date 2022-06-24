@@ -33,7 +33,6 @@ message RechargeMessage {
 }
 
 message RechargePermission {
-  repeated TaxiInformation rechargeQueue = 1;
 }
 
 message RechargeReply {

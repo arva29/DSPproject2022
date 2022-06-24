@@ -38,6 +38,10 @@ public class SetaProcess {
             SubscriberTask subscriberThread = new SubscriberTask();
             subscriberThread.start();
 
+            //Thread to republish request that are not taken in charge
+            PendingRequestTask pendingRequestTask = new PendingRequestTask(client);
+            pendingRequestTask.start();
+
 
             /**
              * TODO - REMOVE COMMENT
@@ -75,15 +79,6 @@ public class SetaProcess {
             System.out.println("excep " + me);
             me.printStackTrace();
         }
-    }
-
-    private static void publishPendingRequest(MqttClient client) throws MqttException {
-        for(int i=1; i<5; i++){
-            for(RideRequest request: getRequestOfOneDistrict(i)){
-                republishRideRequest(client, request);
-            }
-        }
-
     }
 
     private static void publishRideRequest(MqttClient client) throws MqttException {
@@ -165,6 +160,62 @@ public class SetaProcess {
 
                         RideRequest rideRequest = new Gson().fromJson(new String(message.getPayload()), RideRequest.class);
                         removeRequestToMap(rideRequest.getDistrict(), rideRequest);
+
+                    }
+
+                    public void connectionLost(Throwable cause) {
+                        System.err.println(client + " Connection lost! cause:" + cause.getMessage() + " - Stack Trace: " + Arrays.toString(cause.getStackTrace()) + " - Thread PID: " + Thread.currentThread().getId());
+                    }
+
+                    public void deliveryComplete(IMqttDeliveryToken token) {
+                        // Not used here
+                    }
+
+                });
+
+                client.subscribe(TOPIC, QOS);
+
+            } catch (MqttException me) {
+                System.out.println("reason " + me.getReasonCode());
+                System.out.println("msg " + me.getMessage());
+                System.out.println("loc " + me.getLocalizedMessage());
+                System.out.println("cause " + me.getCause());
+                System.out.println("except " + me);
+                me.printStackTrace();
+            }
+        }
+    }
+
+    private static class PendingRequestTask extends Thread{
+        private static final String TOPIC = "seta/smartcity/rides/districtChanges";
+        private static MqttClient publisherClient;
+
+        public PendingRequestTask(MqttClient client) {
+            publisherClient = client;
+        }
+
+        @Override
+        public void run() {
+            try {
+                MqttClient client = new MqttClient(SetaProcess.BROKER, MqttClient.generateClientId());
+                MqttConnectOptions connOpts = new MqttConnectOptions();
+                connOpts.setCleanSession(true);
+
+                // Connect the client
+                System.out.println(client + " Connecting Broker " + BROKER);
+                client.connect(connOpts);
+                System.out.println(client + " Connected - Thread PID: " + Thread.currentThread().getId());
+
+                // Callback
+                client.setCallback(new MqttCallback() {
+
+                    public void messageArrived(String topic, MqttMessage message) throws InterruptedException, MqttException {
+
+                        Integer district = new Gson().fromJson(new String(message.getPayload()), Integer.class);
+
+                        for(RideRequest r: pendingRideRequest.get(district)){
+                            republishRideRequest(publisherClient, r);
+                        }
 
                     }
 

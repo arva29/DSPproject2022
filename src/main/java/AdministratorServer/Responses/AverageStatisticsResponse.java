@@ -36,4 +36,11 @@ public class AverageStatisticsResponse {
     public double getAveragePollution() {
         return averagePollution;
     }
+
+    public void print(){
+        System.out.println(" - Km travelled: " + kmTravelled);
+        System.out.println(" - Battery level: " + batteryLvl);
+        System.out.println(" - Pollution level: " + averagePollution);
+        System.out.println(" - Accomplished rides: " + numberOfRides);
+    }
 }

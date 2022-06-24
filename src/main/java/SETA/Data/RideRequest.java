@@ -11,15 +11,15 @@ public class RideRequest {
         this.id = id;
         Random rn = new Random();
 
-        //this.startPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),
-        //        rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX));
+        this.startPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),
+                rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX));
 
-        this.startPosition = new Position(2,3);
+        //this.startPosition = new Position(2,3);
 
-        //this.endPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),
-        //        rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX));
+        this.endPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),
+                rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX));
 
-        this.endPosition = new Position(4,1);
+        //this.endPosition = new Position(4,1);
 
         while(this.startPosition.equals(this.endPosition)){
             this.endPosition = new Position(rn.nextInt((Position.LAST_CELL_INDEX - Position.FIRST_CELL_INDEX + 1) + Position.FIRST_CELL_INDEX),

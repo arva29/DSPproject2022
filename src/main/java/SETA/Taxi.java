@@ -3,12 +3,15 @@ package SETA;
 import AdministratorServer.Beans.TaxiNetworkInfo;
 import SETA.Data.Position;
 import SETA.Data.RechargingTrigger;
-import com.example.grpc.TaxiNetworkServiceOuterClass;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.sql.Timestamp;
 import java.util.*;
 
+/**
+ * Main entity of a taxi. Initialize all the module for managing communication with administrator server and with other taxis in the network. It also has
+ * a thread running to read the system input for quitting and recharging commands.
+ */
 public class Taxi {
     private static Boolean free = true; //True if it is free to accept a ride
     private static Boolean inElection = false; //True if Taxi is involved in an election
@@ -35,6 +38,7 @@ public class Taxi {
         RESTServerModule restServerModule;
         RideManagementModule rideManagement;
         NetworkCommunicationModule networkCommunicationModule;
+        StatisticsModule statisticsModule;
 
         restServerModule = new RESTServerModule();
 
@@ -42,13 +46,18 @@ public class Taxi {
         restServerModule.addTaxiToNetwork();
 
         networkCommunicationModule = new NetworkCommunicationModule();
+
+        statisticsModule = new StatisticsModule(restServerModule);
+
+        rideManagement = new RideManagementModule(position.getDistrict(), networkCommunicationModule, statisticsModule);
+
         networkCommunicationModule.start();
         networkCommunicationModule.notifyPresenceToNetwork();
+        rideManagement.start();
+        statisticsModule.start();
 
         System.out.println("--- TAXI ---\n - ID: " + ID + "\n - POS: " + position.getX() + "," + position.getY() + "\n");
 
-        rideManagement = new RideManagementModule(position.getDistrict(), networkCommunicationModule);
-        rideManagement.start();
 
         Thread stdinThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
@@ -67,7 +76,10 @@ public class Taxi {
                     break;
                 } else if(line.equals("recharge")){
                     if(batteryLvl < 100) {
-                        if(!isFree()){ // ?????
+                        /**
+                         * todo rivedere
+                         */
+                        if(!isFree()){
                             System.out.println("..waiting");
                             try {
                                 waitForEligibility();
@@ -131,6 +143,10 @@ public class Taxi {
         return taxiNetworkInfo;
     }
 
+    /**
+     *
+     * @param taxiList List of the
+     */
     public static void fillTaxiNetwork(List<TaxiNetworkInfo> taxiList){
         taxiNetwork.addAll(taxiList);
     }
@@ -139,6 +155,10 @@ public class Taxi {
         return free;
     }
 
+    /**
+     * Changes the state of the taxi to free or not and if it becomes free it notify it to all the waiting threads
+     * @param free
+     */
     public static synchronized void setFree(boolean free) throws InterruptedException {
 
         Taxi.free = free;
@@ -193,11 +213,20 @@ public class Taxi {
         Taxi.currentElection = currentElection;
     }
 
+    /**
+     * Set to the given boolean value the askingForRecharging field and set the timestamp of the object to the current time
+     * in order to save the timestamp of the request
+     * @param askingForRecharging true if the taxi is asking for recharging, false if not
+     */
     public static synchronized void setAskingForRecharging(Boolean askingForRecharging) {
         Taxi.askingForRecharging.setValue(askingForRecharging);
         Taxi.askingForRecharging.setTimestamp(new Timestamp(System.currentTimeMillis()));
     }
 
+    /**
+     * Adds the taxi to the recharging queue
+     * @param taxi taxi to add to the recharging queue
+     */
     public static void addToRechargeQueue(TaxiNetworkInfo taxi){
         rechargeQueue.add(taxi);
     }
@@ -206,19 +235,35 @@ public class Taxi {
         return rechargeQueue;
     }
 
+    /**
+     * Clear the queue of taxis asking for recharging
+     */
     public static void clearRechargingQueue(){
         rechargeQueue.clear();
     }
 
+    /**
+     * Add to the ride request to the already accomplished rides
+     * @param rideRequestId ride request to add
+     */
     public static synchronized void addToAccomplishedRide(Integer rideRequestId) {
         rideAccomplished.add(rideRequestId);
         //System.out.println(" - ADDED " + rideRequestId);
     }
 
+
+    /**
+     * Return if the ride request is already been accomplished by another taxi
+     * @param rideRequestId ride request to verify
+     * @return true if the list of accomplished ride contains the ride request as parameter, false if it is not in the list.
+     */
     public static synchronized boolean rideAlreadyAccomplished(Integer rideRequestId) {
         return rideAccomplished.contains(rideRequestId);
     }
 
+    /**
+     * If the taxi is not free the object will wait until it will be available again
+     */
     public static void waitForEligibility() throws InterruptedException {
         synchronized (electionLock){
             System.out.println("... waiting the taxi to be free!");
@@ -226,13 +271,22 @@ public class Taxi {
         }
     }
 
-    public static void notifyEligibility() throws InterruptedException {
+    /**
+     * Notify to wake up objects that are waiting for taxi to be free
+     */
+    public static void notifyEligibility() {
         synchronized (electionLock){
             System.out.println("Taxi is finally free!");
             electionLock.notifyAll();
         }
     }
 
+    /**
+     * Method to leave the network by disconnecting the taxi from all the communications module
+     * @param restServerModule module to communice with administrator server
+     * @param rideManagement module to manage the ride requests
+     * @param networkCommunicationModule module to communicate with other taxis in the network
+     */
     private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule) throws MqttException, InterruptedException {
         restServerModule.removeTaxiFromNetwork();
         networkCommunicationModule.notifyLeavingNetwork();

@@ -8,12 +8,12 @@ import java.util.List;
 
 public class MeasurementsBuffer implements Buffer {
     private final int WINDOW_DIMENSION = 8;
-    private final SensorModule sensorModule;
+    private final StatisticsModule statisticsModule;
     List<Measurement> measurementsWindow;
 
-    public MeasurementsBuffer(SensorModule sensorModule) {
+    public MeasurementsBuffer(StatisticsModule statisticsModule) {
         this.measurementsWindow = new ArrayList<>();
-        this.sensorModule = sensorModule;
+        this.statisticsModule = statisticsModule;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MeasurementsBuffer implements Buffer {
         measurementsWindow.add(m);
 
         if(measurementsWindow.size() == 8){
-            sensorModule.addAverageMeasurement(averageMeasurement(readAllAndClean()));
+            statisticsModule.addAverageMeasurement(averageMeasurement(readAllAndClean()));
         }
     }
 

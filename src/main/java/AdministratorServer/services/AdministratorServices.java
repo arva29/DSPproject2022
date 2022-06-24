@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Path("statistics")
 public class AdministratorServices {
 
-    @Path("listoftaxis")
+    @Path("listOfTaxis")
     @GET
     @Produces({"application/json", "application/xml"})
     public Response getListOfTaxis(){
