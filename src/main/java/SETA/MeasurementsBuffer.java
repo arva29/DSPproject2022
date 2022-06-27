@@ -6,6 +6,9 @@ import SETA.Simulators.Measurement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Buffer to manage the data coming from the sensor with a sliding window system
+ */
 public class MeasurementsBuffer implements Buffer {
     private final int WINDOW_DIMENSION = 8;
     private final StatisticsModule statisticsModule;
@@ -16,6 +19,11 @@ public class MeasurementsBuffer implements Buffer {
         this.statisticsModule = statisticsModule;
     }
 
+    /**
+     * Add to a list the measurement coming from the sensor and when the dimension of the list is equal to the dimension
+     * of the sliding window it calculated the average of that measurements and save it
+     * @param m measurement to add
+     */
     @Override
     public void addMeasurement(Measurement m) {
         /**
@@ -33,6 +41,10 @@ public class MeasurementsBuffer implements Buffer {
         }
     }
 
+    /**
+     * Return the window with the measurements before removing first 4 elements of it
+     * @return window before cleaning
+     */
     @Override
     public List<Measurement> readAllAndClean() {
         List<Measurement> window = new ArrayList<>(measurementsWindow);
@@ -40,6 +52,11 @@ public class MeasurementsBuffer implements Buffer {
         return window;
     }
 
+    /**
+     * Calculates the average of the list of measurements
+     * @param list list of measurements
+     * @return average of measurements as param
+     */
     public double averageMeasurement(List<Measurement> list){
         double sum = 0;
 

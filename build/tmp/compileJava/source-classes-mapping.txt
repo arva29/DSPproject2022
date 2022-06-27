@@ -1,15 +1,27 @@
 AdministratorServer/Responses/TaxiAddingResponse.java
  AdministratorServer.Responses.TaxiAddingResponse
-AdministratorServer/services/AdministratorServices.java
- AdministratorServer.services.AdministratorServices
+SETA/NetworkCommunicationModule.java
+ SETA.NetworkCommunicationModule
+ SETA.NetworkCommunicationModule$1
+ SETA.NetworkCommunicationModule$2
+ SETA.NetworkCommunicationModule$3
+ SETA.NetworkCommunicationModule$ElectionTask
+ SETA.NetworkCommunicationModule$ElectionTask$1
+ SETA.NetworkCommunicationModule$RechargeTask
+ SETA.NetworkCommunicationModule$RechargeTask$1
 SETA/MeasurementsBuffer.java
  SETA.MeasurementsBuffer
 SETA/TaxiNetworkServiceImpl.java
  SETA.TaxiNetworkServiceImpl
 SETA/Data/Position.java
  SETA.Data.Position
-AdministratorServer/services/TaxiServices.java
- AdministratorServer.services.TaxiServices
+SETA/SetaProcess.java
+ SETA.SetaProcess
+ SETA.SetaProcess$1
+ SETA.SetaProcess$PendingRequestTask
+ SETA.SetaProcess$PendingRequestTask$1
+ SETA.SetaProcess$SubscriberTask
+ SETA.SetaProcess$SubscriberTask$1
 AdministratorServer/Responses/TaxiListResponse.java
  AdministratorServer.Responses.TaxiListResponse
 SETA/Simulators/Buffer.java
@@ -33,8 +45,8 @@ SETA/Simulators/PM10Simulator.java
  SETA.Simulators.PM10Simulator
 AdministratorServer/Beans/TaxiList.java
  AdministratorServer.Beans.TaxiList
-AdministratorServer/Beans/StatisticsStorage.java
- AdministratorServer.Beans.StatisticsStorage
+AdministratorServer/Responses/AverageStatisticsResponse.java
+ AdministratorServer.Responses.AverageStatisticsResponse
 AdministratorServer/Beans/Statistics.java
  AdministratorServer.Beans.Statistics
 SETA/Simulators/Measurement.java
@@ -101,21 +113,14 @@ SETA/Taxi.java
  SETA.Taxi
 AdministratorServer/Beans/TaxiNetworkInfo.java
  AdministratorServer.Beans.TaxiNetworkInfo
-SETA/SetaProcess.java
- SETA.SetaProcess
- SETA.SetaProcess$1
- SETA.SetaProcess$PendingRequestTask
- SETA.SetaProcess$PendingRequestTask$1
- SETA.SetaProcess$SubscriberTask
- SETA.SetaProcess$SubscriberTask$1
-SETA/NetworkCommunicationModule.java
- SETA.NetworkCommunicationModule
- SETA.NetworkCommunicationModule$1
- SETA.NetworkCommunicationModule$2
- SETA.NetworkCommunicationModule$3
- SETA.NetworkCommunicationModule$ElectionTask
- SETA.NetworkCommunicationModule$ElectionTask$1
- SETA.NetworkCommunicationModule$RechargeTask
- SETA.NetworkCommunicationModule$RechargeTask$1
-AdministratorServer/Responses/AverageStatisticsResponse.java
- AdministratorServer.Responses.AverageStatisticsResponse
+AdministratorServer/Beans/StatisticsStorage.java
+ AdministratorServer.Beans.StatisticsStorage
+AdministratorServer/services/AdministratorServices.java
+ AdministratorServer.services.AdministratorServices
+ThreadPool.java
+ ThreadPool
+AdministratorServer/services/TaxiServices.java
+ AdministratorServer.services.TaxiServices
+Test.java
+ Test
+ Test$ThreadTest

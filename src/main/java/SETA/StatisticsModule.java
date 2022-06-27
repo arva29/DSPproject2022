@@ -8,6 +8,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Module to manage the sensor and the buffer with the sliding windows
+ */
 public class StatisticsModule extends Thread{
     private final MeasurementsBuffer buffer = new MeasurementsBuffer(this);
     private final RESTServerModule restServerModule;
@@ -36,6 +39,9 @@ public class StatisticsModule extends Thread{
         }
     }
 
+    /**
+     * Sends the statistics to the server by taking the data and adding to them its taxi id, battery level and the current timestamp
+     */
     private void sendStatistics() {
         Statistics statisticsToSend = new Statistics(kmTravelled, numberOfRides, averageMeasurements);
         StatisticsRecord statisticsRecord = new StatisticsRecord(Taxi.getTaxiNetworkInfo().getId(), new Timestamp(System.currentTimeMillis()), Taxi.getBatteryLvl(), statisticsToSend);
@@ -47,6 +53,9 @@ public class StatisticsModule extends Thread{
         cleanData();
     }
 
+    /**
+     * Clear the data collected
+     */
     private synchronized void cleanData(){
         numberOfRides = 0;
         kmTravelled = 0;

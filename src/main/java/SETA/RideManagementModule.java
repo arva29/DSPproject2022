@@ -197,7 +197,7 @@ public class RideManagementModule extends Thread{
                 System.err.println("ID - " + i.getId());
             }
 
-            networkCommunicationModule.notifyPendingTaxi(nextTaxiToRecharge, Taxi.getRechargeQueue());
+            networkCommunicationModule.notifyPendingTaxi(nextTaxiToRecharge);
             Taxi.clearRechargingQueue();
         }
     }

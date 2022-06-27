@@ -2,6 +2,10 @@ package AdministratorServer.Beans;
 
 import java.util.List;
 
+/**
+ * Class to represent a single statistic. It contains the km travelled, the number of rides and the average of the pollution
+ * captured by the sensors
+ */
 public class Statistics {
     private double kmTravelled;
     private int numberOfRides;

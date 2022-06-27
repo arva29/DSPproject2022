@@ -9,6 +9,9 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.sql.Timestamp;
 
+/**
+ * Class to manage responses of the proto messages coming from gRPC communication with other taxis
+ */
 public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
     private final NetworkCommunicationModule networkCommunicationModule;
 
@@ -16,6 +19,9 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
         this.networkCommunicationModule = networkCommunicationModule;
     }
 
+    /**
+     * Adds the taxi to the list of taxi in the network and responds with an empty message
+     */
     @Override
     public void notifyNewTaxiPresence(TaxiInformation request, StreamObserver<Empty> responseObserver) {
         Taxi.addTaxiToNetwork(new TaxiNetworkInfo(request));
@@ -24,6 +30,10 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    /**
+     * If the taxi from which the request arrives doesn't match all the requisites to take charge of the ride, it responds
+     * with STOP, otherwise it responds with OK
+     */
     @Override
     public void electionMessage(ElectionMessage request, StreamObserver<ElectionReply> responseObserver) {
 
@@ -60,6 +70,10 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    /**
+     * If the taxi is already asking for recharging, or it is already in a recharging process it replies with STOP and add the taxi
+     * from which the request arrives to the recharging queue.
+     */
     @Override
     public void rechargeMessage(RechargeMessage request, StreamObserver<RechargeReply> responseObserver) {
 
@@ -76,6 +90,9 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    /**
+     * The taxi could enter the recharging process without starting an election
+     */
     @Override
     public void notifyPermissionToRecharge(RechargePermission request, StreamObserver<Empty> responseObserver) {
 
@@ -88,6 +105,9 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    /**
+     * The taxi remove the taxi from which the message arrives from the list of the taxi in the network
+     */
     @Override
     public void notifyTaxiLeavingNetwork(TaxiLeaving request, StreamObserver<Empty> responseObserver) {
         Taxi.removeTaxiFromNetwork(request.getId());

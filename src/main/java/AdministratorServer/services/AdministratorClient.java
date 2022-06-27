@@ -14,6 +14,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Class to manage the standard input of the administrator client and to provide all the commands for retrieving information
+ * from the server
+ */
 public class AdministratorClient {
 
     private static final String SERVER_ADDRESS = "http://localhost:1337";
@@ -32,6 +36,10 @@ public class AdministratorClient {
 
     }
 
+    /**
+     * Check what command was inserted
+     * @param line standard input line
+     */
     private static void checkCommand(String line) {
 
         String[] commandArray = line.split(" ");
@@ -64,6 +72,9 @@ public class AdministratorClient {
         }
     }
 
+    /**
+     * Print the list of the taxis in the network
+     */
     private static void showListOfTaxi() {
         String getPath = "/statistics/listOfTaxis";
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
@@ -76,6 +87,11 @@ public class AdministratorClient {
         }
     }
 
+    /**
+     * Print the avarage of the statistics of all the taxis in the period between the two timestamp
+     * @param t1 first timestamp
+     * @param t2 last timestamp
+     */
     private static void showTimestampStats(Timestamp t1, Timestamp t2) {
         String getPath = "/statistics/" + t1 + "-" + t2;
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
@@ -87,6 +103,11 @@ public class AdministratorClient {
 
     }
 
+    /**
+     * Print the last n statistics of the taxi specified
+     * @param id id of the taxi
+     * @param n number of statistics to retrieve
+     */
     private static void showTaxiStats(int id, int n) {
         String getPath = "/statistics/" + id + "/" + n;
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
@@ -98,6 +119,9 @@ public class AdministratorClient {
 
     }
 
+    /**
+     * Print a default message with all the commands available
+     */
     private static void defaultMessage(){
         System.out.println("UNKNOWN COMMAND! This is the list of available commands:");
         System.out.println(" - list: Display the list of taxi in the network");
@@ -105,6 +129,12 @@ public class AdministratorClient {
         System.out.println(" - timestampStats {t1} {t2}: Display the average of statistics from all the taxi between the two specified timestamp (format: yyyy-[m]m-[d]d hh:mm:ss)");
     }
 
+    /**
+     * Execute the GET request to the server
+     * @param client client that has to do the request
+     * @param url url of the desired request
+     * @return response to the request performed
+     */
     private static ClientResponse getRequest(Client client, String url){
         WebResource webResource = client.resource(url);
         try {

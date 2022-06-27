@@ -21,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.example.grpc.TaxiNetworkServiceGrpc.newStub;
 
+/**
+ * Class to manage the gRPC communication between taxis.
+ */
 public class NetworkCommunicationModule extends Thread{
     private Server server;
     private RideManagementModule rideManagementModule;
@@ -39,6 +42,9 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
+    /**
+     * Method to notify the entrance of the taxi into the network. It sends a message to all the other taxis with its information
+     */
     public void notifyPresenceToNetwork() throws InterruptedException {
 
         for(TaxiNetworkInfo taxi: Taxi.getTaxiNetwork()){
@@ -76,6 +82,9 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
+    /**
+     * Sends a message to all the taxi in the network to notify that it is leaving the network
+     */
     public void notifyLeavingNetwork() throws InterruptedException {
 
         for(TaxiNetworkInfo taxi: Taxi.getTaxiNetwork()){
@@ -111,12 +120,18 @@ public class NetworkCommunicationModule extends Thread{
 
     }
 
+    /**
+     * Starts the election. It launches a thread for each other taxis in the network and after all threads have closed, if the
+     * Taxi field eligible is still true, the taxi take charge of the ride otherwise it will be free for another ride.
+     * @param rideRequest ride request for the election
+     * @param rideMngModule module that handle mqtt communication
+     */
     public void startElection(RideRequest rideRequest, RideManagementModule rideMngModule) throws InterruptedException, MqttException {
 
         Taxi.setCurrentElection(rideRequest.getId());
         Taxi.setInElection(true);
 
-        if(Taxi.getTaxiNetwork().size() != 0) { //If only 1 taxi, it directly takes the ride
+        /*if(Taxi.getTaxiNetwork().size() != 0) { //If only 1 taxi, it directly takes the ride
             ExecutorService executor = Executors.newFixedThreadPool(Taxi.getTaxiNetwork().size());
 
             for (TaxiNetworkInfo taxi : Taxi.getTaxiNetwork()) {
@@ -131,6 +146,19 @@ public class NetworkCommunicationModule extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }*/
+
+        /**
+         * todo PROVARE
+         */
+        if(Taxi.getTaxiNetwork().size() != 0){ //If only 1 taxi, it directly takes the ride
+            CustomThreadPool pool = new CustomThreadPool();
+
+            for (TaxiNetworkInfo taxi : Taxi.getTaxiNetwork()) {
+                pool.addThread(new ElectionTask(taxi, rideRequest));
+            }
+
+            pool.run();
         }
 
         Taxi.setInElection(false);
@@ -151,7 +179,11 @@ public class NetworkCommunicationModule extends Thread{
 
     }
 
-    public void notifyPendingTaxi(TaxiNetworkInfo taxi, List<TaxiNetworkInfo> rechargeQueue) throws InterruptedException {
+    /**
+     * Notify the first taxi in the recharging queue that now it has access to the recharging station
+     * @param taxi Taxi to notify
+     */
+    public void notifyPendingTaxi(TaxiNetworkInfo taxi) throws InterruptedException {
         ManagedChannel channel = ManagedChannelBuilder
                 .forTarget(taxi.getIpAddress()+":"+taxi.getPortNumber())
                 .usePlaintext()
@@ -178,10 +210,14 @@ public class NetworkCommunicationModule extends Thread{
         channel.awaitTermination(10, TimeUnit.SECONDS);
     }
 
-    public boolean askingForRecharge(){
+    /**
+     * Launches a thread for each taxi in the network to ask them if it can access the recharging station of its district
+     * @return true if the taxi can access the recharging station
+     */
+    public boolean askingForRecharge() throws InterruptedException {
         Taxi.setAskingForRecharging(true);
         List<TaxiNetworkInfo> networkSnapshot = Taxi.getTaxiNetwork();
-        if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
+        /*if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
             ExecutorService executor = Executors.newFixedThreadPool(networkSnapshot.size());
 
             for (TaxiNetworkInfo taxi : networkSnapshot) {
@@ -196,6 +232,21 @@ public class NetworkCommunicationModule extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }*/
+
+        /**
+         * todo DA PROVARE
+         */
+        if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
+            CustomThreadPool pool = new CustomThreadPool();
+
+            for (TaxiNetworkInfo taxi : networkSnapshot) {
+                RechargeTask rechargeTask = new RechargeTask(taxi);
+
+                pool.addThread(rechargeTask);
+            }
+
+            pool.run();
         }
 
         boolean value = (rechargeReplyCounter == networkSnapshot.size());
@@ -204,7 +255,12 @@ public class NetworkCommunicationModule extends Thread{
         return value;
     }
 
-    private class ElectionTask implements Runnable{
+    /**
+     * Thread to send election messages to other taxi in the network via gRPC. The thread creates the message and sends it to
+     * the taxi specified in the constructor, then it waits for the response. If the response is OK nothing happen, otherwise
+     * if the response is STOP the taxi will set itself as not eligible anymore (It will not take charge of the ride).
+     */
+    private class ElectionTask extends Thread{
         private final TaxiNetworkInfo taxi;
         private final RideRequest rideRequest;
 
@@ -253,7 +309,13 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
-    private class RechargeTask implements Runnable{
+    /**
+     * Thread to send message asking for permission to recharge from other taxi in the network via gRPC. The thread creates the
+     * message and sends it to the taxi specified in the constructor, then it waits for the response. If the response is OK it
+     * increment a counter and if at the end the counter will be equal to the number of taxi in the network, it means that
+     * everyone has responded with OK and the taxi could enter the recharging station
+     */
+    private class RechargeTask extends Thread{
         private final TaxiNetworkInfo taxi;
 
         public RechargeTask(TaxiNetworkInfo taxi) {
@@ -302,6 +364,9 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
+    /**
+     * It shuts down its gRPC server
+     */
     public void disconnect(){
         server.shutdown();
         System.out.println(" -- GRPC SERVER DISCONNETTED -- ");
@@ -315,6 +380,9 @@ public class NetworkCommunicationModule extends Thread{
         this.rideManagementModule = rideManagementModule;
     }
 
+    /**
+     * Increment the counter of the OK responses from recharging tasks
+     */
     private synchronized void incrementRechargeReplyCounter(){
         rechargeReplyCounter++;
     }
