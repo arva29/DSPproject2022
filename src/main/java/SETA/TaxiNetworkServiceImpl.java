@@ -37,9 +37,56 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
     @Override
     public void electionMessage(ElectionMessage request, StreamObserver<ElectionReply> responseObserver) {
 
-        System.out.println("------ Replied to " + request.getTaxiId() + " - Request " + request.getRideRequestId());
+        /*ElectionReply reply;
+
+        if(Taxi.isFree()) { //NOT INVOLVED IN AN OTHER RIDE OR RECHARGE PROCESS
+            if(!Taxi.isAskingForRecharging()) {
+                if (request.getRideRequestId() == Taxi.getCurrentElection() || Taxi.getCurrentElection() == -1) {
+                    if (new Position(request.getStartPosition()).getDistrict() == Taxi.getPosition().getDistrict()) { //CHECK IF REQUEST IS FROM SAME DISTRICT
+                        if (!Taxi.rideAlreadyAccomplished(request.getRideRequestId())) { //REQUEST FOR RIDE THAT THIS TAXI HAS ALREADY TAKEN
+                            if (request.getDistance() > Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) { //DISTANCE COMPARISON
+                                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                            } else if (request.getDistance() < Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) {
+                                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                            } else {
+                                if (request.getBatteryLvl() > Taxi.getBatteryLvl()) {    //BATTERY LEVEL COMPARISON
+                                    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                                } else if (request.getBatteryLvl() < Taxi.getBatteryLvl()) {
+                                    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                                } else {    //ID COMPARISON
+                                    //System.out.println("ID REQ: " + request.getTaxiId() + " MY ID: " + Taxi.getTaxiNetworkInfo().getId());
+                                    if (request.getTaxiId() > Taxi.getTaxiNetworkInfo().getId()) {
+                                        reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                                    } else {
+                                        reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                                    }
+                                }
+                            }
+                        } else {
+                            reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                        }
+                    } else {
+                        reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                    }
+                } else {
+                    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+                }
+            } else {
+                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+            }
+        } else {
+            //if(Taxi.rideAlreadyAccomplished(request.getRideRequestId())) {
+            //    reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+            //} else {
+            reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+            //}
+        }*/
+
         ElectionReply reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
 
+        //System.out.println("\nTaxi.isFree - " + Taxi.isFree() + "\n!Taxi.isAskingForRecharging - " + !Taxi.isAskingForRecharging() +
+        //        "\nReqID - CurrElect - " + request.getRideRequestId() + " - " +  Taxi.getCurrentElection() + "\n!Taxi.rideAlreadyAccomplished - " +
+        //        !Taxi.rideAlreadyAccomplished(request.getRideRequestId()) + "\n");
 
         if(Taxi.isFree() && !Taxi.isAskingForRecharging() && (request.getRideRequestId() == Taxi.getCurrentElection() || Taxi.getCurrentElection() == -1)) {
             if (new Position(request.getStartPosition()).getDistrict() == Taxi.getPosition().getDistrict()) { //CHECK IF REQUEST IS FROM SAME DISTRICT
@@ -60,14 +107,20 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
                     reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
                 }
             }
+        } else {
+            if (Taxi.getCurrentElection() == request.getRideRequestId()){
+                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
+            }
         }
 
-        if(reply.getMessage().equals(ReplyMessage.OK) && !Taxi.rideAlreadyAccomplished(request.getRideRequestId())){
-            Taxi.addToAccomplishedRide(request.getRideRequestId());
-        }
+        //if(reply.getMessage().equals(ReplyMessage.OK) && !Taxi.rideAlreadyAccomplished(request.getRideRequestId())){
+        //    Taxi.addToAccomplishedRide(request.getRideRequestId());
+        //}
 
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
+
+        //System.out.println("------ Replied to " + request.getTaxiId() + " - Request " + request.getRideRequestId());
     }
 
     /**

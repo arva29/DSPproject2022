@@ -17,7 +17,7 @@ public class Taxi {
     private static Boolean inElection = false; //True if Taxi is involved in an election
     private static Boolean eligible = true; //True if Taxi is involved in an election
     private static Boolean recharging = false; //True if it is recharging
-    private static int currentElection = 0; //Request ID for the current election
+    private static int currentElection = -1; //Request ID for the current election
     private static RechargingTrigger askingForRecharging = new RechargingTrigger(false); //True if it is asking for recharging
     public static final Object electionLock = new Object();
 
@@ -276,7 +276,7 @@ public class Taxi {
      */
     public static void notifyEligibility() {
         synchronized (electionLock){
-            System.out.println("Taxi is finally free!");
+            //System.out.println("Taxi is now free!");
             electionLock.notifyAll();
         }
     }

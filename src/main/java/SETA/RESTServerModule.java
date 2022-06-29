@@ -37,8 +37,22 @@ public class RESTServerModule {
     public void sendStatistics(StatisticsRecord statisticsToSend){
         ClientResponse clientResponse;
 
+        //statisticsToSend.print();
+
         String postPath = "/taxi/sendStatistics";
-        clientResponse = postRequest(client,SERVER_ADDRESS + postPath, Taxi.getTaxiNetworkInfo());
+
+        WebResource webResource = client.resource(SERVER_ADDRESS + postPath);
+        String input = new Gson().toJson(statisticsToSend);
+        System.out.println("JSON - " + input);
+
+        try {
+            clientResponse = webResource.type("application/json").post(ClientResponse.class, input);
+        } catch (ClientHandlerException e) {
+            System.out.println("Server non disponibile");
+            clientResponse = null;
+        }
+
+        System.out.println("Response " + clientResponse.getStatus() + " - " + clientResponse.getStatusInfo());
         clientResponse.close();
     }
 
@@ -48,16 +62,6 @@ public class RESTServerModule {
         //System.out.println("-----> " + input);
         try {
             return webResource.type("application/json").post(ClientResponse.class, input);
-        } catch (ClientHandlerException e) {
-            System.out.println("Server non disponibile");
-            return null;
-        }
-    }
-
-    private ClientResponse getRequest(Client client, String url){
-        WebResource webResource = client.resource(url);
-        try {
-            return webResource.type("application/json").get(ClientResponse.class);
         } catch (ClientHandlerException e) {
             System.out.println("Server non disponibile");
             return null;

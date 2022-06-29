@@ -8,10 +8,10 @@ import java.sql.Timestamp;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StatisticsRecord {
-    private final int id;
-    private final Timestamp timestamp;
-    private final int batteryLvl;
-    private final Statistics statistics;
+    private int id;
+    private Timestamp timestamp;
+    private int batteryLvl;
+    private Statistics statistics;
 
     public StatisticsRecord(int id, Timestamp timestamp, int batteryLvl, Statistics statistics) {
         this.id = id;
@@ -19,6 +19,8 @@ public class StatisticsRecord {
         this.batteryLvl = batteryLvl;
         this.statistics = statistics;
     }
+
+    public StatisticsRecord() {}
 
     public int getId() {
         return id;
@@ -34,5 +36,14 @@ public class StatisticsRecord {
 
     public Statistics getStatistics() {
         return statistics;
+    }
+
+    public void print(){
+        System.out.println(" - ID -> " + id);
+        System.out.println(" - TIMESTAMP -> " + timestamp.toString());
+        System.out.println(" - BATTERY -> " + batteryLvl);
+        System.out.println(" - KM -> " + statistics.getKmTravelled());
+        System.out.println(" - N° OF RIDES -> " + statistics.getNumberOfRides());
+        System.out.println(" - POLLUTION -> " + statistics.getAveragePollution());
     }
 }

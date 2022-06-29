@@ -36,6 +36,7 @@ public class TaxiServices {
     @POST
     @Consumes({"application/json", "application/xml"})
     public Response sendStatistics(StatisticsRecord statisticsRecord){
+        System.out.println("AAAAAAAAAAAA");
         StatisticsStorage.getInstance().addStatistics(statisticsRecord);
         return Response.ok().build();
     }

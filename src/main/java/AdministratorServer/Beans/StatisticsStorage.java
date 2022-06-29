@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +41,10 @@ public class StatisticsStorage {
      * @param statisticToAdd statistic that has to be added
      */
     public void addStatistics(StatisticsRecord statisticToAdd){
+        getAllStatistics().computeIfAbsent(statisticToAdd.getId(), k -> new ArrayList<>());
         getAllStatistics().get(statisticToAdd.getId()).add(statisticToAdd);
+
+        System.out.println("Added statistics from " + statisticToAdd.getId());
     }
 
     /**

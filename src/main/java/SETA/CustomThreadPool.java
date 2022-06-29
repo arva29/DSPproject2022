@@ -10,17 +10,21 @@ public class CustomThreadPool {
 
     private final List<Thread> threadList = new ArrayList<>();
 
-    public void addThread(Thread t){
-        threadList.add(t);
+    public void addThread(Runnable t){
+        threadList.add(new Thread(t));
     }
 
-    public void run() throws InterruptedException {
+    public void run() {
         for(Thread t: threadList){
             t.start();
         }
 
         for(Thread t: threadList){
-            t.join();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

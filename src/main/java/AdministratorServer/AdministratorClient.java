@@ -1,4 +1,4 @@
-package AdministratorServer.services;
+package AdministratorServer;
 
 import AdministratorServer.Beans.Statistics;
 import AdministratorServer.Beans.TaxiNetworkInfo;
@@ -78,12 +78,21 @@ public class AdministratorClient {
     private static void showListOfTaxi() {
         String getPath = "/statistics/listOfTaxis";
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
-        System.out.println(clientResponse.toString());
+
+        if (clientResponse.getStatus() == 200) {
+            System.out.println(clientResponse.toString());
+        } else {
+            System.out.println("ERROR with code " + clientResponse.getStatus());
+        }
 
         TaxiListResponse list = clientResponse.getEntity(TaxiListResponse.class);
         System.out.println("\nTAXI LIST");
-        for (TaxiNetworkInfo i : list.getTaxiList()){
-            System.out.println(" - ID: " + i.getId() + "  [IP:" + i.getIpAddress() + " - PORT: " + i.getPortNumber() + "]");
+        try {
+            for (TaxiNetworkInfo i : list.getTaxiList()) {
+                System.out.println(" - ID: " + i.getId() + "  [IP:" + i.getIpAddress() + " - PORT: " + i.getPortNumber() + "]");
+            }
+        } catch (NullPointerException e){
+            System.out.println("No taxis in the network");
         }
     }
 
@@ -95,7 +104,12 @@ public class AdministratorClient {
     private static void showTimestampStats(Timestamp t1, Timestamp t2) {
         String getPath = "/statistics/" + t1 + "-" + t2;
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
-        System.out.println(clientResponse.toString());
+
+        if (clientResponse.getStatus() == 200) {
+            System.out.println(clientResponse.toString());
+        } else {
+            System.out.println("ERROR with code " + clientResponse.getStatus());
+        }
 
         AverageStatisticsResponse avgStats = clientResponse.getEntity(AverageStatisticsResponse.class);
         System.out.println("\nAVERAGE STATS BETWEEN " + t1 + " AND " + t2);
@@ -111,7 +125,14 @@ public class AdministratorClient {
     private static void showTaxiStats(int id, int n) {
         String getPath = "/statistics/" + id + "/" + n;
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
-        System.out.println(clientResponse.toString());
+
+        if (clientResponse.getStatus() == 200) {
+            System.out.println(clientResponse.toString());
+        } else {
+            System.out.println("ERROR with code " + clientResponse.getStatus());
+        }
+
+
 
         LastStatisticsByIdResponse lastStats = clientResponse.getEntity(LastStatisticsByIdResponse.class);
         System.out.println("\nAVERAGE OF LAST " + n + " STATISTICS OF TAXI " + id);

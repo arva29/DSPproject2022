@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.grpc.TaxiNetworkServiceGrpc.newStub;
@@ -27,7 +25,9 @@ import static com.example.grpc.TaxiNetworkServiceGrpc.newStub;
 public class NetworkCommunicationModule extends Thread{
     private Server server;
     private RideManagementModule rideManagementModule;
-    int rechargeReplyCounter = 0;
+    private int rechargeReplyCounter = 0;
+    private int replies = 0;
+    private static final Object lock = new Object();
 
     @Override
     public void run() {
@@ -131,26 +131,8 @@ public class NetworkCommunicationModule extends Thread{
         Taxi.setCurrentElection(rideRequest.getId());
         Taxi.setInElection(true);
 
-        /*if(Taxi.getTaxiNetwork().size() != 0) { //If only 1 taxi, it directly takes the ride
-            ExecutorService executor = Executors.newFixedThreadPool(Taxi.getTaxiNetwork().size());
+        setReplies(Taxi.getTaxiNetwork().size());
 
-            for (TaxiNetworkInfo taxi : Taxi.getTaxiNetwork()) {
-                Runnable electionTask = new ElectionTask(taxi, rideRequest);
-
-                executor.execute(electionTask);
-            }
-
-            try {
-                executor.awaitTermination(10, TimeUnit.SECONDS);
-                executor.shutdown();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-
-        /**
-         * todo PROVARE
-         */
         if(Taxi.getTaxiNetwork().size() != 0){ //If only 1 taxi, it directly takes the ride
             CustomThreadPool pool = new CustomThreadPool();
 
@@ -161,12 +143,14 @@ public class NetworkCommunicationModule extends Thread{
             pool.run();
         }
 
+        //Waiting for all responses from threads
+        waitForAllResponses();
+
         Taxi.setInElection(false);
-        Taxi.setCurrentElection(-1);
 
         if(Taxi.isEligible()){ //If eligible at the end of the election the Taxi take the ride
             Taxi.setFree(false);
-            //Taxi.addToAccomplishedRide(rideRequest.getId());
+            Taxi.addToAccomplishedRide(rideRequest.getId());
             try {
                 rideMngModule.accomplishRide(rideRequest);
             } catch (InterruptedException | MqttException e) {
@@ -174,6 +158,7 @@ public class NetworkCommunicationModule extends Thread{
             }
         } else {
             Taxi.setEligible(true);
+            Taxi.setCurrentElection(-1);
             Taxi.notifyEligibility();
         }
 
@@ -217,26 +202,8 @@ public class NetworkCommunicationModule extends Thread{
     public boolean askingForRecharge() throws InterruptedException {
         Taxi.setAskingForRecharging(true);
         List<TaxiNetworkInfo> networkSnapshot = Taxi.getTaxiNetwork();
-        /*if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
-            ExecutorService executor = Executors.newFixedThreadPool(networkSnapshot.size());
+        setReplies(networkSnapshot.size());
 
-            for (TaxiNetworkInfo taxi : networkSnapshot) {
-                Runnable rechargeTask = new RechargeTask(taxi);
-
-                executor.execute(rechargeTask);
-            }
-
-            try {
-                executor.awaitTermination(10, TimeUnit.SECONDS);
-                executor.shutdown();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-
-        /**
-         * todo DA PROVARE
-         */
         if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
             CustomThreadPool pool = new CustomThreadPool();
 
@@ -249,6 +216,8 @@ public class NetworkCommunicationModule extends Thread{
             pool.run();
         }
 
+        waitForAllResponses();
+
         boolean value = (rechargeReplyCounter == networkSnapshot.size());
 
         rechargeReplyCounter = 0;
@@ -260,7 +229,7 @@ public class NetworkCommunicationModule extends Thread{
      * the taxi specified in the constructor, then it waits for the response. If the response is OK nothing happen, otherwise
      * if the response is STOP the taxi will set itself as not eligible anymore (It will not take charge of the ride).
      */
-    private class ElectionTask extends Thread{
+    private class ElectionTask implements Runnable{
         private final TaxiNetworkInfo taxi;
         private final RideRequest rideRequest;
 
@@ -276,6 +245,7 @@ public class NetworkCommunicationModule extends Thread{
                     .forTarget(taxi.getIpAddress() + ":" + taxi.getPortNumber())
                     .usePlaintext()
                     .build();
+
             TaxiNetworkServiceStub stub = newStub(channel);
 
             ElectionMessage message = ElectionMessage.newBuilder()
@@ -289,10 +259,13 @@ public class NetworkCommunicationModule extends Thread{
             stub.electionMessage(message, new StreamObserver<ElectionReply>() {
                 @Override
                 public void onNext(ElectionReply reply) {
+
                     System.out.println(" - REPLY " + reply.getRideRequestId() + " - \nFROM: " + reply.getTaxiId() + "\nMESSAGE: " + reply.getMessage() + "\n");
+
                     if (reply.getMessage().equals(ReplyMessage.STOP)) {
                        Taxi.setEligible(false); //Replace true value with false one
                     }
+
                 }
 
                 @Override
@@ -302,10 +275,10 @@ public class NetworkCommunicationModule extends Thread{
 
                 @Override
                 public void onCompleted() {
-
+                    addReplies();
+                    if(getReplies() == 0) notifyResponses();
                 }
             });
-
         }
     }
 
@@ -315,7 +288,7 @@ public class NetworkCommunicationModule extends Thread{
      * increment a counter and if at the end the counter will be equal to the number of taxi in the network, it means that
      * everyone has responded with OK and the taxi could enter the recharging station
      */
-    private class RechargeTask extends Thread{
+    private class RechargeTask implements Runnable{
         private final TaxiNetworkInfo taxi;
 
         public RechargeTask(TaxiNetworkInfo taxi) {
@@ -357,7 +330,8 @@ public class NetworkCommunicationModule extends Thread{
 
                 @Override
                 public void onCompleted() {
-
+                    addReplies();
+                    if(getReplies() == 0) notifyResponses();
                 }
             });
 
@@ -385,5 +359,32 @@ public class NetworkCommunicationModule extends Thread{
      */
     private synchronized void incrementRechargeReplyCounter(){
         rechargeReplyCounter++;
+    }
+
+    public synchronized void setReplies(int n){
+        replies = n;
+    }
+
+    public synchronized int getReplies() {
+        return replies;
+    }
+
+    public synchronized void addReplies(){
+        replies--;
+    }
+
+    public static void waitForAllResponses() throws InterruptedException {
+        synchronized (lock){
+            //System.out.println("... waiting the taxi to be free!");
+            lock.wait();
+        }
+    }
+
+
+    public static void notifyResponses() {
+        synchronized (lock){
+            //System.out.println("Taxi is finally free!");
+            lock.notify();
+        }
     }
 }

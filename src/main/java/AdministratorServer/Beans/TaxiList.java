@@ -81,7 +81,7 @@ public class TaxiList {
     }
 
     private Position getRandomStationPosition(){
-        int index = new Random().nextInt(3);
+        /*int index = new Random().nextInt(3);
 
         switch (index){
             case 0: //NW
@@ -92,11 +92,11 @@ public class TaxiList {
                 return new Position(9, 0);
             default:
                 return new Position(9, 9);
-        }
+        }*/
 
         /**
          * todo REMOVE
          */
-        //return new Position(0, 0);
+        return new Position(0, 0);
     }
 }
