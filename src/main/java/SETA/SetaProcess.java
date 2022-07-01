@@ -42,34 +42,19 @@ public class SetaProcess {
             PendingRequestTask pendingRequestTask = new PendingRequestTask(client);
             pendingRequestTask.start();
 
+            //debugCommandScanner(client);
 
-            /**
-             * TODO - REMOVE COMMENT
-             */
-            //while (true){
-
-            Scanner scanner = new Scanner(System.in);
-            String a;
-            //DEBUG PURPOSE
             while (true) {
-                a = scanner.nextLine();
-                if (a.equals("r")) {
-                    SetaProcess.publishRideRequest(client);
-                } else if(a.equals("l")){
-                    printMap();
-                }
-            }
-                /*SetaProcess.publishRideRequest(client);
+
+                SetaProcess.publishRideRequest(client);
                 SetaProcess.publishRideRequest(client);
 
-                Thread.sleep(5000);*/
+                Thread.sleep(15000);
+            }
 
-                //publishPendingRequest(client);
-
-                /*if (client.isConnected())
-                    client.disconnect();
-                System.out.println("Publisher " + SetaProcess.CLIENT_ID + " disconnected");*/
-
+            /*if (client.isConnected())
+                client.disconnect();
+            System.out.println("Publisher " + SetaProcess.CLIENT_ID + " disconnected");*/
 
         } catch (MqttException me) {
             System.out.println("reason " + me.getReasonCode());
@@ -248,6 +233,20 @@ public class SetaProcess {
             System.out.println(" DISTRICT " + i);
             for (RideRequest r: pendingRideRequest.get(i)){
                 System.out.println(" - " + r.getId());
+            }
+        }
+    }
+
+    private static void debugCommandScanner(MqttClient client) throws MqttException {
+        Scanner scanner = new Scanner(System.in);
+        String a;
+        //DEBUG PURPOSE
+        while (true) {
+            a = scanner.nextLine();
+            if (a.equals("r")) {
+                SetaProcess.publishRideRequest(client);
+            } else if(a.equals("l")){
+                printMap();
             }
         }
     }

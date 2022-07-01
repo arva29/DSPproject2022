@@ -1,22 +1,17 @@
 AdministratorServer/Responses/TaxiAddingResponse.java
  AdministratorServer.Responses.TaxiAddingResponse
-AdministratorServer/services/AdministratorServices.java
- AdministratorServer.services.AdministratorServices
+SETA/Simulators/Simulator.java
+ SETA.Simulators.Simulator
 AdministratorServer/Responses/AverageStatisticsResponse.java
  AdministratorServer.Responses.AverageStatisticsResponse
 SETA/CustomThreadPool.java
  SETA.CustomThreadPool
 SETA/Data/Position.java
  SETA.Data.Position
-AdministratorServer/AdministratorClient.java
- AdministratorServer.AdministratorClient
-SETA/SetaProcess.java
- SETA.SetaProcess
- SETA.SetaProcess$1
- SETA.SetaProcess$PendingRequestTask
- SETA.SetaProcess$PendingRequestTask$1
- SETA.SetaProcess$SubscriberTask
- SETA.SetaProcess$SubscriberTask$1
+AdministratorServer/Beans/StatisticsRecord.java
+ AdministratorServer.Beans.StatisticsRecord
+AdministratorServer/Responses/LastStatisticsByIdResponse.java
+ AdministratorServer.Responses.LastStatisticsByIdResponse
 AdministratorServer/Responses/TaxiListResponse.java
  AdministratorServer.Responses.TaxiListResponse
 SETA/Simulators/Buffer.java
@@ -34,15 +29,14 @@ com/example/grpc/TaxiNetworkServiceGrpc.java
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceImplBase
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceMethodDescriptorSupplier
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceStub
-Test.java
- Test
- Test$ThreadTest
+SETA/MeasurementsBuffer.java
+ SETA.MeasurementsBuffer
 SETA/Simulators/PM10Simulator.java
  SETA.Simulators.PM10Simulator
-AdministratorServer/Beans/TaxiList.java
- AdministratorServer.Beans.TaxiList
-SETA/Simulators/Simulator.java
- SETA.Simulators.Simulator
+AdministratorServer/Beans/TaxiNetworkInfo.java
+ AdministratorServer.Beans.TaxiNetworkInfo
+AdministratorServer/Beans/StatisticsStorage.java
+ AdministratorServer.Beans.StatisticsStorage
 AdministratorServer/Beans/Statistics.java
  AdministratorServer.Beans.Statistics
 SETA/Simulators/Measurement.java
@@ -92,20 +86,12 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeavingOrBuilder
 SETA/Data/RideRequest.java
  SETA.Data.RideRequest
-AdministratorServer/Beans/TaxiNetworkInfo.java
- AdministratorServer.Beans.TaxiNetworkInfo
-AdministratorServer/Responses/LastStatisticsByIdResponse.java
- AdministratorServer.Responses.LastStatisticsByIdResponse
-AdministratorServer/Beans/StatisticsStorage.java
- AdministratorServer.Beans.StatisticsStorage
-AdministratorServer/Beans/StatisticsRecord.java
- AdministratorServer.Beans.StatisticsRecord
-SETA/Taxi.java
- SETA.Taxi
 SETA/StatisticsModule.java
  SETA.StatisticsModule
-SETA/MeasurementsBuffer.java
- SETA.MeasurementsBuffer
+AdministratorServer/Beans/TaxiList.java
+ AdministratorServer.Beans.TaxiList
+AdministratorServer/services/AdministratorServices.java
+ AdministratorServer.services.AdministratorServices
 SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule
  SETA.NetworkCommunicationModule$1
@@ -120,7 +106,18 @@ SETA/TaxiNetworkServiceImpl.java
 SETA/RideManagementModule.java
  SETA.RideManagementModule
  SETA.RideManagementModule$1
+AdministratorServer/AdministratorClient.java
+ AdministratorServer.AdministratorClient
 SETA/RESTServerModule.java
  SETA.RESTServerModule
 AdministratorServer/services/TaxiServices.java
  AdministratorServer.services.TaxiServices
+SETA/Taxi.java
+ SETA.Taxi
+SETA/SetaProcess.java
+ SETA.SetaProcess
+ SETA.SetaProcess$1
+ SETA.SetaProcess$PendingRequestTask
+ SETA.SetaProcess$PendingRequestTask$1
+ SETA.SetaProcess$SubscriberTask
+ SETA.SetaProcess$SubscriberTask$1

@@ -24,14 +24,18 @@ public class AdministratorServices {
         return Response.ok(StatisticsStorage.getInstance().getLastNStatistics(n, id)).build();
     }
 
-    @Path("{s1}-{s2}")
+    @Path("{s1}&{s2}")
     @GET
     @Produces({"application/json", "application/xml"})
     @Consumes({"application/json", "application/xml"})
     public Response getStatisticsBetweenT1nT2(@PathParam("s1") String s1, @PathParam("s2") String s2){
         try {
-            Timestamp t1 = Timestamp.valueOf(s1);
-            Timestamp t2 = Timestamp.valueOf(s1);
+            System.out.println("s1 - " + s1);
+            System.out.println("s2 - " + s2);
+            System.out.println("t1 - " + s1.replace("_", " "));
+            System.out.println("t2 - " + s2.replace("_", " "));
+            Timestamp t1 = Timestamp.valueOf(s1.replace("_", " "));
+            Timestamp t2 = Timestamp.valueOf(s2.replace("_", " "));
             return Response.ok(StatisticsStorage.getInstance().getAverageStatisticsFromT1ToT2(t1, t2)).build();
         } catch (IllegalArgumentException e){
             return Response.status(Response.Status.BAD_REQUEST).build();

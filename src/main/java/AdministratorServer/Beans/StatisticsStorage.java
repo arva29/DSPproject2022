@@ -54,33 +54,50 @@ public class StatisticsStorage {
      * @return all the last n statistics of the taxi with the id specified as param
      */
     public LastStatisticsByIdResponse getLastNStatistics(int n, int taxiId){
-        List<StatisticsRecord> allStatistics = getAllStatistics().get(taxiId);
+        if(getAllStatistics().get(taxiId) != null) {
+            List<StatisticsRecord> allStatistics = getAllStatistics().get(taxiId);
 
-        double kmTravelled = 0;
-        double batteryLvl = 0;
-        double pollutionLvl = 0;
-        double accomplishedRides = 0;
-        int pollutionCounter = 0;
 
-        for(int i = allStatistics.size() - 1; i >= allStatistics.size() - n; i--){
-            kmTravelled += allStatistics.get(i).getStatistics().getKmTravelled();
-            batteryLvl += allStatistics.get(i).getBatteryLvl();
-            for(double d: allStatistics.get(i).getStatistics().getAveragePollution()) {
-                pollutionLvl += d;
-                pollutionCounter++;
+            if (n > allStatistics.size()) {
+                n = allStatistics.size();
             }
-            accomplishedRides += allStatistics.get(i).getStatistics().getNumberOfRides();
-        }
 
-        return new LastStatisticsByIdResponse(
-                taxiId,
-                new AverageStatisticsResponse(
-                batteryLvl/n,
-                kmTravelled/n,
-                accomplishedRides/n,
-                pollutionLvl/pollutionCounter
-                )
-        );
+            double kmTravelled = 0;
+            double batteryLvl = 0;
+            double pollutionLvl = 0;
+            double accomplishedRides = 0;
+            int pollutionCounter = 0;
+
+            for (int i = allStatistics.size() - 1; i >= allStatistics.size() - n; i--) {
+                kmTravelled += allStatistics.get(i).getStatistics().getKmTravelled();
+                batteryLvl += allStatistics.get(i).getBatteryLvl();
+                for (double d : allStatistics.get(i).getStatistics().getAveragePollution()) {
+                    pollutionLvl += d;
+                    pollutionCounter++;
+                }
+                accomplishedRides += allStatistics.get(i).getStatistics().getNumberOfRides();
+            }
+
+            return new LastStatisticsByIdResponse(
+                    taxiId,
+                    new AverageStatisticsResponse(
+                            batteryLvl / n,
+                            kmTravelled / n,
+                            accomplishedRides / n,
+                            pollutionLvl / pollutionCounter
+                    )
+            );
+        } else {
+            return new LastStatisticsByIdResponse(
+                    -1,
+                    new AverageStatisticsResponse(
+                            0,
+                            0,
+                            0,
+                            0
+                    )
+            );
+        }
     }
 
     /**
@@ -92,36 +109,45 @@ public class StatisticsStorage {
     public AverageStatisticsResponse getAverageStatisticsFromT1ToT2(Timestamp t1, Timestamp t2){
 
         List<StatisticsRecord> allRecords;
-        double kmTravelled = 0;
-        double batteryLvl = 0;
-        double pollutionLvl = 0;
-        double accomplishedRides = 0;
-        int statsCounter = 0;
-        int pollutionCounter = 0;
 
-        for(Integer key: getAllStatistics().keySet()){
-            allRecords = getAllStatistics().get(key);
+        if (getAllStatistics().keySet().size() > 0) {
+            double kmTravelled = 0;
+            double batteryLvl = 0;
+            double pollutionLvl = 0;
+            double accomplishedRides = 0;
+            int statsCounter = 0;
+            int pollutionCounter = 0;
 
-            for(StatisticsRecord record: allRecords){
-                if(record.getTimestamp().after(t1) && record.getTimestamp().before(t2)){
-                    kmTravelled += record.getStatistics().getKmTravelled();
-                    batteryLvl += record.getBatteryLvl();
-                    for(double d: record.getStatistics().getAveragePollution()) {
-                        pollutionLvl += d;
-                        pollutionCounter++;
+            for (Integer key : getAllStatistics().keySet()) {
+                allRecords = getAllStatistics().get(key);
+
+                for (StatisticsRecord record : allRecords) {
+                    if (Timestamp.valueOf(record.getTimestamp()).after(t1) && Timestamp.valueOf(record.getTimestamp()).before(t2)) {
+                        kmTravelled += record.getStatistics().getKmTravelled();
+                        batteryLvl += record.getBatteryLvl();
+                        for (double d : record.getStatistics().getAveragePollution()) {
+                            pollutionLvl += d;
+                            pollutionCounter++;
+                        }
+                        accomplishedRides += record.getStatistics().getNumberOfRides();
+                        statsCounter++;
                     }
-                    accomplishedRides += record.getStatistics().getNumberOfRides();
-                    statsCounter++;
                 }
             }
+
+            return new AverageStatisticsResponse(
+                    batteryLvl / statsCounter,
+                    kmTravelled / statsCounter,
+                    accomplishedRides / statsCounter,
+                    pollutionLvl / pollutionCounter
+            );
+        } else {
+            return new AverageStatisticsResponse(
+                    -1,
+                    0,
+                    0,
+                    0
+            );
         }
-
-        return new AverageStatisticsResponse(
-                batteryLvl/statsCounter,
-                kmTravelled/statsCounter,
-                accomplishedRides/statsCounter,
-                pollutionLvl/pollutionCounter
-        );
-
     }
 }

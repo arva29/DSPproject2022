@@ -66,7 +66,7 @@ public class Taxi {
                 line = scanner.nextLine();
                 if(line.equals("quit")){
                     if(!isFree() || isInElection() || isAskingForRecharging() || isRecharging()){ //Taxi can quit the network only if it is free
-                        System.out.println("..waiting");
+                        //System.out.println("..waiting");
                         try {
                             waitForEligibility();
                         } catch (InterruptedException e) {
@@ -76,10 +76,7 @@ public class Taxi {
                     break;
                 } else if(line.equals("recharge")){
                     if(batteryLvl < 100) {
-                        /**
-                         * todo rivedere
-                         */
-                        if(!isFree()){
+                        if(!isFree() || !isInElection()){
                             System.out.println("..waiting");
                             try {
                                 waitForEligibility();
@@ -92,18 +89,15 @@ public class Taxi {
                         } catch (InterruptedException | MqttException e) {
                             e.printStackTrace();
                         }
+                    } else {
+                        System.out.println("Taxi already at 100% of battery");
                     }
                 }
             }
             try {
-                while (true) {
-                    if(free) {
-                        leaveNetwork(restServerModule, rideManagement, networkCommunicationModule);
-                        break;
-                    }
-                }
+                leaveNetwork(restServerModule, rideManagement, networkCommunicationModule, statisticsModule);
             } catch (MqttException | InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("ERROR WHILE LEAVING THE NETWORK!");
             }
         });
         stdinThread.start();
@@ -166,7 +160,6 @@ public class Taxi {
         if(free){
             Taxi.notifyEligibility();
         }
-        //System.out.println("--- Free -> " + free);
     }
 
     public static synchronized Boolean isInElection() {
@@ -176,7 +169,6 @@ public class Taxi {
     public static synchronized void setInElection(Boolean inElection) {
 
         Taxi.inElection = inElection;
-        //System.out.println("--- InElection -> " + inElection);
     }
 
     public static synchronized Boolean isEligible() {
@@ -184,9 +176,7 @@ public class Taxi {
     }
 
     public static synchronized void setEligible(Boolean eligible) {
-
         Taxi.eligible = eligible;
-        //System.out.println("--- Eligible -> " + eligible);
     }
 
     public static synchronized Boolean isRecharging() {
@@ -209,6 +199,10 @@ public class Taxi {
         return currentElection;
     }
 
+    /**
+     * Set the id of the election in progress
+     * @param currentElection id of the election
+     */
     public static synchronized void setCurrentElection(int currentElection) {
         Taxi.currentElection = currentElection;
     }
@@ -286,11 +280,13 @@ public class Taxi {
      * @param restServerModule module to communice with administrator server
      * @param rideManagement module to manage the ride requests
      * @param networkCommunicationModule module to communicate with other taxis in the network
+     * @param statisticsModule module to collect and send statistics
      */
-    private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule) throws MqttException, InterruptedException {
+    private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule, StatisticsModule statisticsModule) throws MqttException, InterruptedException {
         restServerModule.removeTaxiFromNetwork();
         networkCommunicationModule.notifyLeavingNetwork();
         rideManagement.disconnect();
         networkCommunicationModule.disconnect();
+        statisticsModule.setRunning(false);
     }
 }

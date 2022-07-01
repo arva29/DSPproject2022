@@ -9,11 +9,11 @@ import java.sql.Timestamp;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StatisticsRecord {
     private int id;
-    private Timestamp timestamp;
+    private String timestamp;
     private int batteryLvl;
     private Statistics statistics;
 
-    public StatisticsRecord(int id, Timestamp timestamp, int batteryLvl, Statistics statistics) {
+    public StatisticsRecord(int id, String timestamp, int batteryLvl, Statistics statistics) {
         this.id = id;
         this.timestamp = timestamp;
         this.batteryLvl = batteryLvl;
@@ -26,7 +26,7 @@ public class StatisticsRecord {
         return id;
     }
 
-    public Timestamp getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 

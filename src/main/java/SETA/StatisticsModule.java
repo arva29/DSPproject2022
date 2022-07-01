@@ -18,6 +18,7 @@ public class StatisticsModule extends Thread{
     private final List<Double> averageMeasurements = new ArrayList<>();
     private int numberOfRides = 0;
     private int kmTravelled = 0;
+    private boolean running = true;
 
 
     public StatisticsModule(RESTServerModule restServerModule){
@@ -32,11 +33,18 @@ public class StatisticsModule extends Thread{
         while(true){
             try {
                 Thread.sleep(15000);
-                sendStatistics();
+                if(isRunning()) {
+                    sendStatistics();
+                } else{
+                    break;
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        simulator.stopMeGently();
+        System.out.println(" -- SIMULATOR STOPPED -- ");
     }
 
     /**
@@ -44,11 +52,11 @@ public class StatisticsModule extends Thread{
      */
     private void sendStatistics() {
         Statistics statisticsToSend = new Statistics(kmTravelled, numberOfRides, averageMeasurements);
-        StatisticsRecord statisticsRecord = new StatisticsRecord(Taxi.getTaxiNetworkInfo().getId(), new Timestamp(System.currentTimeMillis()), Taxi.getBatteryLvl(), statisticsToSend);
+        StatisticsRecord statisticsRecord = new StatisticsRecord(Taxi.getTaxiNetworkInfo().getId(), new Timestamp(System.currentTimeMillis()).toString(), Taxi.getBatteryLvl(), statisticsToSend);
 
         restServerModule.sendStatistics(statisticsRecord);
 
-        System.out.println("--- STATISTICS SENDS ---");
+        System.out.println(" ... sending statistics!");
 
         cleanData();
     }
@@ -76,5 +84,13 @@ public class StatisticsModule extends Thread{
 
     public synchronized void addKmTravelled(int km){
         kmTravelled += km;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 }

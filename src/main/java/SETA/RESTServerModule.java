@@ -17,7 +17,7 @@ public class RESTServerModule {
         ClientResponse clientResponse;
 
         String postPath = "/taxi/add";
-        clientResponse = postRequest(client,SERVER_ADDRESS + postPath, Taxi.getTaxiNetworkInfo());
+        clientResponse = postRequest(client,SERVER_ADDRESS + postPath, new Gson().toJson(Taxi.getTaxiNetworkInfo()));
         TaxiAddingResponse response = clientResponse.getEntity(TaxiAddingResponse.class);
 
         Taxi.setPosition(response.getPosition());
@@ -36,30 +36,18 @@ public class RESTServerModule {
 
     public void sendStatistics(StatisticsRecord statisticsToSend){
         ClientResponse clientResponse;
+        String postPath = "/taxi/statistics";
 
-        //statisticsToSend.print();
+        clientResponse = postRequest(client, SERVER_ADDRESS + postPath, new Gson().toJson(statisticsToSend));
 
-        String postPath = "/taxi/sendStatistics";
-
-        WebResource webResource = client.resource(SERVER_ADDRESS + postPath);
-        String input = new Gson().toJson(statisticsToSend);
-        System.out.println("JSON - " + input);
-
-        try {
-            clientResponse = webResource.type("application/json").post(ClientResponse.class, input);
-        } catch (ClientHandlerException e) {
-            System.out.println("Server non disponibile");
-            clientResponse = null;
-        }
-
-        System.out.println("Response " + clientResponse.getStatus() + " - " + clientResponse.getStatusInfo());
+        //System.out.println("Response " + clientResponse.getStatus() + " - " + clientResponse.getStatusInfo());
         clientResponse.close();
     }
 
-    private ClientResponse postRequest(Client client, String url, TaxiNetworkInfo t){
+    private ClientResponse postRequest(Client client, String url, String input){
         WebResource webResource = client.resource(url);
-        String input = new Gson().toJson(t);
-        //System.out.println("-----> " + input);
+        //System.out.println("JSON - " + input);
+
         try {
             return webResource.type("application/json").post(ClientResponse.class, input);
         } catch (ClientHandlerException e) {

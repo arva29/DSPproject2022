@@ -32,12 +32,12 @@ public class TaxiServices {
         return Response.ok().build();
     }
 
-    @Path("sendStatistics")
+    @Path("statistics")
     @POST
     @Consumes({"application/json", "application/xml"})
-    public Response sendStatistics(StatisticsRecord statisticsRecord){
-        System.out.println("AAAAAAAAAAAA");
-        StatisticsStorage.getInstance().addStatistics(statisticsRecord);
+    public Response sendStatistics(StatisticsRecord stat){
+        System.out.println(stat);
+        StatisticsStorage.getInstance().addStatistics(stat);
         return Response.ok().build();
     }
 }

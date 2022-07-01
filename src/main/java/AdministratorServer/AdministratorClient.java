@@ -10,6 +10,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import javax.xml.bind.UnmarshalException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -24,6 +25,8 @@ public class AdministratorClient {
     private static final Client client = Client.create();
 
     public static void main(String[] args) {
+
+        defaultMessage();
 
         Scanner scanner = new Scanner(System.in);
         String line;
@@ -57,12 +60,12 @@ public class AdministratorClient {
                 }
                 break;
             case "timestampStats":
-                try {
-                    Timestamp t1 = Timestamp.valueOf(commandArray[1]);
-                    Timestamp t2 = Timestamp.valueOf(commandArray[2]);
-                    showTimestampStats(t1, t2);
-                } catch (NumberFormatException e){
-                    e.printStackTrace();
+                if(commandArray.length == 3){
+                    String s1 = commandArray[1];
+                    String s2 = commandArray[2];
+                    // TEST -> timestampStats 2022-06-29_18:09:23 2022-06-30_18:25:00
+                    showTimestampStats(s1, s2);
+                } else {
                     defaultMessage();
                 }
                 break;
@@ -80,7 +83,7 @@ public class AdministratorClient {
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
 
         if (clientResponse.getStatus() == 200) {
-            System.out.println(clientResponse.toString());
+            System.out.println(clientResponse);
         } else {
             System.out.println("ERROR with code " + clientResponse.getStatus());
         }
@@ -101,20 +104,27 @@ public class AdministratorClient {
      * @param t1 first timestamp
      * @param t2 last timestamp
      */
-    private static void showTimestampStats(Timestamp t1, Timestamp t2) {
-        String getPath = "/statistics/" + t1 + "-" + t2;
+    private static void showTimestampStats(String t1, String t2) {
+        String getPath = "/statistics/" + t1 + "&" + t2;
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
 
         if (clientResponse.getStatus() == 200) {
-            System.out.println(clientResponse.toString());
+            System.out.println(clientResponse);
+
+            AverageStatisticsResponse avgStats = clientResponse.getEntity(AverageStatisticsResponse.class);
+
+            if(avgStats.getBatteryLvl() != -1){
+                System.out.println("\nAVERAGE STATS BETWEEN " + t1 + " AND " + t2);
+                avgStats.print();
+            } else {
+                System.out.println("\nTHERE ARE NO STATISTICS AVAILABLE");
+            }
+
+        } else if (clientResponse.getStatus() == 400){
+            defaultMessage();
         } else {
             System.out.println("ERROR with code " + clientResponse.getStatus());
         }
-
-        AverageStatisticsResponse avgStats = clientResponse.getEntity(AverageStatisticsResponse.class);
-        System.out.println("\nAVERAGE STATS BETWEEN " + t1 + " AND " + t2);
-        avgStats.print();
-
     }
 
     /**
@@ -127,27 +137,30 @@ public class AdministratorClient {
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
 
         if (clientResponse.getStatus() == 200) {
-            System.out.println(clientResponse.toString());
+            System.out.println(clientResponse);
+
+            LastStatisticsByIdResponse lastStats = clientResponse.getEntity(LastStatisticsByIdResponse.class);
+
+            if(lastStats.getId() != -1) {
+                System.out.println("\nAVERAGE OF LAST " + n + " STATISTICS OF TAXI " + id);
+                lastStats.getStatistics().print();
+            } else {
+                System.out.println("\nNO TAXI WITH THE SPECIFIED ID");
+            }
+
         } else {
             System.out.println("ERROR with code " + clientResponse.getStatus());
         }
-
-
-
-        LastStatisticsByIdResponse lastStats = clientResponse.getEntity(LastStatisticsByIdResponse.class);
-        System.out.println("\nAVERAGE OF LAST " + n + " STATISTICS OF TAXI " + id);
-        lastStats.getStatistics().print();
-
     }
 
     /**
      * Print a default message with all the commands available
      */
     private static void defaultMessage(){
-        System.out.println("UNKNOWN COMMAND! This is the list of available commands:");
+        System.out.println("\nThis is the list of available commands:");
         System.out.println(" - list: Display the list of taxi in the network");
         System.out.println(" - taxiStat {id} {n}: Display last n local statistics of taxi with the id specified");
-        System.out.println(" - timestampStats {t1} {t2}: Display the average of statistics from all the taxi between the two specified timestamp (format: yyyy-[m]m-[d]d hh:mm:ss)");
+        System.out.println(" - timestampStats {t1} {t2}: Display the average of statistics from all the taxi between the two specified timestamp (format: yyyy-[m]m-[d]d_hh:mm:ss)");
     }
 
     /**

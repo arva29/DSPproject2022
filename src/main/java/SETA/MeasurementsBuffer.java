@@ -26,12 +26,13 @@ public class MeasurementsBuffer implements Buffer {
      */
     @Override
     public void addMeasurement(Measurement m) {
-        /**
-         * TODO: Sync timestamp ??
-         */
-        int comparison = m.compareTo(measurementsWindow.get(measurementsWindow.size()-1));
-        if(comparison <= 0){
-            m.setTimestamp(measurementsWindow.get(measurementsWindow.size()-1).getTimestamp() + 1);
+        //System.out.println("Add measurement - " + m.getValue());
+        if(measurementsWindow.size() > 0) {
+            int comparison = m.compareTo(measurementsWindow.get(measurementsWindow.size() - 1));
+
+            if (comparison <= 0) {
+                m.setTimestamp(measurementsWindow.get(measurementsWindow.size() - 1).getTimestamp() + 1);
+            }
         }
 
         measurementsWindow.add(m);
@@ -48,7 +49,7 @@ public class MeasurementsBuffer implements Buffer {
     @Override
     public List<Measurement> readAllAndClean() {
         List<Measurement> window = new ArrayList<>(measurementsWindow);
-        measurementsWindow.subList(0,5).clear(); //Delete first 4 elements
+        measurementsWindow.subList(0,4).clear(); //Delete first 4 elements
         return window;
     }
 
@@ -63,6 +64,8 @@ public class MeasurementsBuffer implements Buffer {
         for(Measurement m: list){
             sum += m.getValue();
         }
+
+        //System.out.println("Measurement average - " + sum/WINDOW_DIMENSION);
 
         return sum/WINDOW_DIMENSION;
     }
