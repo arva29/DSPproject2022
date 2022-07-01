@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * REST server response to the client for the request of average statistics of all taxis between two timestamps
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AverageStatisticsResponse {

@@ -30,10 +30,6 @@ public class AdministratorServices {
     @Consumes({"application/json", "application/xml"})
     public Response getStatisticsBetweenT1nT2(@PathParam("s1") String s1, @PathParam("s2") String s2){
         try {
-            System.out.println("s1 - " + s1);
-            System.out.println("s2 - " + s2);
-            System.out.println("t1 - " + s1.replace("_", " "));
-            System.out.println("t2 - " + s2.replace("_", " "));
             Timestamp t1 = Timestamp.valueOf(s1.replace("_", " "));
             Timestamp t2 = Timestamp.valueOf(s2.replace("_", " "));
             return Response.ok(StatisticsStorage.getInstance().getAverageStatisticsFromT1ToT2(t1, t2)).build();

@@ -9,10 +9,17 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+/**
+ * Module to handle communication with the REST server
+ */
 public class RESTServerModule {
     private final String SERVER_ADDRESS = "http://localhost:1337";
     private final Client client = Client.create();
 
+    /**
+     * Send information of this taxi to the server in order to add it to the city. The method also read the server response and
+     * set the initial position of the taxi and the list of other taxis already present in the city
+     */
     public void addTaxiToNetwork(){
         ClientResponse clientResponse;
 
@@ -26,6 +33,9 @@ public class RESTServerModule {
         }
     }
 
+    /**
+     * Notify the server to remove the taxi from the server
+     */
     public void removeTaxiFromNetwork(){
         ClientResponse clientResponse;
 
@@ -34,6 +44,10 @@ public class RESTServerModule {
         clientResponse.close();
     }
 
+    /**
+     * Send statistics to the administrator server
+     * @param statisticsToSend statistics that have to be sent
+     */
     public void sendStatistics(StatisticsRecord statisticsToSend){
         ClientResponse clientResponse;
         String postPath = "/taxi/statistics";

@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Contains all the taxi's information useful for communication, such as id, ip address and port number
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiNetworkInfo {

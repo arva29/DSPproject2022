@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Represents the list of the taxi in the network. Instantiated by the server as a singleton
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiList {
@@ -31,13 +34,12 @@ public class TaxiList {
         return instance;
     }
 
+    /**
+     * Check if the taxi as a unique id and add it to the list, otherwise it returns false and does nothing
+     * @param taxi taxi to add
+     * @return true if there isn't already a taxi with its id, false otherwise
+     */
     public synchronized boolean addTaxi(TaxiNetworkInfo taxi){
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         if(listOfTaxis.containsKey(taxi.getId())){
             return false;
         } else {
@@ -46,15 +48,18 @@ public class TaxiList {
         }
     }
 
+    /**
+     * Remove the taxi from the list
+     * @param id id of the taxi to remove
+     */
     public synchronized void removeTaxi(Integer id){
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         listOfTaxis.remove(id);
     }
 
+    /**
+     * Return the list of taxi from the map
+     * @return list of taxi
+     */
     private List<TaxiNetworkInfo> getListFromMap(){
         List<TaxiNetworkInfo> listToReturn = new ArrayList<>();
         for(int key : listOfTaxis.keySet()){
@@ -64,10 +69,19 @@ public class TaxiList {
         return listToReturn;
     }
 
+    /**
+     * Return the response of the server to the request of having the list of taxi in the network
+     * @return Server response with the list of taxi in the network
+     */
     public synchronized TaxiListResponse getListOfTaxis() {
         return new TaxiListResponse(getListFromMap());
     }
 
+    /**
+     * Return the response of the server with the initial position of the taxi and the list of the other taxis in the network
+     * @param taxiId id of the taxi asking for response
+     * @return Server response to the addition of the taxi
+     */
     public TaxiAddingResponse responseToAddition(int taxiId){
         List<TaxiNetworkInfo> taxiList = new ArrayList<>();
 
@@ -80,6 +94,10 @@ public class TaxiList {
         return new TaxiAddingResponse(getRandomStationPosition(), taxiList);
     }
 
+    /**
+     * Get randomly the position of 1 of the 4 recharging stations
+     * @return position of a recharge station
+     */
     private Position getRandomStationPosition(){
         int index = new Random().nextInt(3);
 

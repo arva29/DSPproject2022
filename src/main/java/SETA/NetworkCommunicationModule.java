@@ -202,6 +202,7 @@ public class NetworkCommunicationModule extends Thread{
     public boolean askingForRecharge() throws InterruptedException {
         Taxi.setAskingForRecharging(true);
         List<TaxiNetworkInfo> networkSnapshot = Taxi.getTaxiNetwork();
+
         setReplies(networkSnapshot.size());
 
         if(networkSnapshot.size() != 0) { //If only 1 taxi, it directly takes the ride
@@ -361,6 +362,10 @@ public class NetworkCommunicationModule extends Thread{
         rechargeReplyCounter++;
     }
 
+    /**
+     * Set the number of replies needed to end the election process
+     * @param n number of replies needed
+     */
     public synchronized void setReplies(int n){
         replies = n;
     }
@@ -373,6 +378,9 @@ public class NetworkCommunicationModule extends Thread{
         replies--;
     }
 
+    /**
+     * Wait for all the response of an election or mutual exclusion algorithm to arrive
+     */
     public static void waitForAllResponses() throws InterruptedException {
         synchronized (lock){
             //System.out.println("... waiting the taxi to be free!");
@@ -380,7 +388,9 @@ public class NetworkCommunicationModule extends Thread{
         }
     }
 
-
+    /**
+     * Notify the process waiting for all the responses from other taxis
+     */
     public static void notifyResponses() {
         synchronized (lock){
             //System.out.println("Taxi is finally free!");

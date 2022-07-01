@@ -74,10 +74,6 @@ public class StatisticsModule extends Thread{
         averageMeasurements.add(m);
     }
 
-    public synchronized List<Double> getAverageMeasurements() {
-        return averageMeasurements;
-    }
-
     public synchronized void addRide(){
         numberOfRides++;
     }

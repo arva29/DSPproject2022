@@ -18,7 +18,7 @@ public class Taxi {
     private static Boolean eligible = true; //True if Taxi is involved in an election
     private static Boolean recharging = false; //True if it is recharging
     private static int currentElection = -1; //Request ID for the current election
-    private static RechargingTrigger askingForRecharging = new RechargingTrigger(false); //True if it is asking for recharging
+    private static final RechargingTrigger askingForRecharging = new RechargingTrigger(false); //True if it is asking for recharging
     public static final Object electionLock = new Object();
 
     private static final int ID = new Random().nextInt(1000) + 1400;
@@ -76,7 +76,7 @@ public class Taxi {
                     break;
                 } else if(line.equals("recharge")){
                     if(batteryLvl < 100) {
-                        if(!isFree() || !isInElection()){
+                        if(!isFree() && !isInElection()){
                             System.out.println("..waiting");
                             try {
                                 waitForEligibility();
@@ -104,10 +104,18 @@ public class Taxi {
 
     }
 
+    /**
+     * Add a taxi from the list of other taxis
+     * @param newTaxi taxi to add
+     */
     public static synchronized void addTaxiToNetwork(TaxiNetworkInfo newTaxi){
         taxiNetwork.add(newTaxi);
     }
 
+    /**
+     * Remove a taxi from the list of other taxis
+     * @param id id of the taxi to remove
+     */
     public static synchronized void removeTaxiFromNetwork(int id){
         taxiNetwork.removeIf(i -> i.getId() == id);
     }
@@ -138,8 +146,8 @@ public class Taxi {
     }
 
     /**
-     *
-     * @param taxiList List of the
+     * Fill the list with the other taxi present in the city
+     * @param taxiList List of the taxi to add
      */
     public static void fillTaxiNetwork(List<TaxiNetworkInfo> taxiList){
         taxiNetwork.addAll(taxiList);

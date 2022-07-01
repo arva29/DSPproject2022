@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Timestamp;
 
+/**
+ * Represents the statistic record that a taxi sends every 15 seconds to the Administrator Server
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class StatisticsRecord {

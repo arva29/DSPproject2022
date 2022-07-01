@@ -6,6 +6,9 @@ import org.eclipse.paho.client.mqttv3.*;
 
 import java.util.*;
 
+/**
+ * The SETA process that has the job to publish the ride request to the mqtt broker
+ */
 public class SetaProcess {
 
     private static int requestId = 1000; //First ID
@@ -66,6 +69,10 @@ public class SetaProcess {
         }
     }
 
+    /**
+     * Publishes the ride request on the correct topic based on the district of the request
+     * @param client mqtt client
+     */
     private static void publishRideRequest(MqttClient client) throws MqttException {
         RideRequest rideRequest;
         int district;
@@ -90,6 +97,11 @@ public class SetaProcess {
         System.out.println(SetaProcess.CLIENT_ID + " Message published");
     }
 
+    /**
+     * Republish a request that has not been taken care of
+     * @param client mqtt client
+     * @param request request to republish
+     */
     private static void republishRideRequest(MqttClient client, RideRequest request) throws MqttException {
 
         Gson gson = new Gson();
@@ -105,10 +117,20 @@ public class SetaProcess {
         System.out.println(SetaProcess.CLIENT_ID + " Message published");
     }
 
+    /**
+     * Adds the request to the map with all the pending requests
+     * @param district district of the request
+     * @param rideRequest request to add
+     */
     public static synchronized void addRequestToMap(int district, RideRequest rideRequest){
         pendingRideRequest.get(district).add(rideRequest);
     }
 
+    /**
+     * Removes the request from the map with all the pending requests
+     * @param district district of the request
+     * @param rideRequest request to remove
+     */
     public static synchronized void removeRequestToMap(int district, RideRequest rideRequest){
 
         for(int i=0; i<pendingRideRequest.get(district).size(); i++){
@@ -119,10 +141,10 @@ public class SetaProcess {
 
     }
 
-    public static synchronized List<RideRequest> getRequestOfOneDistrict(int district){
-        return pendingRideRequest.get(district);
-    }
-
+    /**
+     * Thread that works as subscriber to the topic "seta/smartcity/rides/accomplished" where taxis notify their completed
+     * rides
+     */
     private static class SubscriberTask extends Thread{
         private static final String TOPIC = "seta/smartcity/rides/accomplished";
 
@@ -171,6 +193,10 @@ public class SetaProcess {
         }
     }
 
+    /**
+     * Thread that works as subscriber to the topic "seta/smartcity/rides/districtChanges" where taxis notify when they change district.
+     * In this way the SETA process can republish all the ride that are pending in that district
+     */
     private static class PendingRequestTask extends Thread{
         private static final String TOPIC = "seta/smartcity/rides/districtChanges";
         private static MqttClient publisherClient;
@@ -237,6 +263,9 @@ public class SetaProcess {
         }
     }
 
+    /**
+     * Only for debugging purpose. With "r" you can publish a ride and with "l" you can see all pending rides divided by district
+     */
     private static void debugCommandScanner(MqttClient client) throws MqttException {
         Scanner scanner = new Scanner(System.in);
         String a;

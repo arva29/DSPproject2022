@@ -83,19 +83,18 @@ public class AdministratorClient {
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
 
         if (clientResponse.getStatus() == 200) {
-            System.out.println(clientResponse);
+            //System.out.println(clientResponse);
+            TaxiListResponse list = clientResponse.getEntity(TaxiListResponse.class);
+            System.out.println("\nTAXI LIST");
+            try {
+                for (TaxiNetworkInfo i : list.getTaxiList()) {
+                    System.out.println(" - ID: " + i.getId() + "  [IP:" + i.getIpAddress() + " - PORT: " + i.getPortNumber() + "]");
+                }
+            } catch (NullPointerException e){
+                System.out.println("No taxis in the network");
+            }
         } else {
             System.out.println("ERROR with code " + clientResponse.getStatus());
-        }
-
-        TaxiListResponse list = clientResponse.getEntity(TaxiListResponse.class);
-        System.out.println("\nTAXI LIST");
-        try {
-            for (TaxiNetworkInfo i : list.getTaxiList()) {
-                System.out.println(" - ID: " + i.getId() + "  [IP:" + i.getIpAddress() + " - PORT: " + i.getPortNumber() + "]");
-            }
-        } catch (NullPointerException e){
-            System.out.println("No taxis in the network");
         }
     }
 
@@ -109,7 +108,7 @@ public class AdministratorClient {
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
 
         if (clientResponse.getStatus() == 200) {
-            System.out.println(clientResponse);
+            //System.out.println(clientResponse);
 
             AverageStatisticsResponse avgStats = clientResponse.getEntity(AverageStatisticsResponse.class);
 
@@ -137,7 +136,7 @@ public class AdministratorClient {
         ClientResponse clientResponse = getRequest(client,SERVER_ADDRESS+getPath);
 
         if (clientResponse.getStatus() == 200) {
-            System.out.println(clientResponse);
+            //System.out.println(clientResponse);
 
             LastStatisticsByIdResponse lastStats = clientResponse.getEntity(LastStatisticsByIdResponse.class);
 

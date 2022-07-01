@@ -8,6 +8,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
+/**
+ * REST server response to the taxi after it entered the network
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiAddingResponse {

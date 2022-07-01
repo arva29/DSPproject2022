@@ -31,7 +31,7 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
     }
 
     /**
-     * If the taxi from which the request arrives doesn't match all the requisites to take charge of the ride, it responds
+     * If the taxi from which the request arrives doesn't match all the requirements to take charge of the ride, it responds
      * with STOP, otherwise it responds with OK
      */
     @Override

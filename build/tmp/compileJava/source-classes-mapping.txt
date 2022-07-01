@@ -86,12 +86,23 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeavingOrBuilder
 SETA/Data/RideRequest.java
  SETA.Data.RideRequest
-SETA/StatisticsModule.java
- SETA.StatisticsModule
+SETA/SetaProcess.java
+ SETA.SetaProcess
+ SETA.SetaProcess$1
+ SETA.SetaProcess$PendingRequestTask
+ SETA.SetaProcess$PendingRequestTask$1
+ SETA.SetaProcess$SubscriberTask
+ SETA.SetaProcess$SubscriberTask$1
 AdministratorServer/Beans/TaxiList.java
  AdministratorServer.Beans.TaxiList
+AdministratorServer/AdministratorClient.java
+ AdministratorServer.AdministratorClient
+AdministratorServer/services/TaxiServices.java
+ AdministratorServer.services.TaxiServices
 AdministratorServer/services/AdministratorServices.java
  AdministratorServer.services.AdministratorServices
+SETA/StatisticsModule.java
+ SETA.StatisticsModule
 SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule
  SETA.NetworkCommunicationModule$1
@@ -106,18 +117,7 @@ SETA/TaxiNetworkServiceImpl.java
 SETA/RideManagementModule.java
  SETA.RideManagementModule
  SETA.RideManagementModule$1
-AdministratorServer/AdministratorClient.java
- AdministratorServer.AdministratorClient
 SETA/RESTServerModule.java
  SETA.RESTServerModule
-AdministratorServer/services/TaxiServices.java
- AdministratorServer.services.TaxiServices
 SETA/Taxi.java
  SETA.Taxi
-SETA/SetaProcess.java
- SETA.SetaProcess
- SETA.SetaProcess$1
- SETA.SetaProcess$PendingRequestTask
- SETA.SetaProcess$PendingRequestTask$1
- SETA.SetaProcess$SubscriberTask
- SETA.SetaProcess$SubscriberTask$1

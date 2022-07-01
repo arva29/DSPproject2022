@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Represent a position in the grid of the city
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Position {
@@ -30,6 +33,10 @@ public class Position {
         return this.x == pos.x && this.y == pos.y;
     }
 
+    /**
+     * Obtain the district number by the position
+     * @return district number of this position
+     */
     public int getDistrict() {
         if(x < 5 && y < 5) {
             return 1;
@@ -42,6 +49,11 @@ public class Position {
         }
     }
 
+    /**
+     * Calculate the distance between this position and the one specified in the param
+     * @param startingPosition position from wich you want the distance
+     * @return euclidean distance between the two position
+     */
     public double getDistance(Position startingPosition){
         double x = startingPosition.x - this.x;
         double y = startingPosition.y - this.y;
@@ -49,6 +61,10 @@ public class Position {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
+    /**
+     * Get the position of the recharge station in the current district
+     * @return the position of the recharge station
+     */
     public Position getRechargeStation(){
         switch (this.getDistrict()){
             case 1: //NW
@@ -62,6 +78,10 @@ public class Position {
         }
     }
 
+    /**
+     * Map this position the position class of the proto file
+     * @return position of the proto file
+     */
     public TaxiNetworkServiceOuterClass.Position toProtoPosition(){
         return TaxiNetworkServiceOuterClass.Position.newBuilder().setX(this.x).setY(this.y).build();
     }

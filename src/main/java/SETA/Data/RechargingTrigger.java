@@ -2,6 +2,9 @@ package SETA.Data;
 
 import java.sql.Timestamp;
 
+/**
+ * Flag to understand if the taxi is asking for recharging or not, with the timestamp of the request associated
+ */
 public class RechargingTrigger {
     private Boolean value;
     private Timestamp timestamp;

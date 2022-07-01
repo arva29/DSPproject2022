@@ -7,6 +7,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
+/**
+ * REST server response to the client for the request of the list of taxi in the city
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TaxiListResponse {
