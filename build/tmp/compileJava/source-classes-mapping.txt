@@ -1,17 +1,17 @@
 AdministratorServer/Responses/TaxiAddingResponse.java
  AdministratorServer.Responses.TaxiAddingResponse
-SETA/Simulators/Simulator.java
- SETA.Simulators.Simulator
+SETA/TaxiNetworkServiceImpl.java
+ SETA.TaxiNetworkServiceImpl
+SETA/MeasurementsBuffer.java
+ SETA.MeasurementsBuffer
 AdministratorServer/Responses/AverageStatisticsResponse.java
  AdministratorServer.Responses.AverageStatisticsResponse
-SETA/CustomThreadPool.java
- SETA.CustomThreadPool
 SETA/Data/Position.java
  SETA.Data.Position
-AdministratorServer/Beans/StatisticsRecord.java
- AdministratorServer.Beans.StatisticsRecord
-AdministratorServer/Responses/LastStatisticsByIdResponse.java
- AdministratorServer.Responses.LastStatisticsByIdResponse
+AdministratorServer/AdministratorClient.java
+ AdministratorServer.AdministratorClient
+AdministratorServer/services/TaxiServices.java
+ AdministratorServer.services.TaxiServices
 AdministratorServer/Responses/TaxiListResponse.java
  AdministratorServer.Responses.TaxiListResponse
 SETA/Simulators/Buffer.java
@@ -29,14 +29,12 @@ com/example/grpc/TaxiNetworkServiceGrpc.java
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceImplBase
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceMethodDescriptorSupplier
  com.example.grpc.TaxiNetworkServiceGrpc$TaxiNetworkServiceStub
-SETA/MeasurementsBuffer.java
- SETA.MeasurementsBuffer
+SETA/StatisticsModule.java
+ SETA.StatisticsModule
 SETA/Simulators/PM10Simulator.java
  SETA.Simulators.PM10Simulator
-AdministratorServer/Beans/TaxiNetworkInfo.java
- AdministratorServer.Beans.TaxiNetworkInfo
-AdministratorServer/Beans/StatisticsStorage.java
- AdministratorServer.Beans.StatisticsStorage
+AdministratorServer/Beans/TaxiList.java
+ AdministratorServer.Beans.TaxiList
 AdministratorServer/Beans/Statistics.java
  AdministratorServer.Beans.Statistics
 SETA/Simulators/Measurement.java
@@ -86,23 +84,25 @@ com/example/grpc/TaxiNetworkServiceOuterClass.java
  com.example.grpc.TaxiNetworkServiceOuterClass$TaxiLeavingOrBuilder
 SETA/Data/RideRequest.java
  SETA.Data.RideRequest
-SETA/SetaProcess.java
- SETA.SetaProcess
- SETA.SetaProcess$1
- SETA.SetaProcess$PendingRequestTask
- SETA.SetaProcess$PendingRequestTask$1
- SETA.SetaProcess$SubscriberTask
- SETA.SetaProcess$SubscriberTask$1
-AdministratorServer/Beans/TaxiList.java
- AdministratorServer.Beans.TaxiList
-AdministratorServer/AdministratorClient.java
- AdministratorServer.AdministratorClient
-AdministratorServer/services/TaxiServices.java
- AdministratorServer.services.TaxiServices
-AdministratorServer/services/AdministratorServices.java
- AdministratorServer.services.AdministratorServices
-SETA/StatisticsModule.java
- SETA.StatisticsModule
+AdministratorServer/Beans/StatisticsRecord.java
+ AdministratorServer.Beans.StatisticsRecord
+AdministratorServer/Responses/LastStatisticsByIdResponse.java
+ AdministratorServer.Responses.LastStatisticsByIdResponse
+SETA/Simulators/Simulator.java
+ SETA.Simulators.Simulator
+SETA/RideManagementModule.java
+ SETA.RideManagementModule
+ SETA.RideManagementModule$1
+SETA/RESTServerModule.java
+ SETA.RESTServerModule
+SETA/Taxi.java
+ SETA.Taxi
+AdministratorServer/Beans/TaxiNetworkInfo.java
+ AdministratorServer.Beans.TaxiNetworkInfo
+AdministratorServer/StatisticsStorage.java
+ AdministratorServer.StatisticsStorage
+SETA/CustomThreadPool.java
+ SETA.CustomThreadPool
 SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule
  SETA.NetworkCommunicationModule$1
@@ -112,12 +112,12 @@ SETA/NetworkCommunicationModule.java
  SETA.NetworkCommunicationModule$ElectionTask$1
  SETA.NetworkCommunicationModule$RechargeTask
  SETA.NetworkCommunicationModule$RechargeTask$1
-SETA/TaxiNetworkServiceImpl.java
- SETA.TaxiNetworkServiceImpl
-SETA/RideManagementModule.java
- SETA.RideManagementModule
- SETA.RideManagementModule$1
-SETA/RESTServerModule.java
- SETA.RESTServerModule
-SETA/Taxi.java
- SETA.Taxi
+AdministratorServer/services/ClientServices.java
+ AdministratorServer.services.ClientServices
+SETA/SetaProcess.java
+ SETA.SetaProcess
+ SETA.SetaProcess$1
+ SETA.SetaProcess$PendingRequestTask
+ SETA.SetaProcess$PendingRequestTask$1
+ SETA.SetaProcess$SubscriberTask
+ SETA.SetaProcess$SubscriberTask$1

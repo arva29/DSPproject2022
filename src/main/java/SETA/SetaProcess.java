@@ -52,7 +52,7 @@ public class SetaProcess {
                 SetaProcess.publishRideRequest(client);
                 SetaProcess.publishRideRequest(client);
 
-                Thread.sleep(15000);
+                Thread.sleep(5000);
             }
 
             /*if (client.isConnected())

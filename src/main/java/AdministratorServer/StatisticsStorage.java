@@ -1,5 +1,6 @@
-package AdministratorServer.Beans;
+package AdministratorServer;
 
+import AdministratorServer.Beans.StatisticsRecord;
 import AdministratorServer.Responses.AverageStatisticsResponse;
 import AdministratorServer.Responses.LastStatisticsByIdResponse;
 
@@ -15,8 +16,6 @@ import java.util.List;
  * Class that works as a storage of statistics for the Administrator server and provide all the methods to query these statistics
  * in order to satisfy client requests.
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class StatisticsStorage {
     private final HashMap<Integer, List<StatisticsRecord>> statisticsStorage;
     private static StatisticsStorage instance;

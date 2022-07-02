@@ -39,8 +39,8 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
 
         ElectionReply reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.OK).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
 
-        if(Taxi.isFree() && !Taxi.isAskingForRecharging() && (request.getRideRequestId() == Taxi.getCurrentElection() || Taxi.getCurrentElection() == -1)) {
-            if (new Position(request.getStartPosition()).getDistrict() == Taxi.getPosition().getDistrict()) { //CHECK IF REQUEST IS FROM SAME DISTRICT
+        if(Taxi.isFree() && !Taxi.isAskingForRecharging() && (new Position(request.getStartPosition()).getDistrict() == Taxi.getPosition().getDistrict())) {
+            if (request.getRideRequestId() == Taxi.getCurrentElection() || Taxi.getCurrentElection() == -1) { //CHECK IF REQUEST IS FROM SAME DISTRICT
                 if (!Taxi.rideAlreadyAccomplished(request.getRideRequestId())) { //REQUEST FOR RIDE THAT THIS TAXI HAS ALREADY TAKEN
                     if (request.getDistance() > Taxi.getPosition().getDistance(new Position(request.getStartPosition()))) { //DISTANCE COMPARISON
                         reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
@@ -57,10 +57,6 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
                 } else {
                     reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
                 }
-            }
-        } else {
-            if (Taxi.getCurrentElection() == request.getRideRequestId()){
-                reply = ElectionReply.newBuilder().setRideRequestId(request.getRideRequestId()).setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
             }
         }
 

@@ -1,6 +1,6 @@
 package AdministratorServer.services;
 
-import AdministratorServer.Beans.StatisticsStorage;
+import AdministratorServer.StatisticsStorage;
 import AdministratorServer.Beans.TaxiList;
 
 import javax.ws.rs.*;
@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import java.sql.Timestamp;
 
 @Path("statistics")
-public class AdministratorServices {
+public class ClientServices {
 
     @Path("listOfTaxis")
     @GET

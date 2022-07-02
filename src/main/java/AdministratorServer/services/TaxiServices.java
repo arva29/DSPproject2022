@@ -1,7 +1,7 @@
 package AdministratorServer.services;
 
 import AdministratorServer.Beans.StatisticsRecord;
-import AdministratorServer.Beans.StatisticsStorage;
+import AdministratorServer.StatisticsStorage;
 import AdministratorServer.Beans.TaxiNetworkInfo;
 import AdministratorServer.Beans.TaxiList;
 
