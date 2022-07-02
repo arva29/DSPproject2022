@@ -54,6 +54,7 @@ public class RideManagementModule extends Thread{
 
                     if (rideRequest.getDistrict() == district) {
                         if(Taxi.isFree() && !Taxi.isAskingForRecharging() && !Taxi.rideAlreadyAccomplished(rideRequest.getId())) { //If not free Taxi doesn't take into consideration the request
+                        //if(Taxi.isFree() && !Taxi.isAskingForRecharging()) { //If not free Taxi doesn't take into consideration the request
 
                             networkCommunicationModule.startElection(rideRequest, thisModule);
 

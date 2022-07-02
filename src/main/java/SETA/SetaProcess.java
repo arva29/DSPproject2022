@@ -45,15 +45,16 @@ public class SetaProcess {
             PendingRequestTask pendingRequestTask = new PendingRequestTask(client);
             pendingRequestTask.start();
 
-            //debugCommandScanner(client);
+            debugCommandScanner(client);
 
+            /*
             while (true) {
 
                 SetaProcess.publishRideRequest(client);
                 SetaProcess.publishRideRequest(client);
 
                 Thread.sleep(5000);
-            }
+            }*/
 
             /*if (client.isConnected())
                 client.disconnect();
