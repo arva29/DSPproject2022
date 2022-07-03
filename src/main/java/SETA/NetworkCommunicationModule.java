@@ -13,7 +13,6 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -132,6 +131,7 @@ public class NetworkCommunicationModule extends Thread{
         Taxi.setInElection(true);
 
         setReplies(Taxi.getTaxiNetwork().size());
+        System.out.println("REPLIES = " + getReplies());
 
         if(Taxi.getTaxiNetwork().size() != 0){ //If only 1 taxi, it directly takes the ride
             CustomThreadPool pool = new CustomThreadPool();
@@ -141,10 +141,10 @@ public class NetworkCommunicationModule extends Thread{
             }
 
             pool.run();
-        }
 
-        //Waiting for all responses from threads
-        waitForAllResponses();
+            //Waiting for all responses from threads
+            waitForAllResponses();
+        }
 
         Taxi.setInElection(false);
 
@@ -215,9 +215,11 @@ public class NetworkCommunicationModule extends Thread{
             }
 
             pool.run();
+
+            waitForAllResponses();
         }
 
-        waitForAllResponses();
+
 
         boolean value = (rechargeReplyCounter == networkSnapshot.size());
 
@@ -267,18 +269,21 @@ public class NetworkCommunicationModule extends Thread{
                        Taxi.setEligible(false); //Replace true value with false one
                     }
 
+                    addReplies();
+                    if(getReplies() == 0) notifyResponses();
                 }
 
                 @Override
                 public void onError(Throwable t) {
-                    System.err.println("ELECTION MESSAGE ERROR: " + t.getMessage() + " - " + Arrays.toString(t.getStackTrace()));
+
+                    System.err.println("ELECTION MESSAGE ERROR: " + t.getMessage() + " - " + t.getCause());
                 }
 
                 @Override
                 public void onCompleted() {
-                    addReplies();
-                    if(getReplies() == 0) notifyResponses();
+
                 }
+
             });
         }
     }
@@ -322,6 +327,9 @@ public class NetworkCommunicationModule extends Thread{
                     if(reply.getMessage().equals(ReplyMessage.OK)){
                         incrementRechargeReplyCounter();
                     }
+
+                    addReplies();
+                    if(getReplies() == 0) notifyResponses();
                 }
 
                 @Override
@@ -331,8 +339,7 @@ public class NetworkCommunicationModule extends Thread{
 
                 @Override
                 public void onCompleted() {
-                    addReplies();
-                    if(getReplies() == 0) notifyResponses();
+
                 }
             });
 
@@ -383,7 +390,7 @@ public class NetworkCommunicationModule extends Thread{
      */
     public static void waitForAllResponses() throws InterruptedException {
         synchronized (lock){
-            //System.out.println("... waiting the taxi to be free!");
+            //System.out.println("... WAIT RESPONSES!");
             lock.wait();
         }
     }
@@ -393,8 +400,8 @@ public class NetworkCommunicationModule extends Thread{
      */
     public static void notifyResponses() {
         synchronized (lock){
-            //System.out.println("Taxi is finally free!");
             lock.notify();
+            //System.out.println("... OK RESPONSES!");
         }
     }
 }

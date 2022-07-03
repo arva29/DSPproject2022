@@ -17,6 +17,7 @@ public class Taxi {
     private static Boolean inElection = false; //True if Taxi is involved in an election
     private static Boolean eligible = true; //True if Taxi is involved in an election
     private static Boolean recharging = false; //True if it is recharging
+    private static Boolean quitting = false; //True if it asked to quit
     private static int currentElection = -1; //Request ID for the current election
     private static final RechargingTrigger askingForRecharging = new RechargingTrigger(false); //True if it is asking for recharging
     public static final Object electionLock = new Object();
@@ -66,7 +67,7 @@ public class Taxi {
                 line = scanner.nextLine();
                 if(line.equals("quit")){
                     if(!isFree() || isInElection() || isAskingForRecharging() || isRecharging()){ //Taxi can quit the network only if it is free
-                        //System.out.println("..waiting");
+                        System.out.println("..waiting to quit");
                         try {
                             waitForEligibility();
                         } catch (InterruptedException e) {
@@ -77,7 +78,7 @@ public class Taxi {
                 } else if(line.equals("recharge")){
                     if(batteryLvl < 100) {
                         if(!isFree() && !isInElection()){
-                            System.out.println("..waiting");
+                            System.out.println("..waiting to recharge");
                             try {
                                 waitForEligibility();
                             } catch (InterruptedException e) {
@@ -115,9 +116,11 @@ public class Taxi {
     /**
      * Remove a taxi from the list of other taxis
      * @param id id of the taxi to remove
+     *
      */
     public static synchronized void removeTaxiFromNetwork(int id){
         taxiNetwork.removeIf(i -> i.getId() == id);
+        System.out.println(" - Taxi " + id + " leaved the network");
     }
 
     public static synchronized List<TaxiNetworkInfo> getTaxiNetwork(){
@@ -203,6 +206,14 @@ public class Taxi {
         return askingForRecharging;
     }
 
+    public static synchronized Boolean isQuitting() {
+        return quitting;
+    }
+
+    public static synchronized void setQuitting(Boolean quitting) {
+        Taxi.quitting = quitting;
+    }
+
     public static synchronized int getCurrentElection() {
         return currentElection;
     }
@@ -268,7 +279,7 @@ public class Taxi {
      */
     public static void waitForEligibility() throws InterruptedException {
         synchronized (electionLock){
-            System.out.println("... waiting the taxi to be free!");
+            //System.out.println("... waiting the taxi to be free!");
             electionLock.wait();
         }
     }
@@ -291,6 +302,7 @@ public class Taxi {
      * @param statisticsModule module to collect and send statistics
      */
     private static void leaveNetwork(RESTServerModule restServerModule, RideManagementModule rideManagement, NetworkCommunicationModule networkCommunicationModule, StatisticsModule statisticsModule) throws MqttException, InterruptedException {
+        setQuitting(true);
         restServerModule.removeTaxiFromNetwork();
         networkCommunicationModule.notifyLeavingNetwork();
         rideManagement.disconnect();

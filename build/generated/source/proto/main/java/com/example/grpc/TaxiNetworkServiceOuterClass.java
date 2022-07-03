@@ -4677,6 +4677,12 @@ public final class TaxiNetworkServiceOuterClass {
      * @return The message.
      */
     com.example.grpc.TaxiNetworkServiceOuterClass.ReplyMessage getMessage();
+
+    /**
+     * <code>int32 taxiId = 2;</code>
+     * @return The taxiId.
+     */
+    int getTaxiId();
   }
   /**
    * Protobuf type {@code com.example.grpc.RechargeReply}
@@ -4730,6 +4736,11 @@ public final class TaxiNetworkServiceOuterClass {
               message_ = rawValue;
               break;
             }
+            case 16: {
+
+              taxiId_ = input.readInt32();
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -4781,6 +4792,16 @@ public final class TaxiNetworkServiceOuterClass {
       return result == null ? com.example.grpc.TaxiNetworkServiceOuterClass.ReplyMessage.UNRECOGNIZED : result;
     }
 
+    public static final int TAXIID_FIELD_NUMBER = 2;
+    private int taxiId_;
+    /**
+     * <code>int32 taxiId = 2;</code>
+     * @return The taxiId.
+     */
+    public int getTaxiId() {
+      return taxiId_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -4798,6 +4819,9 @@ public final class TaxiNetworkServiceOuterClass {
       if (message_ != com.example.grpc.TaxiNetworkServiceOuterClass.ReplyMessage.OK.getNumber()) {
         output.writeEnum(1, message_);
       }
+      if (taxiId_ != 0) {
+        output.writeInt32(2, taxiId_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -4810,6 +4834,10 @@ public final class TaxiNetworkServiceOuterClass {
       if (message_ != com.example.grpc.TaxiNetworkServiceOuterClass.ReplyMessage.OK.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(1, message_);
+      }
+      if (taxiId_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, taxiId_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -4827,6 +4855,8 @@ public final class TaxiNetworkServiceOuterClass {
       com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply other = (com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply) obj;
 
       if (message_ != other.message_) return false;
+      if (getTaxiId()
+          != other.getTaxiId()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -4840,6 +4870,8 @@ public final class TaxiNetworkServiceOuterClass {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
       hash = (53 * hash) + message_;
+      hash = (37 * hash) + TAXIID_FIELD_NUMBER;
+      hash = (53 * hash) + getTaxiId();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -4975,6 +5007,8 @@ public final class TaxiNetworkServiceOuterClass {
         super.clear();
         message_ = 0;
 
+        taxiId_ = 0;
+
         return this;
       }
 
@@ -5002,6 +5036,7 @@ public final class TaxiNetworkServiceOuterClass {
       public com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply buildPartial() {
         com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply result = new com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply(this);
         result.message_ = message_;
+        result.taxiId_ = taxiId_;
         onBuilt();
         return result;
       }
@@ -5052,6 +5087,9 @@ public final class TaxiNetworkServiceOuterClass {
         if (other == com.example.grpc.TaxiNetworkServiceOuterClass.RechargeReply.getDefaultInstance()) return this;
         if (other.message_ != 0) {
           setMessageValue(other.getMessageValue());
+        }
+        if (other.getTaxiId() != 0) {
+          setTaxiId(other.getTaxiId());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -5130,6 +5168,36 @@ public final class TaxiNetworkServiceOuterClass {
       public Builder clearMessage() {
         
         message_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private int taxiId_ ;
+      /**
+       * <code>int32 taxiId = 2;</code>
+       * @return The taxiId.
+       */
+      public int getTaxiId() {
+        return taxiId_;
+      }
+      /**
+       * <code>int32 taxiId = 2;</code>
+       * @param value The taxiId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTaxiId(int value) {
+        
+        taxiId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 taxiId = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearTaxiId() {
+        
+        taxiId_ = 0;
         onChanged();
         return this;
       }
@@ -5672,21 +5740,21 @@ public final class TaxiNetworkServiceOuterClass {
       "Message\0223\n\010taxiInfo\030\001 \001(\0132!.com.example." +
       "grpc.TaxiInformation\022\020\n\010district\030\002 \001(\005\022\021" +
       "\n\ttimestamp\030\003 \001(\t\"\024\n\022RechargePermission\"" +
-      "@\n\rRechargeReply\022/\n\007message\030\001 \001(\0162\036.com." +
-      "example.grpc.ReplyMessage\"\007\n\005Empty* \n\014Re" +
-      "plyMessage\022\006\n\002OK\020\000\022\010\n\004STOP\020\0012\310\003\n\022TaxiNet" +
-      "workService\022S\n\025notifyNewTaxiPresence\022!.c" +
-      "om.example.grpc.TaxiInformation\032\027.com.ex" +
-      "ample.grpc.Empty\022R\n\030notifyTaxiLeavingNet" +
-      "work\022\035.com.example.grpc.TaxiLeaving\032\027.co" +
-      "m.example.grpc.Empty\022U\n\017electionMessage\022" +
-      "!.com.example.grpc.ElectionMessage\032\037.com" +
-      ".example.grpc.ElectionReply\022U\n\017rechargeM" +
-      "essage\022!.com.example.grpc.RechargeMessag" +
-      "e\032\037.com.example.grpc.RechargeReply\022[\n\032no" +
-      "tifyPermissionToRecharge\022$.com.example.g" +
-      "rpc.RechargePermission\032\027.com.example.grp" +
-      "c.Emptyb\006proto3"
+      "P\n\rRechargeReply\022/\n\007message\030\001 \001(\0162\036.com." +
+      "example.grpc.ReplyMessage\022\016\n\006taxiId\030\002 \001(" +
+      "\005\"\007\n\005Empty* \n\014ReplyMessage\022\006\n\002OK\020\000\022\010\n\004ST" +
+      "OP\020\0012\310\003\n\022TaxiNetworkService\022S\n\025notifyNew" +
+      "TaxiPresence\022!.com.example.grpc.TaxiInfo" +
+      "rmation\032\027.com.example.grpc.Empty\022R\n\030noti" +
+      "fyTaxiLeavingNetwork\022\035.com.example.grpc." +
+      "TaxiLeaving\032\027.com.example.grpc.Empty\022U\n\017" +
+      "electionMessage\022!.com.example.grpc.Elect" +
+      "ionMessage\032\037.com.example.grpc.ElectionRe" +
+      "ply\022U\n\017rechargeMessage\022!.com.example.grp" +
+      "c.RechargeMessage\032\037.com.example.grpc.Rec" +
+      "hargeReply\022[\n\032notifyPermissionToRecharge" +
+      "\022$.com.example.grpc.RechargePermission\032\027" +
+      ".com.example.grpc.Emptyb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -5739,7 +5807,7 @@ public final class TaxiNetworkServiceOuterClass {
     internal_static_com_example_grpc_RechargeReply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_com_example_grpc_RechargeReply_descriptor,
-        new java.lang.String[] { "Message", });
+        new java.lang.String[] { "Message", "TaxiId", });
     internal_static_com_example_grpc_Empty_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_com_example_grpc_Empty_fieldAccessorTable = new

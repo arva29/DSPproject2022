@@ -45,16 +45,16 @@ public class SetaProcess {
             PendingRequestTask pendingRequestTask = new PendingRequestTask(client);
             pendingRequestTask.start();
 
-            debugCommandScanner(client);
+            //debugCommandScanner(client);
 
-            /*
+
             while (true) {
 
                 SetaProcess.publishRideRequest(client);
                 SetaProcess.publishRideRequest(client);
 
                 Thread.sleep(5000);
-            }*/
+            }
 
             /*if (client.isConnected())
                 client.disconnect();
@@ -225,8 +225,13 @@ public class SetaProcess {
 
                         Integer district = new Gson().fromJson(new String(message.getPayload()), Integer.class);
 
-                        for(RideRequest r: pendingRideRequest.get(district)){
-                            republishRideRequest(publisherClient, r);
+                        int limit = 2;
+                        if(pendingRideRequest.get(district).size() < 2){
+                            limit = pendingRideRequest.get(district).size();
+                        }
+
+                        for(int i = 0; i < limit ; i++){
+                            republishRideRequest(publisherClient, pendingRideRequest.get(district).get(i));
                         }
 
                     }

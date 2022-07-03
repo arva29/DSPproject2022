@@ -82,7 +82,7 @@ public class TaxiNetworkServiceImpl extends TaxiNetworkServiceImplBase {
         if(request.getDistrict() == Taxi.getPosition().getDistrict()){ //Other district
             if((Taxi.isAskingForRecharging() && Taxi.getAskingForRecharging().getTimestamp().before(Timestamp.valueOf(request.getTimestamp()))) || Taxi.isRecharging()){
                 Taxi.addToRechargeQueue(new TaxiNetworkInfo(request.getTaxiInfo()));
-                reply = RechargeReply.newBuilder().setMessage(ReplyMessage.STOP).build();
+                reply = RechargeReply.newBuilder().setMessage(ReplyMessage.STOP).setTaxiId(Taxi.getTaxiNetworkInfo().getId()).build();
             }
         }
 

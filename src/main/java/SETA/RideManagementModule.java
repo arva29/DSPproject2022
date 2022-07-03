@@ -52,12 +52,14 @@ public class RideManagementModule extends Thread{
 
                     //System.out.println("Message arrived (" + rideRequest.getId() + ")! - FREE: " + Taxi.isFree() + " - ALREADY ANSWERED - " + !Taxi.rideAlreadyAccomplished(rideRequest.getId()));
 
-                    if (rideRequest.getDistrict() == district) {
-                        if(Taxi.isFree() && !Taxi.isAskingForRecharging() && !Taxi.rideAlreadyAccomplished(rideRequest.getId())) { //If not free Taxi doesn't take into consideration the request
-                        //if(Taxi.isFree() && !Taxi.isAskingForRecharging()) { //If not free Taxi doesn't take into consideration the request
+                    if(!Taxi.isQuitting()) {
+                        if (rideRequest.getDistrict() == district) {
+                            if (Taxi.isFree() && !Taxi.isAskingForRecharging() && !Taxi.rideAlreadyAccomplished(rideRequest.getId())) { //If not free Taxi doesn't take into consideration the request
+                                //if(Taxi.isFree() && !Taxi.isAskingForRecharging()) { //If not free Taxi doesn't take into consideration the request
+                                System.out.println("\n-----> Election " + rideRequest.getId());
+                                networkCommunicationModule.startElection(rideRequest, thisModule);
 
-                            networkCommunicationModule.startElection(rideRequest, thisModule);
-
+                            }
                         }
                     }
                 }
@@ -96,7 +98,7 @@ public class RideManagementModule extends Thread{
         if(client.isConnected()) {
             client.disconnect();
         }
-        System.out.println(" -- MQTT CLIENT DISCONNETTED -- ");
+        System.out.println("\n -- MQTT CLIENT DISCONNETTED -- ");
     }
 
     /**
@@ -110,26 +112,25 @@ public class RideManagementModule extends Thread{
         int kmTravelled = (int)Math.ceil(Taxi.getPosition().getDistance(rideRequest.getStartPosition()) + rideRequest.getStartPosition().getDistance(rideRequest.getEndPosition()));
         System.out.println("\n ... on the road!\n");
         Thread.sleep(5000);
-        System.out.println("ACCOMPLISHED RIDE - " + rideRequest.getId());
+        System.out.println("\nACCOMPLISHED RIDE - " + rideRequest.getId());
         Taxi.setBatteryLvl(Taxi.getBatteryLvl() - kmTravelled);
         System.out.println("BATTERY: " + Taxi.getBatteryLvl());
         Taxi.setPosition(rideRequest.getEndPosition());
         System.out.println("POSITION: " + Taxi.getPosition().getX() + "," + Taxi.getPosition().getY());
+
+        if(Taxi.getPosition().getDistrict() != district){
+            changeDistrict();
+        }
 
         if (Taxi.getBatteryLvl() < 30){
             recharge(false);
         } else {
             Taxi.setFree(true);
             Taxi.setEligible(true);
-            System.out.println();
         }
 
         Taxi.setCurrentElection(-1);
         notifyAccomplishedRide(rideRequest);
-
-        if(Taxi.getPosition().getDistrict() != district){
-            changeDistrict();
-        }
 
         statisticsModule.addRide();
         statisticsModule.addKmTravelled(kmTravelled);
@@ -172,7 +173,7 @@ public class RideManagementModule extends Thread{
         if(Taxi.isFree()){Taxi.setFree(false);}
         Taxi.setBatteryLvl(Taxi.getBatteryLvl() - (int)Math.ceil(Taxi.getPosition().getDistance(Taxi.getPosition().getRechargeStation())));
         Taxi.setPosition(Taxi.getPosition().getRechargeStation());
-        System.out.println(" ...Starting recharging ");
+        System.out.println("\n ...Starting recharging ");
         Thread.sleep(10000);
         Taxi.setBatteryLvl(100);
         Taxi.setFree(true);
@@ -188,19 +189,10 @@ public class RideManagementModule extends Thread{
      */
     private void notifyFreeChargingStation() throws InterruptedException {
 
-        /*System.err.println("Recharge Queue BEFORE");
-        for(TaxiNetworkInfo i: Taxi.getRechargeQueue()){
-            System.err.println("ID - " + i.getId());
-        }*/
 
         if(Taxi.getRechargeQueue().size() > 0){
             TaxiNetworkInfo nextTaxiToRecharge = Taxi.getRechargeQueue().get(0);
             Taxi.getRechargeQueue().remove(0);
-
-            /*System.err.println("\nRecharge Queue AFTER");
-            for(TaxiNetworkInfo i: Taxi.getRechargeQueue()){
-                System.err.println("ID - " + i.getId());
-            }*/
 
             networkCommunicationModule.notifyPendingTaxi(nextTaxiToRecharge);
             Taxi.clearRechargingQueue();
